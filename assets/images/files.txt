@@ -1,0 +1,1 @@
+static const logoPng = 'assets/images/logo.png';
