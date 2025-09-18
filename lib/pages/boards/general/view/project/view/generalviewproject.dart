@@ -5,12 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../../../../common/styles/assets.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
-import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../../../common/values/index.dart';
-import '../../../../../../core/dependencies/dependencies.dart';
 import '../../../notifier/device_notifier.dart';
 import 'generalviewglobalgroupitem.dart';
+import 'generalview_time_header.dart'; // 新增：引入拆分后的时间头部组件
 
 class GeneralViewProject extends ConsumerWidget {
   GeneralViewProject({Key? key}) : super(key: key);
@@ -22,43 +21,8 @@ class GeneralViewProject extends ConsumerWidget {
       margin: EdgeInsets.only(top: 10.h),
       child: Column(
         children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.w),
-              color: ref.watch(colorProvider)['backgroundColorWidget'],
-            ),
-            height: 158.h,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: 136.h,
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 20.w, top: 10.h, right: 20.w),
-                  child: ref.watch(currentTimeProvider).when(
-                        data: (time) => RichText(
-                          text: TextSpan(
-                            text: time.split('@')[0],
-                            style: TextStyle(fontSize: Constant.textSP_24, color: ref.watch(colorProvider)['text']),
-                            children: [
-                              TextSpan(
-                                text: "\n" + time.split('@')[1],
-                                style: TextStyle(fontSize: Constant.textSP_30, color: ref.watch(colorProvider)['text']),
-                              ),
-                            ],
-                          ),
-                        ),
-                        loading: () => Container(),
-                        error: (error, stack) {
-                          LoggerManager().e("GeneralViewProject error: $error");
-                          return Container();
-                        },
-                      ),
-                ),
-              ],
-            ),
-          ),
+          // 原先整段时间容器替换为独立组件，避免整页跟随时间刷新重建
+          const GeneralViewTimeHeader(),
           SizedBox(height: 10.h),
           Container(
             height: 592.h,

@@ -67,10 +67,6 @@ bool floatButtonRestore(Ref ref) {
 }
 
 /// Global Info
-@riverpod
-List<GeneralGlobalInfoModel> itemsGeneralGlobalInfo(Ref ref) {
-  return [];
-}
 
 /// Current Time (格式1)
 @riverpod

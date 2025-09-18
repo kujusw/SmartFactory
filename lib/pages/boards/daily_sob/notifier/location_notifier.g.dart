@@ -44,7 +44,7 @@ final class LocationListProvider
   }
 }
 
-String _$locationListHash() => r'a242a3f08ad7962b95a61002778384b30843963c';
+String _$locationListHash() => r'ab843a034d66e7a66018b985a301d5bd2b44c6ad';
 
 /// 原始数据
 
@@ -100,7 +100,7 @@ final class LocationUIManagerProvider
   }
 }
 
-String _$locationUIManagerHash() => r'8a7dd4a5e4a10a1c8ee04aa81a19b493e8541449';
+String _$locationUIManagerHash() => r'7e58c1156f078079a69a736c4a52dee6250ed6c0';
 
 /// 过滤后的数据
 
@@ -161,4 +161,4 @@ final class GetLocationsProvider extends $FunctionalProvider<
   }
 }
 
-String _$getLocationsHash() => r'94432a7eec51b67cac0c8ec7987eae34e6131266';
+String _$getLocationsHash() => r'cda4401b4714b8e6f2caa4d6db4189650a1b66d5';

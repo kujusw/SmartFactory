@@ -41,7 +41,7 @@ final class DeviceManagerProvider
   }
 }
 
-String _$deviceManagerHash() => r'b048aaf675b842cdb4c3c093f6d3bb73ce36645e';
+String _$deviceManagerHash() => r'52e37c9235707e193c332198212f0dc5056d082c';
 
 abstract class _$DeviceManager extends $Notifier<List<DeviceModel>> {
   List<DeviceModel> build();

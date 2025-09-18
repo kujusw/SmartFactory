@@ -344,64 +344,18 @@ String _$floatButtonRestoreHash() =>
     r'3ce61d8dfd9c9db151b3febaac6da764916576ff';
 
 /// Global Info
-
-@ProviderFor(itemsGeneralGlobalInfo)
-const itemsGeneralGlobalInfoProvider = ItemsGeneralGlobalInfoProvider._();
-
-/// Global Info
-
-final class ItemsGeneralGlobalInfoProvider extends $FunctionalProvider<
-    List<GeneralGlobalInfoModel>,
-    List<GeneralGlobalInfoModel>,
-    List<GeneralGlobalInfoModel>> with $Provider<List<GeneralGlobalInfoModel>> {
-  /// Global Info
-  const ItemsGeneralGlobalInfoProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'itemsGeneralGlobalInfoProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$itemsGeneralGlobalInfoHash();
-
-  @$internal
-  @override
-  $ProviderElement<List<GeneralGlobalInfoModel>> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  List<GeneralGlobalInfoModel> create(Ref ref) {
-    return itemsGeneralGlobalInfo(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<GeneralGlobalInfoModel> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<GeneralGlobalInfoModel>>(value),
-    );
-  }
-}
-
-String _$itemsGeneralGlobalInfoHash() =>
-    r'bbcac9d0e3c456e875a89f7a019c9f9b58d9b360';
-
 /// Current Time (格式1)
 
 @ProviderFor(currentTime)
 const currentTimeProvider = CurrentTimeProvider._();
 
+/// Global Info
 /// Current Time (格式1)
 
 final class CurrentTimeProvider
     extends $FunctionalProvider<AsyncValue<String>, String, Stream<String>>
     with $FutureModifier<String>, $StreamProvider<String> {
+  /// Global Info
   /// Current Time (格式1)
   const CurrentTimeProvider._()
       : super(

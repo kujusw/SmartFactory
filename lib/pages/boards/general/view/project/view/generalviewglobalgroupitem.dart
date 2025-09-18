@@ -3,10 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import 'package:smart_factory/pages/boards/daily_sob/notifier/location_notifier.dart';
-import '../../../../../../common/styles/assets.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/values/index.dart';
@@ -94,36 +92,19 @@ class GroupsItemTile extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  ref.watch(colorProvider)['white']!,
-                  BlendMode.srcIn,
-                ),
-                child: SvgPicture.asset(
-                  AssetsImages.plusIconRemovebgPreview_1Svg,
-                  height: 15.h,
-                  width: 15.h,
-                ),
-              ),
               Transform.scale(
                 scale: 0.6, // 缩放比例
                 child: TriStateCheckbox(
-                  value: CheckboxState.unchecked,
+                  value: getTitleOneChechkState(body, ref),
                   onChanged: (value) {
                     LoggerManager().d("value $value");
-                    //根据位置过滤设备到showMenuDeviceListProvider
-                    if (value == CheckboxState.checked) {
-                      //根据位置过滤所有的设备
-                      ref.read(showMenuDeviceListProvider.notifier).setValue(
-                            //根据位置过滤所有的设备
-                            ref
-                                    .watch(deviceManagerProvider.notifier)
-                                    .getSelectedDevices()
-                                    ?.where((element) => element.locationId == body.id)
-                                    .length ??
-                                0,
-                          );
-                    }
+                    final notifier = ref.read(deviceManagerProvider.notifier);
+                    final selected = value == CheckboxState.checked;
+                    // 用不可变方式一次性更新，确保触发 Riverpod 通知
+                    notifier.selectDeviceInMenuByLocation(body.id ?? 0, selected);
+                    // 回调里使用 read 而不是 watch
+                    ref.read(showMenuDeviceListProvider.notifier).setValue(notifier.getSelectedDevices()?.length ?? 0);
+                    LoggerManager().d("showMenuDeviceListProvider  ${ref.read(showMenuDeviceListProvider)}");
                   },
                 ),
               ),
@@ -139,5 +120,26 @@ class GroupsItemTile extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  getTitleOneChechkState(LocationModel body, WidgetRef ref) {
+    int total = 0;
+    int selectedNum = 0;
+    for (var device in ref.watch(deviceManagerProvider)) {
+      if (device.locationId == body.id) {
+        total++;
+        if (device.selectedInMenu ?? false) {
+          selectedNum++;
+        }
+      }
+    }
+    LoggerManager().d("getTitleOneChechkState total $total selectedNum $selectedNum");
+    if (total != 0 && total == selectedNum) {
+      return CheckboxState.checked;
+    } else if (total != 0 && selectedNum != 0) {
+      return CheckboxState.indeterminate;
+    } else {
+      return CheckboxState.unchecked;
+    }
   }
 }

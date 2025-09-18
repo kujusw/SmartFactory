@@ -61,6 +61,14 @@ class DeviceManager extends _$DeviceManager {
     state = state.map((t) => t.id == device.id ? device.copyWith(selectedInMenu: selected) : t).toList();
   }
 
+  // 批量：按 locationId 设置菜单选中状态（一次性产生新列表，确保触发刷新）
+  void selectDeviceInMenuByLocation(int? locationId, bool selected) {
+    state = [
+      for (final d in state)
+        if (d.locationId == locationId) d.copyWith(selectedInMenu: selected) else d,
+    ];
+  }
+
   // 获取菜单里选中的设备
   List<DeviceModel>? getSelectedDevices() {
     return state.where((device) => device.selectedInMenu ?? false).toList();

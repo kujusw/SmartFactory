@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
+import '../../../../common/styles/assets.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
-import '../../../../models/general_globalinfo_model.dart';
-import '../../../common/general_globalinfo_utils.dart';
 
 class GeneralViewGlobalInfoItem extends ConsumerWidget {
-  final GeneralGlobalInfoModel item;
+  final Map<String, dynamic> item;
   const GeneralViewGlobalInfoItem({super.key, required this.item});
 
   @override
@@ -29,11 +27,11 @@ class GeneralViewGlobalInfoItem extends ConsumerWidget {
               right: 10.w,
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  getAlarmColor(item.name, ref),
+                  ref.watch(colorProvider)['text'] ?? Colors.white,
                   BlendMode.srcIn,
                 ),
                 child: SvgPicture.asset(
-                  alarmTypeIconPathMap[item.name] ?? '',
+                  AssetsImages.chipIconBlueSvg,
                   height: 30.h,
                   width: 30.h,
                 ),
@@ -47,18 +45,16 @@ class GeneralViewGlobalInfoItem extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    (item.name == "Devices" || item.name == "Connected Devices")
-                        ? ref.watch(deviceManagerProvider).length.toString()
-                        : item.value.toString(),
+                    item.values.first.toString(),
                     style: TextStyle(
-                      color: getAlarmColor(item.name, ref),
+                      color: ref.watch(colorProvider)['text'] ?? Colors.white,
                       fontSize: Constant.textSP_42,
                     ),
                   ),
                   Text(
-                    item.name ?? '',
+                    item.keys.first,
                     style: TextStyle(
-                      color: getAlarmColor(item.name, ref),
+                      color: ref.watch(colorProvider)['text'] ?? Colors.white,
                       fontSize: Constant.textSP_20,
                     ),
                   ),
