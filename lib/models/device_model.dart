@@ -179,9 +179,9 @@ class DeviceModel {
 }
 
 class DeviceEnergyResponseEntity {
-  final int? code;
-  final DeviceEnergyModel? data;
-  final String? message;
+  int? code;
+  DeviceEnergyModel? data;
+  String? message;
 
   DeviceEnergyResponseEntity({
     this.code,
@@ -189,25 +189,14 @@ class DeviceEnergyResponseEntity {
     this.message,
   });
 
-  DeviceEnergyResponseEntity copyWith({
-    int? code,
-    DeviceEnergyModel? data,
-    String? message,
-  }) =>
-      DeviceEnergyResponseEntity(
-        code: code ?? this.code,
-        data: data ?? this.data,
-        message: message ?? this.message,
-      );
-
   factory DeviceEnergyResponseEntity.fromRawJson(String str) => DeviceEnergyResponseEntity.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory DeviceEnergyResponseEntity.fromJson(Map<String, dynamic> json) => DeviceEnergyResponseEntity(
-        code: json.containsKey("code") ? json["code"] : 0,
-        data: json.containsKey("data") ? DeviceEnergyModel.fromJson(json["data"]) : DeviceEnergyModel(),
-        message: json.containsKey("message") ? json["message"] : "",
+        code: json["code"],
+        data: json["data"] == null ? null : DeviceEnergyModel.fromJson(json["data"]),
+        message: json["message"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -215,147 +204,96 @@ class DeviceEnergyResponseEntity {
         "data": data?.toJson(),
         "message": message,
       };
-
-  @override
-  String toString() {
-    return jsonEncode(this);
-  }
 }
 
 class DeviceEnergyModel {
-  final double? current;
-  final String? id;
-  final double? energy;
-  final double? energyDaily;
-  final double? energyHourly;
-  final double? energyMonthly;
-  final double? energyWeekly;
-  final double? energyWeeklyDiff;
-  final int? energyDailyTimestamp;
-  final int? energyHourlyTimestamp;
-  final int? energyMonthlyTimestamp;
-  final int? energyWeeklyTimestamp;
-  final double? power;
-  final int? timestamp;
+  num? current;
+  num? energy;
+  num? power;
+  num? powerFactor;
+  String? timestamp;
+  num? totalCurrent;
+  num? totalPower;
+  num? voltage;
+  List<Warning>? warnings;
 
   DeviceEnergyModel({
     this.current,
-    this.id,
     this.energy,
-    this.energyDaily,
-    this.energyHourly,
-    this.energyMonthly,
-    this.energyWeekly,
-    this.energyWeeklyDiff,
-    this.energyDailyTimestamp,
-    this.energyHourlyTimestamp,
-    this.energyMonthlyTimestamp,
-    this.energyWeeklyTimestamp,
     this.power,
+    this.powerFactor,
     this.timestamp,
+    this.totalCurrent,
+    this.totalPower,
+    this.voltage,
+    this.warnings,
   });
-
-  DeviceEnergyModel copyWith({
-    double? current,
-    String? id,
-    double? energy,
-    double? energyDaily,
-    double? energyHourly,
-    double? energyMonthly,
-    double? energyWeekly,
-    double? energyWeeklyDiff,
-    int? energyDailyTimestamp,
-    int? energyHourlyTimestamp,
-    int? energyMonthlyTimestamp,
-    int? energyWeeklyTimestamp,
-    double? power,
-    int? timestamp,
-  }) =>
-      DeviceEnergyModel(
-        current: current ?? this.current,
-        id: id ?? this.id,
-        energy: energy ?? this.energy,
-        energyDaily: energyDaily ?? this.energyDaily,
-        energyHourly: energyHourly ?? this.energyHourly,
-        energyMonthly: energyMonthly ?? this.energyMonthly,
-        energyWeekly: energyWeekly ?? this.energyWeekly,
-        energyWeeklyDiff: energyWeeklyDiff ?? this.energyWeeklyDiff,
-        energyDailyTimestamp: energyDailyTimestamp ?? this.energyDailyTimestamp,
-        energyHourlyTimestamp: energyHourlyTimestamp ?? this.energyHourlyTimestamp,
-        energyMonthlyTimestamp: energyMonthlyTimestamp ?? this.energyMonthlyTimestamp,
-        energyWeeklyTimestamp: energyWeeklyTimestamp ?? this.energyWeeklyTimestamp,
-        power: power ?? this.power,
-        timestamp: timestamp ?? this.timestamp,
-      );
 
   factory DeviceEnergyModel.fromRawJson(String str) => DeviceEnergyModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
-  //兼容服务器传递过来的数据类型
+
   factory DeviceEnergyModel.fromJson(Map<String, dynamic> json) => DeviceEnergyModel(
-        current: json.containsKey("current") ? json["current"] : 0.0,
-        id: json.containsKey("id") ? json["id"] : "",
-        energy: json.containsKey("energy")
-            ? (json['energy'] is double)
-                ? json['energy']
-                : (json['energy'] as num).toDouble()
-            : 0.0,
-        energyDaily: json.containsKey("energy_daily")
-            ? (json['energy_daily'] is double)
-                ? json['energy_daily']
-                : (json['energy_daily'] as num).toDouble()
-            : 0.0,
-        energyHourly: json.containsKey("energy_hourly")
-            ? (json['energy_hourly'] is double)
-                ? json['energy_hourly']
-                : (json['energy_hourly'] as num).toDouble()
-            : 0.0,
-        energyMonthly: json.containsKey("energy_monthly")
-            ? (json['energy_monthly'] is double)
-                ? json['energy_monthly']
-                : (json['energy_monthly'] as num).toDouble()
-            : 0.0,
-        energyWeekly: json.containsKey("energy_weekly")
-            ? (json['energy_weekly'] is double)
-                ? json['energy_weekly']
-                : (json['energy_weekly'] as num).toDouble()
-            : 0.0,
-        energyWeeklyDiff: json.containsKey("energy_weekly_diff")
-            ? (json['energy_weekly_diff'] is double)
-                ? json['energy_weekly_diff']
-                : (json['energy_weekly_diff'] as num).toDouble()
-            : 0.0,
-        energyDailyTimestamp: json.containsKey("energy_daily_timestamp") ? json["energy_daily_timestamp"] : 0,
-        energyHourlyTimestamp: json.containsKey("energy_hourly_timestamp") ? json["energy_hourly_timestamp"] : 0,
-        energyMonthlyTimestamp: json.containsKey("energy_monthly_timestamp") ? json["energy_monthly_timestamp"] : 0,
-        energyWeeklyTimestamp: json.containsKey("energy_weekly_timestamp") ? json["energy_weekly_timestamp"] : 0,
-        power: json.containsKey("power")
-            ? (json['power'] is double)
-                ? json['power']
-                : (json['power'] as num).toDouble()
-            : 0.0,
-        timestamp: json.containsKey("timestamp") ? json["timestamp"] : 0,
+        current: json["current"],
+        energy: json["energy"],
+        power: json["power"],
+        powerFactor: json["power_factor"],
+        timestamp: json["timestamp"],
+        totalCurrent: json["total_current"],
+        totalPower: json["total_power"],
+        voltage: json["voltage"],
+        warnings: json["warnings"] == null ? [] : List<Warning>.from(json["warnings"]!.map((x) => Warning.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "current": current,
-        "id": id,
         "energy": energy,
-        "energy_daily": energyDaily,
-        "energy_hourly": energyHourly,
-        "energy_monthly": energyMonthly,
-        "energy_weekly": energyWeekly,
-        "energy_weekly_diff": energyWeeklyDiff,
-        "energy_daily_timestamp": energyDailyTimestamp,
-        "energy_hourly_timestamp": energyHourlyTimestamp,
-        "energy_monthly_timestamp": energyMonthlyTimestamp,
-        "energy_weekly_timestamp": energyWeeklyTimestamp,
         "power": power,
+        "power_factor": powerFactor,
         "timestamp": timestamp,
+        "total_current": totalCurrent,
+        "total_power": totalPower,
+        "voltage": voltage,
+        "warnings": warnings == null ? [] : List<dynamic>.from(warnings!.map((x) => x.toJson())),
       };
+}
 
-  @override
-  String toString() {
-    return jsonEncode(this);
-  }
+class Warning {
+  num? currentValue;
+  num? exceededBy;
+  String? level;
+  String? message;
+  num? threshold;
+  String? type;
+
+  Warning({
+    this.currentValue,
+    this.exceededBy,
+    this.level,
+    this.message,
+    this.threshold,
+    this.type,
+  });
+
+  factory Warning.fromRawJson(String str) => Warning.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Warning.fromJson(Map<String, dynamic> json) => Warning(
+        currentValue: json["current_value"],
+        exceededBy: json["exceeded_by"],
+        level: json["level"],
+        message: json["message"],
+        threshold: json["threshold"],
+        type: json["type"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "current_value": currentValue,
+        "exceeded_by": exceededBy,
+        "level": level,
+        "message": message,
+        "threshold": threshold,
+        "type": type,
+      };
 }

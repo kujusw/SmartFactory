@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
-import '../../../../common/utils/time_utils.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/dependencies/dependencies.dart';
 import '../../../../core/notifiers/device_state_notifier.dart';
@@ -52,45 +51,68 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
     ref.listen<DeviceModel?>(selectedDeviceProvider, (previous, next) async {
       DeviceEnergyResponseEntity deviceEnergyResponseEntity = await DeviceAPI.getDeviceModelEnergy(
           path: "v1/energy/${next?.id}", token: ref.read(loginProvider).data?.token);
-      ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceName(next?.deviceName ?? "");
-      ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceID(next?.id ?? "");
-      List<GeneralDeviceInfoModel> generalDeviceInfoModel = ref.read(generalDevicesInThingsProvider);
-      for (var item in generalDeviceInfoModel) {
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Current") {
-          item.value = (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + "A";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.timestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Energy") {
-          item.value = (deviceEnergyResponseEntity.data?.energy ?? 0.0).toStringAsFixed(2) + "kWh";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.timestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Power") {
-          item.value = (deviceEnergyResponseEntity.data?.power ?? 0.0).toStringAsFixed(2) + "kW";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.timestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Status") {
-          item.value = "Connected";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.timestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Hourly Total Energy") {
-          item.value = (deviceEnergyResponseEntity.data?.energyHourly ?? 0.0).toStringAsFixed(2) + "kWh";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.energyHourlyTimestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Daily Total Energy") {
-          item.value = (deviceEnergyResponseEntity.data?.energyDaily ?? 0.0).toStringAsFixed(2) + "kWh";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.energyDailyTimestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Monthly Total Energy") {
-          item.value = (deviceEnergyResponseEntity.data?.energyMonthly ?? 0.0).toStringAsFixed(2) + "kWh";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.energyMonthlyTimestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Weekly Energy Diff") {
-          item.value = (deviceEnergyResponseEntity.data?.energyWeeklyDiff ?? 0.0).toStringAsFixed(2) + "kWh";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.energyWeeklyTimestamp ?? 0)).toString();
-        }
-        if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Weekly Total Energy") {
-          item.value = (deviceEnergyResponseEntity.data?.energyWeekly ?? 0.0).toStringAsFixed(2) + "kWh";
-          item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.energyWeeklyTimestamp ?? 0)).toString();
+      List<GeneralDeviceInfoModel> generalDeviceInfoModel = [];
+      if (deviceEnergyResponseEntity.code == 100001) {
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Current",
+          value: (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + "A",
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Energy",
+          value: (deviceEnergyResponseEntity.data?.energy ?? 0.0).toStringAsFixed(2) + "kWh",
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Power",
+          value: (deviceEnergyResponseEntity.data?.power ?? 0.0).toStringAsFixed(2) + "kW",
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Power Factor",
+          value: (deviceEnergyResponseEntity.data?.powerFactor ?? 0.0).toStringAsFixed(2),
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Total Current",
+          value: (deviceEnergyResponseEntity.data?.totalCurrent ?? 0.0).toStringAsFixed(2) + "A",
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Total Power",
+          value: (deviceEnergyResponseEntity.data?.totalPower ?? 0.0).toStringAsFixed(2) + "kW",
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+          id: next?.id,
+          name: next?.deviceName ?? "",
+          type: "Voltage",
+          value: (deviceEnergyResponseEntity.data?.voltage ?? 0.0).toStringAsFixed(2) + "V",
+          time: deviceEnergyResponseEntity.data?.timestamp,
+        ));
+
+        for (var warning in deviceEnergyResponseEntity.data?.warnings ?? []) {
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: warning.type,
+            value: warning.message,
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
         }
       }
       ref.read(generalDevicesInThingsProvider.notifier).setList(generalDeviceInfoModel);

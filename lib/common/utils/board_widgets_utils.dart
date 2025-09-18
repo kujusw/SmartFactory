@@ -1,5 +1,4 @@
 import '../../models/boards_tab_model.dart';
-import '../../models/device_model.dart';
 
 String getReadingByWidgetReadingProviderInChart(String reading) {
   return reading == "Hourly Usage(Last 7 Days)"
@@ -109,50 +108,4 @@ String getReadingByWidgetReadingProviderInLastReadings(String reading) {
                               : reading == "Energy Weekly Diff"
                                   ? "energy_weekly_diff"
                                   : "";
-}
-
-String getLastReadingsWidgetStatusValue(
-    BoardsChartWidgetModel lastReadingsWidgetModel, DeviceEnergyResponseEntity deviceEnergyResponseEntity) {
-  String status = "N/A";
-  if (lastReadingsWidgetModel.reading == "current") {
-    status = (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + " A";
-  } else if (lastReadingsWidgetModel.reading == "power") {
-    status = (deviceEnergyResponseEntity.data?.power ?? 0.0).toStringAsFixed(2) + " kW";
-  } else if (lastReadingsWidgetModel.reading == "energy") {
-    status = (deviceEnergyResponseEntity.data?.energy ?? 0.0).toStringAsFixed(2) + " kWh";
-  } else if (lastReadingsWidgetModel.reading == "energy_hourly") {
-    status = (deviceEnergyResponseEntity.data?.energyHourly ?? 0.0).toStringAsFixed(2) + " kWh";
-  } else if (lastReadingsWidgetModel.reading == "energy_daily") {
-    status = (deviceEnergyResponseEntity.data?.energyDaily ?? 0.0).toStringAsFixed(2) + " kWh";
-  } else if (lastReadingsWidgetModel.reading == "energy_weekly") {
-    status = (deviceEnergyResponseEntity.data?.energyWeekly ?? 0.0).toStringAsFixed(2) + " kWh";
-  } else if (lastReadingsWidgetModel.reading == "energy_monthly") {
-    status = (deviceEnergyResponseEntity.data?.energyMonthly ?? 0.0).toStringAsFixed(2) + " kWh";
-  } else if (lastReadingsWidgetModel.reading == "energy_weekly_diff") {
-    status = (deviceEnergyResponseEntity.data?.energyWeeklyDiff ?? 0.0).toStringAsFixed(2) + " kWh";
-  }
-  return status;
-}
-
-int getLastReadingsWidgetStatusTime(
-    BoardsChartWidgetModel lastReadingsWidgetModel, DeviceEnergyResponseEntity deviceEnergyResponseEntity) {
-  int time = 0;
-  if (lastReadingsWidgetModel.reading == "current") {
-    time = deviceEnergyResponseEntity.data?.timestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "power") {
-    time = deviceEnergyResponseEntity.data?.timestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "energy") {
-    time = deviceEnergyResponseEntity.data?.timestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "energy_hourly") {
-    time = deviceEnergyResponseEntity.data?.energyHourlyTimestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "energy_daily") {
-    time = deviceEnergyResponseEntity.data?.energyDailyTimestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "energy_weekly") {
-    time = deviceEnergyResponseEntity.data?.energyWeeklyTimestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "energy_monthly") {
-    time = deviceEnergyResponseEntity.data?.energyMonthlyTimestamp ?? 0;
-  } else if (lastReadingsWidgetModel.reading == "energy_weekly_diff") {
-    time = deviceEnergyResponseEntity.data?.energyWeeklyTimestamp ?? 0;
-  }
-  return time;
 }
