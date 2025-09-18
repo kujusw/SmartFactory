@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class DevicesResponseEntity {
-  final int? code;
-  final List<DeviceModel>? data;
-  final String? message;
+  int? code;
+  List<DeviceModel>? data;
+  String? message;
 
   DevicesResponseEntity({
     this.code,
@@ -11,25 +11,14 @@ class DevicesResponseEntity {
     this.message,
   });
 
-  DevicesResponseEntity copyWith({
-    int? code,
-    List<DeviceModel>? data,
-    String? message,
-  }) =>
-      DevicesResponseEntity(
-        code: code ?? this.code,
-        data: data ?? this.data,
-        message: message ?? this.message,
-      );
-
   factory DevicesResponseEntity.fromRawJson(String str) => DevicesResponseEntity.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory DevicesResponseEntity.fromJson(Map<String, dynamic> json) => DevicesResponseEntity(
-        code: json.containsKey("code") ? json["code"] : 0,
-        data: json.containsKey("data") ? List<DeviceModel>.from(json["data"].map((x) => DeviceModel.fromJson(x))) : [],
-        message: json.containsKey("message") ? json["message"] : "",
+        code: json["code"],
+        data: json["data"] == null ? [] : List<DeviceModel>.from(json["data"]!.map((x) => DeviceModel.fromJson(x))),
+        message: json["message"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,111 +26,152 @@ class DevicesResponseEntity {
         "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
         "message": message,
       };
-
-  @override
-  String toString() {
-    return jsonEncode(this);
-  }
 }
 
 class DeviceModel {
-  final String? id;
-  final bool? isOnline;
-  String? location;
+  String? applicationId;
+  String? applicationName;
+  int? associatedDeviceCount;
+  List<DeviceModel>? associatedDevices;
+  String? createdAt;
+  dynamic devAddr;
+  String? deviceName;
+  int? deviceStatus;
+  String? deviceType;
+  String? firstSeen;
+  String? id;
+  dynamic ipsoVersion;
+  String? lastSeen;
   int? locationId;
-  String? name;
-  final String? type;
+  String? updatedAt;
+  num? warningRedThreshold;
+  num? warningYellowThreshold;
+
+  //UI
   bool? selected; //在设备列表中是否选中
   bool? selectedInAddDevice; //在添加设备中是否选中
-  List<String>? associatedDeviceIds;
   bool? selectedInMenu; //在设备三级菜单中是否选中
 
   DeviceModel({
+    this.applicationId,
+    this.applicationName,
+    this.associatedDeviceCount,
+    this.associatedDevices,
+    this.createdAt,
+    this.devAddr,
+    this.deviceName,
+    this.deviceStatus,
+    this.deviceType,
+    this.firstSeen,
     this.id,
-    this.isOnline,
-    this.location,
+    this.ipsoVersion,
+    this.lastSeen,
     this.locationId,
-    this.name,
-    this.type,
+    this.updatedAt,
+    this.warningRedThreshold,
+    this.warningYellowThreshold,
     this.selected,
     this.selectedInAddDevice,
-    this.associatedDeviceIds,
     this.selectedInMenu,
   });
-
-  DeviceModel copyWith({
-    String? id,
-    bool? isOnline,
-    String? location,
-    int? locationId,
-    String? name,
-    String? type,
-    bool? selected,
-    bool? selectedInAddDevice,
-    List<String>? associatedDeviceIds,
-    bool? selectedInMenu,
-  }) =>
-      DeviceModel(
-        id: id ?? this.id,
-        isOnline: isOnline ?? this.isOnline,
-        location: location ?? this.location,
-        locationId: locationId ?? this.locationId,
-        name: name ?? this.name,
-        type: type ?? this.type,
-        selected: selected ?? this.selected,
-        selectedInAddDevice: selectedInAddDevice ?? this.selectedInAddDevice,
-        associatedDeviceIds: associatedDeviceIds ?? this.associatedDeviceIds,
-        selectedInMenu: selectedInMenu ?? this.selectedInMenu,
-      );
 
   factory DeviceModel.fromRawJson(String str) => DeviceModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory DeviceModel.fromJson(Map<String, dynamic> json) => DeviceModel(
-        id: json.containsKey("id") ? json["id"] : "",
-        isOnline: json.containsKey("is_online") ? json["is_online"] : false,
-        location: json.containsKey("location") ? json["location"] : "",
-        locationId: json.containsKey("location_id") ? json["location_id"] : 0,
-        name: json.containsKey("name") ? json["name"] : "",
-        type: json.containsKey("type") ? json["type"] : "",
-        associatedDeviceIds: json.containsKey("associated_device_ids")
-            ? List<String>.from(json["associated_device_ids"].map((x) => x))
-            : [],
-        selected: json.containsKey("selected") ? json["selected"] : false,
-        selectedInAddDevice: json.containsKey("selectedInAddDevice") ? json["selectedInAddDevice"] : false,
-        selectedInMenu: json.containsKey("selectedInMenu") ? json["selectedInMenu"] : false,
+        applicationId: json["application_id"],
+        applicationName: json["application_name"],
+        associatedDeviceCount: json["associated_device_count"],
+        associatedDevices: json["associated_devices"] == null
+            ? []
+            : List<DeviceModel>.from(json["associated_devices"]!.map((x) => DeviceModel.fromJson(x))),
+        createdAt: json["created_at"],
+        devAddr: json["dev_addr"],
+        deviceName: json["device_name"],
+        deviceStatus: json["device_status"],
+        deviceType: json["device_type"],
+        firstSeen: json["first_seen"],
+        id: json["id"],
+        ipsoVersion: json["ipso_version"],
+        lastSeen: json["last_seen"],
+        locationId: json["location_id"],
+        updatedAt: json["updated_at"],
+        warningRedThreshold: json["warning_red_threshold"],
+        warningYellowThreshold: json["warning_yellow_threshold"],
+        selected: json["selected"],
+        selectedInAddDevice: json["selected_in_add_device"],
+        selectedInMenu: json["selected_in_menu"],
       );
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is DeviceModel &&
-        other.id == id &&
-        other.isOnline == isOnline &&
-        other.location == location &&
-        other.locationId == locationId &&
-        other.name == name &&
-        other.type == type &&
-        other.selected == selected &&
-        other.selectedInAddDevice == selectedInAddDevice &&
-        other.associatedDeviceIds == associatedDeviceIds &&
-        other.selectedInMenu == selectedInMenu;
-  }
-
   Map<String, dynamic> toJson() => {
+        "application_id": applicationId,
+        "application_name": applicationName,
+        "associated_device_count": associatedDeviceCount,
+        "associated_devices":
+            associatedDevices == null ? [] : List<dynamic>.from(associatedDevices!.map((x) => x.toJson())),
+        "created_at": createdAt,
+        "dev_addr": devAddr,
+        "device_name": deviceName,
+        "device_status": deviceStatus,
+        "device_type": deviceType,
+        "first_seen": firstSeen,
         "id": id,
-        "is_online": isOnline,
-        "location": location,
+        "ipso_version": ipsoVersion,
+        "last_seen": lastSeen,
         "location_id": locationId,
-        "name": name,
-        "type": type,
-        "associated_device_ids":
-            associatedDeviceIds == null ? [] : List<dynamic>.from(associatedDeviceIds!.map((x) => x)),
+        "updated_at": updatedAt,
+        "warning_red_threshold": warningRedThreshold,
+        "warning_yellow_threshold": warningYellowThreshold,
         "selected": selected,
-        "selectedInAddDevice": selectedInAddDevice,
-        "selectedInMenu": selectedInMenu,
+        "selected_in_add_device": selectedInAddDevice,
+        "selected_in_menu": selectedInMenu,
       };
+
+  DeviceModel copyWith({
+    String? applicationId,
+    String? applicationName,
+    int? associatedDeviceCount,
+    List<DeviceModel>? associatedDevices,
+    String? createdAt,
+    dynamic devAddr,
+    String? deviceName,
+    int? deviceStatus,
+    String? deviceType,
+    String? firstSeen,
+    String? id,
+    dynamic ipsoVersion,
+    String? lastSeen,
+    int? locationId,
+    String? updatedAt,
+    num? warningRedThreshold,
+    num? warningYellowThreshold,
+    bool? selected,
+    bool? selectedInAddDevice,
+    bool? selectedInMenu,
+  }) =>
+      DeviceModel(
+        applicationId: applicationId ?? this.applicationId,
+        applicationName: applicationName ?? this.applicationName,
+        associatedDeviceCount: associatedDeviceCount ?? this.associatedDeviceCount,
+        associatedDevices: associatedDevices ?? this.associatedDevices,
+        createdAt: createdAt ?? this.createdAt,
+        devAddr: devAddr ?? this.devAddr,
+        deviceName: deviceName ?? this.deviceName,
+        deviceStatus: deviceStatus ?? this.deviceStatus,
+        deviceType: deviceType ?? this.deviceType,
+        firstSeen: firstSeen ?? this.firstSeen,
+        id: id ?? this.id,
+        ipsoVersion: ipsoVersion ?? this.ipsoVersion,
+        lastSeen: lastSeen ?? this.lastSeen,
+        locationId: locationId ?? this.locationId,
+        updatedAt: updatedAt ?? this.updatedAt,
+        warningRedThreshold: warningRedThreshold ?? this.warningRedThreshold,
+        warningYellowThreshold: warningYellowThreshold ?? this.warningYellowThreshold,
+        selected: selected ?? this.selected,
+        selectedInAddDevice: selectedInAddDevice ?? this.selectedInAddDevice,
+        selectedInMenu: selectedInMenu ?? this.selectedInMenu,
+      );
   @override
   String toString() {
     return jsonEncode(this);

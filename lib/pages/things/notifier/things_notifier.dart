@@ -1,16 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
-import '../../../core/dependencies/dependencies.dart';
 import '../../../http/device.dart';
 import '../../../models/device_model.dart';
 import '../../../models/device_model_new.dart';
 import '../../../models/general_device_info_model.dart';
 import '../../../models/locationresponseentity.dart';
 import '../../boards/general/notifier/device_notifier.dart';
-import 'deviceaddhttpmanager.dart';
-import 'devicedeletehttpmanager.dart';
-import 'location_inuser_state_notifier.dart';
 import 'updatedevicelocationhttpmanager.dart';
 
 part 'things_notifier.g.dart';
@@ -82,7 +78,7 @@ List<DeviceModel> searchDevicesInThings(Ref ref) {
   final devices = ref.watch(deviceManagerProvider);
 
   if (searchValue.isNotEmpty) {
-    return devices.where((d) => d.name?.toLowerCase().contains(searchValue.toLowerCase()) ?? false).toList();
+    return devices.where((d) => d.deviceName?.toLowerCase().contains(searchValue.toLowerCase()) ?? false).toList();
   }
   return devices;
 }

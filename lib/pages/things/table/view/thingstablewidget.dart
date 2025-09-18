@@ -67,7 +67,7 @@ class ThingsViewTableWidget extends ConsumerWidget {
                             color: ref.watch(colorProvider)['text'],
                           ),
                           onChanged: (value) {
-                            ref.read(searchValueInThingsProvider.notifier).state = value;
+                            ref.read(searchValueInThingsProvider.notifier).set(value);
                           },
                           controller: searchController,
                           decoration: InputDecoration(
@@ -109,7 +109,7 @@ class ThingsViewTableWidget extends ConsumerWidget {
                             suffixIcon: GestureDetector(
                               onTap: () {
                                 if (ref.read(searchValueInThingsProvider).toString().length > 0) {
-                                  ref.read(searchValueInThingsProvider.notifier).state = "";
+                                  ref.read(searchValueInThingsProvider.notifier).set("");
                                   searchController.clear();
                                 }
                               },

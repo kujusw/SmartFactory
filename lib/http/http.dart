@@ -4,7 +4,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../common/utils/logger_manager.dart';
 import '../common/values/cache.dart';
 import '../common/values/constant.dart';
-import 'package:http/http.dart' as http;
 
 /*
   * http 操作类
@@ -180,6 +179,7 @@ class HttpUtil {
       //e.response?.data 是服务器拦截返回的错误信息 例如：{"code":401,"message":"Unauthorized"} 直接返回它
       //但是做前置判断 try catch 会捕获到错误信息，所以需要在这里返回
       //解析 e.response?.data 为json格式
+      LoggerManager().e('error.response -> ${e.response}');
       int? code = e.response?.statusCode;
       String? message = e.response?.data.toString();
       try {

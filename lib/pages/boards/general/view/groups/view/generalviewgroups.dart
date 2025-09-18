@@ -5,10 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../../../common/styles/assets.dart';
-import '../../../../../../common/styles/theme.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/values/index.dart';
-import '../../../../../../core/dependencies/dependencies.dart';
 import '../../../../../../core/notifiers/device_state_notifier.dart';
 import '../../../notifier/device_notifier.dart';
 import 'devicelistview.dart';
@@ -87,7 +85,7 @@ class GeneralViewGroups extends ConsumerWidget {
                               color: ref.watch(colorProvider)['text'],
                             ),
                             onChanged: (value) {
-                              ref.read(vualeSearchProvider.notifier).state = value;
+                              ref.read(vualeSearchProvider.notifier).setValue(value);
                               //通过是否有值替换下面的列表
                             },
                             controller: searchController,
@@ -117,7 +115,7 @@ class GeneralViewGroups extends ConsumerWidget {
                               suffixIcon: GestureDetector(
                                 onTap: () {
                                   if (ref.read(vualeSearchProvider).toString().length > 0) {
-                                    ref.read(vualeSearchProvider.notifier).state = "";
+                                    ref.read(vualeSearchProvider.notifier).setValue("");
                                     searchController.clear();
                                   }
                                 },

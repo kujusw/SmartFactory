@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../common/styles/assets.dart';
-import '../../../../../../common/styles/theme.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/utils/screenutil.dart';
@@ -31,7 +30,7 @@ class DeviceListView extends ConsumerWidget {
                           return GestureDetector(
                             onTap: () => {
                               LoggerManager().d("DeviceListView item : ${data[index]}"),
-                              ref.read(currentDeviceProvider.notifier).state = data[index]
+                              ref.read(currentDeviceProvider.notifier).setCurrentDevice(data[index]),
                             },
                             child: Column(
                               children: [
@@ -60,7 +59,7 @@ class DeviceListView extends ConsumerWidget {
                                             margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
                                           ),
                                           Text(
-                                            data[index].name ?? "",
+                                            data[index].deviceName ?? "",
                                             style: TextStyle(
                                               fontSize: Constant.textSP_14,
                                               color: ref.watch(colorProvider)['text'],

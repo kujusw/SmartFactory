@@ -5,7 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 
 import '../../../../common/utils/sort.dart';
-import '../../../../core/dependencies/dependencies.dart';
 import '../../../../http/device.dart';
 import '../../../../models/device_model.dart';
 import '../../../../models/general_device_info_model.dart';
@@ -17,7 +16,7 @@ part 'device_notifier.g.dart';
 @riverpod
 Future<List<DeviceModel>> devices(Ref ref) async {
   final token = ref.read(loginProvider).data?.token;
-  final devices = await DeviceAPI.getDevices(path: "v1/devices/all", token: token);
+  final devices = await DeviceAPI.getDevices(path: "api/v1/devices/all", token: token);
   final sortDevicesReturn = sortDevices(devices.data ?? []);
 
   ref.read(deviceManagerProvider.notifier).setDevices(sortDevicesReturn ?? []);

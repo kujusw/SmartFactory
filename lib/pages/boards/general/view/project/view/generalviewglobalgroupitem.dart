@@ -45,25 +45,25 @@ class _GeneralViewGlobalGroupsItemState extends ConsumerState<GeneralViewGlobalG
   List<Map<String, dynamic>> getJsonList(LocationModel locationModel, List<DeviceModel> devices, String type) {
     List<Map<String, dynamic>> list = [];
     for (var item in devices) {
-      if (item.location == locationModel.name) {
+      if (item.locationId == locationModel.id) {
         if (type == "Lighting") {
-          if ((item.name ?? "").toUpperCase().contains("LTG")) {
+          if ((item.deviceName ?? "").toUpperCase().contains("LTG")) {
             list.add(item.toJson());
           }
         } else if (type == "AC") {
-          if ((item.name ?? "").toUpperCase().contains("AC")) {
+          if ((item.deviceName ?? "").toUpperCase().contains("AC")) {
             list.add(item.toJson());
           }
         } else if (type == "Socket") {
-          if ((item.name ?? "").toUpperCase().contains("SO")) {
+          if ((item.deviceName ?? "").toUpperCase().contains("SO")) {
             list.add(item.toJson());
           }
         } else if (type == "Total Consumption") {
-          if ((item.name ?? "").toUpperCase().contains("TOTAL")) {
+          if ((item.deviceName ?? "").toUpperCase().contains("TOTAL")) {
             list.add(item.toJson());
           }
         } else if (type == "Mains") {
-          if ((item.name ?? "").toUpperCase().contains("MAINS")) {
+          if ((item.deviceName ?? "").toUpperCase().contains("MAINS")) {
             list.add(item.toJson());
           }
         } else {

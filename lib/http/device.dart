@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../common/utils/logger_manager.dart';
 import '../common/values/constant.dart';
 import '../models/device_model.dart';
@@ -10,7 +12,7 @@ class DeviceAPI {
     String? token,
   }) async {
     var response = await HttpUtil(url: (Constant.HOST), token: token).get(path!);
-    LoggerManager().d("getDevices :$response");
+    LoggerManager().d("getDevices response: ${jsonEncode(response)}");
     return DevicesResponseEntity.fromJson(response);
   }
 

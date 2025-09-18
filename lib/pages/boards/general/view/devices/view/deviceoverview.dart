@@ -25,7 +25,7 @@ class DeviceOverView extends ConsumerWidget {
       LoggerManager().d("deviceEnergyResponseEntity: ${deviceEnergyResponseEntity.toString()}");
       ref
           .read(itemsGeneralDeviceProvider.notifier)
-          .updateGeneralDeviceName(GeneralDeviceInfoModel(id: next?.id ?? "", name: next?.name ?? ""));
+          .updateGeneralDeviceName(GeneralDeviceInfoModel(id: next?.id ?? "", name: next?.deviceName ?? ""));
       List<GeneralDeviceInfoModel> generalDeviceInfoModel = ref.read(itemsGeneralDeviceProvider);
       if (deviceEnergyResponseEntity.code == 100001) {
         for (var item in generalDeviceInfoModel) {

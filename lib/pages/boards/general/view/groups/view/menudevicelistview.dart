@@ -8,7 +8,6 @@ import '../../../../../../common/styles/assets.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../../../common/values/index.dart';
-import '../../../../../../core/dependencies/dependencies.dart';
 import '../../../notifier/device_notifier.dart';
 
 class MenuDeviceListView extends ConsumerWidget {
@@ -58,7 +57,7 @@ class MenuDeviceListView extends ConsumerWidget {
                                     margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
                                   ),
                                   Text(
-                                    datas[index].name ?? "",
+                                    datas[index].deviceName ?? "",
                                     style: TextStyle(
                                       fontSize: Constant.textSP_14,
                                       color: ref.watch(colorProvider)['text'],

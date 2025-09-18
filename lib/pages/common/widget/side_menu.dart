@@ -6,8 +6,6 @@ import '../../../common/styles/assets.dart';
 import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../../core/dependencies/dependencies.dart';
-import '../../../models/user_role_model.dart';
-import '../../login/notifier/login_notifier.dart';
 
 class SideMenu extends ConsumerWidget {
   final TextEditingController urlController = TextEditingController()..text = "";

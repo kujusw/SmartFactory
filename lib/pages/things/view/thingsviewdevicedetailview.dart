@@ -6,15 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
-import '../../../common/styles/theme.dart';
 import '../../../common/styles/theme_state_notifier.dart';
-import '../../../common/utils/logger_manager.dart';
 import '../../../common/values/index.dart';
-import '../../../core/dependencies/dependencies.dart';
 import '../../../models/device_model.dart';
-import '../../../models/device_model_new.dart';
-import '../../login/notifier/login_notifier.dart';
-import '../notifier/things_notifier.dart';
 
 class ThingsViewDeviceDetailView extends ConsumerStatefulWidget {
   final DeviceModel _model;
@@ -59,7 +53,8 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        ref.watch(deviceManagerProvider.notifier).getDeviceById(widget._model.id ?? "0")?.name ?? "",
+                        ref.watch(deviceManagerProvider.notifier).getDeviceById(widget._model.id ?? "0")?.deviceName ??
+                            "",
                         style: TextStyle(
                           fontSize: Constant.textSP_18,
                           color: ref.watch(colorProvider)['white'],

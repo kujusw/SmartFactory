@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../common/styles/theme.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/values/index.dart';
-import '../../../../../../core/dependencies/dependencies.dart';
 import '../../../../../../core/notifiers/device_state_notifier.dart';
 import '../../../../../../models/device_model.dart';
 import '../../../notifier/device_notifier.dart';
@@ -41,7 +39,7 @@ class GeneralViewDevices extends ConsumerWidget {
                   DeviceModel? deviceModel = watch.watch(currentDeviceProvider);
                   if (devices?.isNotEmpty == true && deviceModel?.id?.isNotEmpty == true) {
                     return Text(
-                      deviceModel?.name ?? "",
+                      deviceModel?.deviceName ?? "",
                       style: TextStyle(
                         fontSize: Constant.textSP_20,
                         color: ref.watch(colorProvider)['text'],

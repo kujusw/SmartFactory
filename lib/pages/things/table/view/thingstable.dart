@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import '../../../../common/styles/theme.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/utils/time_utils.dart';
 import '../../../../common/values/index.dart';
@@ -53,7 +52,7 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
     ref.listen<DeviceModel?>(selectedDeviceProvider, (previous, next) async {
       DeviceEnergyResponseEntity deviceEnergyResponseEntity = await DeviceAPI.getDeviceModelEnergy(
           path: "v1/energy/${next?.id}", token: ref.read(loginProvider).data?.token);
-      ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceName(next?.name ?? "");
+      ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceName(next?.deviceName ?? "");
       ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceID(next?.id ?? "");
       List<GeneralDeviceInfoModel> generalDeviceInfoModel = ref.read(generalDevicesInThingsProvider);
       for (var item in generalDeviceInfoModel) {
@@ -151,8 +150,8 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
           child: Container(padding: const EdgeInsets.all(20), color: Colors.grey[200], child: const Text('No data'))),
 
       rows: List<DataRow>.generate(
-        ref.watch(searchDevicesInThingsProvider)?.length ?? 0,
-        (index) => devicesDataRow(ref.watch(searchDevicesInThingsProvider)![index], index, ref),
+        ref.watch(searchDevicesInThingsProvider).length,
+        (index) => devicesDataRow(ref.watch(searchDevicesInThingsProvider)[index], index, ref),
       ),
     );
   }
@@ -164,7 +163,7 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
       onSelectChanged: (value) {
         if (deviceModel.selected != value) {
           //现在只能选择虚拟设备进行删除
-          if (deviceModel.type == "virtual") {
+          if (deviceModel.deviceType == "virtual") {
             deviceModel.selected = value;
             ref.read(deviceManagerProvider.notifier).updateDevice(deviceModel);
 
@@ -182,7 +181,7 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
         }
       },
       onTap: () => {
-        ref.read(selectedDeviceProvider.notifier).state = deviceModel,
+        ref.read(selectedDeviceProvider.notifier).set(deviceModel),
         unawaited(
           SmartDialog.show(
             usePenetrate: false,
@@ -202,9 +201,9 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
       specificRowHeight: 60.h,
       cells: [
         DataCell(customValue(deviceModel.id ?? "0", ref)),
-        DataCell(customValue(deviceModel.name ?? "", ref)),
-        DataCell(customValue(deviceModel.location ?? "", ref)),
-        DataCell(customValue(deviceModel.type ?? "", ref)),
+        DataCell(customValue(deviceModel.deviceName ?? "", ref)),
+        DataCell(customValue((deviceModel.locationId ?? 0).toString(), ref)),
+        DataCell(customValue(deviceModel.deviceType ?? "", ref)),
         DataCell(customValueOnline(deviceModel)),
       ],
     );
@@ -212,9 +211,9 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
 
   customValueOnline(DeviceModel deviceModel) {
     return Text(
-      deviceModel.isOnline ?? false ? "Online" : "Offline",
+      (deviceModel.deviceStatus == 1) ? "Online" : "Offline",
       style: TextStyle(
-        color: deviceModel.isOnline ?? false ? Colors.green : Colors.red,
+        color: (deviceModel.deviceStatus == 1) ? Colors.green : Colors.red,
         fontWeight: FontWeight.bold,
         fontSize: Constant.textSP_16,
       ),

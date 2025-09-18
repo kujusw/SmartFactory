@@ -30,9 +30,7 @@ abstract class Constant {
   // static String HOST_MQTT = "ws://47.119.160.142:8083/mqtt";
 
   //测试环境
-  static String HOST = "https://aipanel-kuju.com/";
-  static String HOST_MQTT = "ws://mpiot.com.hk:8083/mqtt";
-  static String HOST_MQTT_TEST = "aipanel-kuju.com";
+  static String HOST = "http://8.138.251.245/";
 
   //是否是测试环境
   static const bool isUser = true;

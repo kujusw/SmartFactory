@@ -7,21 +7,21 @@ sortDevices(List<DeviceModel> devices) {
     }
     //分离出名字含有total的设备
     List<DeviceModel> totalDeviceList = devices.where((element) {
-      return (element.name ?? "").toLowerCase().contains("total");
+      return (element.deviceName ?? "").toLowerCase().contains("total");
     }).toList();
 
     //根据名字排序
     totalDeviceList.sort((a, b) {
-      return (a.name ?? "").toLowerCase().compareTo((b.name ?? "").toLowerCase());
+      return (a.deviceName ?? "").toLowerCase().compareTo((b.deviceName ?? "").toLowerCase());
     });
     //分离出名字不含有total的设备
     List<DeviceModel> noTotalDeviceList = devices.where((element) {
-      return !((element.name ?? "").toLowerCase().contains("total"));
+      return !((element.deviceName ?? "").toLowerCase().contains("total"));
     }).toList();
 
     //根据名字排序
     noTotalDeviceList.sort((a, b) {
-      return (a.name ?? "").toLowerCase().compareTo((b.name ?? "").toLowerCase());
+      return (a.deviceName ?? "").toLowerCase().compareTo((b.deviceName ?? "").toLowerCase());
     });
 
     //合并

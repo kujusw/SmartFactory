@@ -66,7 +66,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  datas[index].name ?? "",
+                                  datas[index].deviceName ?? "",
                                   style: TextStyle(
                                     fontSize: Constant.textSP_14,
                                     color: ref.watch(colorProvider)['text'],

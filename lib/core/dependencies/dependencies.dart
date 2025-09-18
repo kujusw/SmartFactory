@@ -1,8 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../models/device_model.dart';
 import '../../models/general_globalinfo_model.dart';
 import '../notifiers/floatbuttonmanager.dart';
 import '../preferences/preferences.dart';
