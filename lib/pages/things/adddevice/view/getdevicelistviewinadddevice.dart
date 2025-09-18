@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../../../../common/utils/screenutil.dart';
-import '../../../../common/styles/theme.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
-import '../../../../core/dependencies/dependencies.dart';
 
 class DeviceListViewInAddDevice extends ConsumerStatefulWidget {
   final String type;

@@ -152,87 +152,88 @@ class GeneralViewGroups extends ConsumerWidget {
           SizedBox(height: 10.h),
 
           Container(
-              height: 690.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.w),
-                color: ref.watch(colorProvider)['backgroundColorWidget'],
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    height: 48.h,
-                    padding: EdgeInsets.only(left: 20.w, right: 20.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                ref.watch(colorProvider)['white']!,
-                                BlendMode.srcIn,
-                              ),
-                              child: SvgPicture.asset(
-                                AssetsImages.lightningBoltIconRemovebgPreview_2Svg,
-                                height: 30.h,
-                                width: 30.h,
-                              ),
+            height: 690.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.w),
+              color: ref.watch(colorProvider)['backgroundColorWidget'],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  height: 48.h,
+                  padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              ref.watch(colorProvider)['white']!,
+                              BlendMode.srcIn,
                             ),
-                            Container(
-                              color: ref.watch(colorProvider)['grey'],
-                              width: 2.w,
-                              margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
+                            child: SvgPicture.asset(
+                              AssetsImages.lightningBoltIconRemovebgPreview_2Svg,
+                              height: 30.h,
+                              width: 30.h,
                             ),
-                            Text(
-                              "Name",
-                              style: TextStyle(
-                                fontSize: Constant.textSP_14,
-                                color: ref.watch(colorProvider)['text'],
-                              ),
+                          ),
+                          Container(
+                            color: ref.watch(colorProvider)['grey'],
+                            width: 2.w,
+                            margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
+                          ),
+                          Text(
+                            "Name",
+                            style: TextStyle(
+                              fontSize: Constant.textSP_14,
+                              color: ref.watch(colorProvider)['text'],
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              color: ref.watch(colorProvider)['grey'],
-                              width: 2.w,
-                              margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            color: ref.watch(colorProvider)['grey'],
+                            width: 2.w,
+                            margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
+                          ),
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              ref.watch(colorProvider)['white']!,
+                              BlendMode.srcIn,
                             ),
-                            ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                ref.watch(colorProvider)['white']!,
-                                BlendMode.srcIn,
-                              ),
-                              child: SvgPicture.asset(
-                                AssetsImages.bellIconGraySvg,
-                                height: 30.h,
-                                width: 30.h,
-                              ),
+                            child: SvgPicture.asset(
+                              AssetsImages.bellIconGraySvg,
+                              height: 30.h,
+                              width: 30.h,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                ),
 
-                  //分割线
-                  Container(
-                    color: ref.watch(colorProvider)['dividerColor'],
-                    margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
-                    height: 2.h,
-                  ),
-                  Consumer(builder: (context, ref, child) {
-                    return ref.watch(vualeSearchProvider).toString().length > 0
-                        ? SearchDeviceListView()
-                        : ref.watch(showMenuDeviceListProvider) > 0
-                            ? MenuDeviceListView()
-                            : DeviceListView();
-                  }),
+                //分割线
+                Container(
+                  color: ref.watch(colorProvider)['dividerColor'],
+                  margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
+                  height: 2.h,
+                ),
+                Consumer(builder: (context, ref, child) {
+                  return ref.watch(vualeSearchProvider).toString().length > 0
+                      ? SearchDeviceListView()
+                      : ref.watch(showMenuDeviceListProvider) > 0
+                          ? MenuDeviceListView()
+                          : DeviceListView();
+                }),
 
-                  Consumer(builder: (context, ref, child) {
+                Consumer(
+                  builder: (context, ref, child) {
                     var result = ref.watch(vualeSearchProvider).toString().length > 0
                         ? ref.watch(itemsSearchDeviceModelInDeviceProvider) ?? []
                         : ref.watch(showMenuDeviceListProvider) > 0
@@ -250,9 +251,11 @@ class GeneralViewGroups extends ConsumerWidget {
                         ),
                       ),
                     );
-                  }),
-                ],
-              )),
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

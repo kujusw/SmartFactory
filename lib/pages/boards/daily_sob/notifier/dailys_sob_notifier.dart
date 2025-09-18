@@ -279,28 +279,6 @@ class BoardsWidgetDelete extends _$BoardsWidgetDelete {
 /// ==================== FutureProviders ====================
 
 @riverpod
-Future<List<BoardsTabModel>> boardsTabs(Ref ref) async {
-  final token = ref.read(loginProvider).data?.token;
-  final boards = await BoardsTabAPI.getBoardsTabs(path: "v1/boards", token: token);
-
-  ref.read(pageProvider.notifier).clearTabs();
-  ref.read(pageProvider.notifier).addTabs(boards.data ?? []);
-
-  return boards.data ?? [];
-}
-
-@riverpod
-Future<List<BoardsChartWidgetModel>> boardsWidgets(Ref ref, int boardId) async {
-  final token = ref.read(loginProvider).data?.token;
-  final widgets = await BoardsTabAPI.getBoardsWidgets(path: "v1/boards/$boardId/widgets", token: token);
-
-  ref.read(chartWidgetProvider.notifier).clearWidgets();
-  ref.read(chartWidgetProvider.notifier).setWidgets(widgets.data ?? []);
-
-  return widgets.data ?? [];
-}
-
-@riverpod
 Future<List<DeviceEnergy>> deviceEnergys(Ref ref, BoardsChartWidgetModel parameter) async {
   final period = parameter.period;
   final type = getEnergyRequestType(parameter);
@@ -329,8 +307,6 @@ Future<DeviceEnergyResponseEntity> lastReadingsWidgetStatus(
 //退出登录后 清空数据
 void clearBoardsProvider(WidgetRef ref) {
   ref.invalidate(pageProvider);
-  ref.invalidate(boardsTabsProvider);
-  ref.invalidate(boardsWidgetsProvider);
   ref.invalidate(deviceEnergysProvider);
   ref.invalidate(lastReadingsWidgetStatusProvider);
   ref.invalidate(boardsTabAddProvider);

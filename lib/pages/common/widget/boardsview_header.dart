@@ -24,7 +24,6 @@ class _BoardsViewHeaderState extends ConsumerState<BoardsViewHeader> {
   @override
   void initState() {
     super.initState();
-    ref.refresh(boardsTabsProvider); //刷新并read新值
   }
 
   @override
@@ -197,12 +196,7 @@ class BoardsTabWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onLongPress: () {},
-      onDoubleTap: () {
-        // 双击事件的处理逻辑
-        if (tab.id != 0 && tab.name != "General") {
-          ref.refresh(boardsWidgetsProvider(tab.id ?? 0)); //刷新并read新值
-        }
-      },
+      onDoubleTap: () {},
       child: Stack(
         children: [
           TextButton(

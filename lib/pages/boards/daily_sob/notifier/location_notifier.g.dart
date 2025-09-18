@@ -161,4 +161,4 @@ final class GetLocationsProvider extends $FunctionalProvider<
   }
 }
 
-String _$getLocationsHash() => r'a1269d0eb866f2e775ba9bc687a0e28fb15091a9';
+String _$getLocationsHash() => r'94432a7eec51b67cac0c8ec7987eae34e6131266';

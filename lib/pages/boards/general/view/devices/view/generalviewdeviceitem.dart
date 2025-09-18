@@ -8,6 +8,7 @@ import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../../../../models/general_device_info_model.dart';
 import '../../../../../things/notifier/things_notifier.dart';
+import '../../../../common/widgets/marquee.dart';
 import '../../../notifier/device_notifier.dart';
 
 class GeneralViewDevicesItem extends ConsumerWidget {
@@ -66,12 +67,28 @@ class GeneralViewDevicesItem extends ConsumerWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Text(
-                      item.value ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: Constant.textSP_16,
-                        color: ref.watch(colorProvider)['text'],
+                    Container(
+                      width: double.infinity,
+                      height: 50.h,
+                      child: Marquee(
+                        text: item.value ?? "",
+                        scrollAxis: Axis.horizontal, // 水平方向滚动
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        blankSpace: 20.w, // 每次滚动之间的空白
+                        velocity: 30.0, // 滚动速度
+                        startPadding: 10.0,
+                        accelerationCurve: Curves.easeIn,
+                        decelerationCurve: Curves.easeOut,
+                        style: TextStyle(
+                          fontSize: Constant.textSP_16,
+                          color: item.type == "red"
+                              ? Colors.red
+                              : item.type == "yellow"
+                                  ? Colors.yellow
+                                  : item.type == "green"
+                                      ? Colors.green
+                                      : ref.watch(colorProvider)['text'],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -82,7 +99,13 @@ class GeneralViewDevicesItem extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: Constant.textSP_16,
-                        color: ref.watch(colorProvider)['text'],
+                        color: item.type == "red"
+                            ? Colors.red
+                            : item.type == "yellow"
+                                ? Colors.yellow
+                                : item.type == "green"
+                                    ? Colors.green
+                                    : ref.watch(colorProvider)['text'],
                       ),
                     ),
                     SizedBox(
@@ -93,7 +116,13 @@ class GeneralViewDevicesItem extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: Constant.textSP_12,
-                        color: ref.watch(colorProvider)['text'],
+                        color: item.type == "red"
+                            ? Colors.red
+                            : item.type == "yellow"
+                                ? Colors.yellow
+                                : item.type == "green"
+                                    ? Colors.green
+                                    : ref.watch(colorProvider)['text'],
                       ),
                     ),
                   ],

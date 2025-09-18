@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../common/utils/screenutil.dart';
-import '../../../../common/styles/theme.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
-import '../../../../core/dependencies/dependencies.dart';
 import '../../../../core/notifiers/device_state_notifier.dart';
 import '../../notifier/things_notifier.dart';
 
@@ -39,7 +37,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
 
   @override
   Widget build(BuildContext context) {
-    var datas = ref.watch(searchDevicesInThingsProvider) ?? [];
+    var datas = ref.watch(searchDevicesInThingsProvider);
     return Container(
       height: 600.h,
       decoration: BoxDecoration(
@@ -91,7 +89,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
                     ],
                   );
                 },
-                childCount: ref.read(searchDevicesInThingsProvider)?.length,
+                childCount: ref.read(searchDevicesInThingsProvider).length,
               ),
             ),
           ],

@@ -298,7 +298,7 @@ final class SearchDevicesInThingsProvider extends $FunctionalProvider<
 }
 
 String _$searchDevicesInThingsHash() =>
-    r'b2d9b0899efd6b1c556ca6c7473d6ae771936e6a';
+    r'f822117bc8db44fb88a786ba452a256ea08e84d6';
 
 @ProviderFor(selectedDevicesInThings)
 const selectedDevicesInThingsProvider = SelectedDevicesInThingsProvider._();

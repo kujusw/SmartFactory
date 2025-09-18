@@ -52,9 +52,9 @@ class AddLocationModelRequestEntity {
 }
 
 class LocationModelResponseEntity {
-  final int? code;
-  final List<LocationModel>? data;
-  final String? message;
+  int? code;
+  LocationModelData? data;
+  String? message;
 
   LocationModelResponseEntity({
     this.code,
@@ -62,99 +62,83 @@ class LocationModelResponseEntity {
     this.message,
   });
 
-  LocationModelResponseEntity copyWith({
-    int? code,
-    List<LocationModel>? data,
-    String? message,
-  }) =>
-      LocationModelResponseEntity(
-        code: code ?? this.code,
-        data: data ?? this.data,
-        message: message ?? this.message,
-      );
-
   factory LocationModelResponseEntity.fromRawJson(String str) => LocationModelResponseEntity.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory LocationModelResponseEntity.fromJson(Map<String, dynamic> json) => LocationModelResponseEntity(
         code: json["code"],
-        data: json["data"] == null ? [] : List<LocationModel>.from(json["data"]!.map((x) => LocationModel.fromJson(x))),
+        data: json["data"] == null ? null : LocationModelData.fromJson(json["data"]),
         message: json["message"],
       );
 
   Map<String, dynamic> toJson() => {
         "code": code,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data?.toJson(),
         "message": message,
       };
+}
 
-  @override
-  String toString() {
-    return jsonEncode(this);
-  }
+class LocationModelData {
+  List<LocationModel>? locations;
+  int? total;
+
+  LocationModelData({
+    this.locations,
+    this.total,
+  });
+
+  factory LocationModelData.fromRawJson(String str) => LocationModelData.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory LocationModelData.fromJson(Map<String, dynamic> json) => LocationModelData(
+        locations: json["locations"] == null
+            ? []
+            : List<LocationModel>.from(json["locations"]!.map((x) => LocationModel.fromJson(x))),
+        total: json["total"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "locations": locations == null ? [] : List<dynamic>.from(locations!.map((x) => x.toJson())),
+        "total": total,
+      };
 }
 
 class LocationModel {
-  final int? id;
-  final String? name;
-  final String? building;
-  final String? tenant;
-  final int? area;
-  bool? selected;
+  int? area;
+  String? building;
+  int? id;
+  String? name;
+  String? tenant;
 
   LocationModel({
+    this.area,
+    this.building,
     this.id,
     this.name,
-    this.building,
     this.tenant,
-    this.area,
-    this.selected = false,
   });
-
-  LocationModel copyWith({
-    int? id,
-    String? name,
-    String? building,
-    String? tenant,
-    int? area,
-    bool? selected,
-  }) =>
-      LocationModel(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        building: building ?? this.building,
-        tenant: tenant ?? this.tenant,
-        area: area ?? this.area,
-        selected: selected ?? this.selected,
-      );
 
   factory LocationModel.fromRawJson(String str) => LocationModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory LocationModel.fromJson(Map<String, dynamic> json) => LocationModel(
-        id: json.containsKey("id") ? json["id"] : "",
-        name: json.containsKey("name") ? json["name"] : "",
-        building: json.containsKey("building") ? json["building"] : "",
-        tenant: json.containsKey("tenant") ? json["tenant"] : "",
-        area: json.containsKey("area") ? json["area"] : 0,
-        selected: json.containsKey("selected") ? json["selected"] : false,
+        area: json["area"],
+        building: json["building"],
+        id: json["id"],
+        name: json["name"],
+        tenant: json["tenant"],
       );
 
   Map<String, dynamic> toJson() => {
+        "area": area,
+        "building": building,
         "id": id,
         "name": name,
-        "building": building,
         "tenant": tenant,
-        "area": area,
-        "selected": selected,
       };
-
-  @override
-  String toString() {
-    return jsonEncode(this);
-  }
 }
 
 class AddLocationResponseEntity {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../common/utils/logger_manager.dart';
 import '../common/values/constant.dart';
 import '../models/locationresponseentity.dart';
@@ -9,7 +11,7 @@ class LocationAPI {
     String? token,
   }) async {
     var response = await HttpUtil(url: (Constant.HOST), token: token).get(path!);
-    // LoggerManager().d("LocationAPI.getLocations response: $response");
+    LoggerManager().d("LocationAPI.getLocations response: ${jsonEncode(response)}");
     return LocationModelResponseEntity.fromJson(response);
   }
 

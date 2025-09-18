@@ -1199,128 +1199,10 @@ abstract class _$BoardsWidgetDelete
 
 /// ==================== FutureProviders ====================
 
-@ProviderFor(boardsTabs)
-const boardsTabsProvider = BoardsTabsProvider._();
-
-/// ==================== FutureProviders ====================
-
-final class BoardsTabsProvider extends $FunctionalProvider<
-        AsyncValue<List<BoardsTabModel>>,
-        List<BoardsTabModel>,
-        FutureOr<List<BoardsTabModel>>>
-    with
-        $FutureModifier<List<BoardsTabModel>>,
-        $FutureProvider<List<BoardsTabModel>> {
-  /// ==================== FutureProviders ====================
-  const BoardsTabsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'boardsTabsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$boardsTabsHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<List<BoardsTabModel>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<BoardsTabModel>> create(Ref ref) {
-    return boardsTabs(ref);
-  }
-}
-
-String _$boardsTabsHash() => r'c43f61109c329af53a8c852b6fbb0e37b27bef73';
-
-@ProviderFor(boardsWidgets)
-const boardsWidgetsProvider = BoardsWidgetsFamily._();
-
-final class BoardsWidgetsProvider extends $FunctionalProvider<
-        AsyncValue<List<BoardsChartWidgetModel>>,
-        List<BoardsChartWidgetModel>,
-        FutureOr<List<BoardsChartWidgetModel>>>
-    with
-        $FutureModifier<List<BoardsChartWidgetModel>>,
-        $FutureProvider<List<BoardsChartWidgetModel>> {
-  const BoardsWidgetsProvider._(
-      {required BoardsWidgetsFamily super.from, required int super.argument})
-      : super(
-          retry: null,
-          name: r'boardsWidgetsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$boardsWidgetsHash();
-
-  @override
-  String toString() {
-    return r'boardsWidgetsProvider'
-        ''
-        '($argument)';
-  }
-
-  @$internal
-  @override
-  $FutureProviderElement<List<BoardsChartWidgetModel>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<BoardsChartWidgetModel>> create(Ref ref) {
-    final argument = this.argument as int;
-    return boardsWidgets(
-      ref,
-      argument,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is BoardsWidgetsProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
-}
-
-String _$boardsWidgetsHash() => r'1f905a3926738d97f9f08c12f38e45c102bd3a5e';
-
-final class BoardsWidgetsFamily extends $Family
-    with
-        $FunctionalFamilyOverride<FutureOr<List<BoardsChartWidgetModel>>, int> {
-  const BoardsWidgetsFamily._()
-      : super(
-          retry: null,
-          name: r'boardsWidgetsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
-
-  BoardsWidgetsProvider call(
-    int boardId,
-  ) =>
-      BoardsWidgetsProvider._(argument: boardId, from: this);
-
-  @override
-  String toString() => r'boardsWidgetsProvider';
-}
-
 @ProviderFor(deviceEnergys)
 const deviceEnergysProvider = DeviceEnergysFamily._();
+
+/// ==================== FutureProviders ====================
 
 final class DeviceEnergysProvider extends $FunctionalProvider<
         AsyncValue<List<DeviceEnergy>>,
@@ -1329,6 +1211,7 @@ final class DeviceEnergysProvider extends $FunctionalProvider<
     with
         $FutureModifier<List<DeviceEnergy>>,
         $FutureProvider<List<DeviceEnergy>> {
+  /// ==================== FutureProviders ====================
   const DeviceEnergysProvider._(
       {required DeviceEnergysFamily super.from,
       required BoardsChartWidgetModel super.argument})
@@ -1378,6 +1261,8 @@ final class DeviceEnergysProvider extends $FunctionalProvider<
 
 String _$deviceEnergysHash() => r'b2a0822fbb698d64d03d30e393d91a60a88079f7';
 
+/// ==================== FutureProviders ====================
+
 final class DeviceEnergysFamily extends $Family
     with
         $FunctionalFamilyOverride<FutureOr<List<DeviceEnergy>>,
@@ -1390,6 +1275,8 @@ final class DeviceEnergysFamily extends $Family
           $allTransitiveDependencies: null,
           isAutoDispose: true,
         );
+
+  /// ==================== FutureProviders ====================
 
   DeviceEnergysProvider call(
     BoardsChartWidgetModel parameter,

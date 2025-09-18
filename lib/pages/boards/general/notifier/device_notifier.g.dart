@@ -49,7 +49,7 @@ final class DevicesProvider extends $FunctionalProvider<
   }
 }
 
-String _$devicesHash() => r'985f74b1cce43d68e9d042980081cd51f57cd367';
+String _$devicesHash() => r'02d173cbcdd289f7718c07fd47cf743fe7e6ca7b';
 
 /// 当前选中的设备
 
