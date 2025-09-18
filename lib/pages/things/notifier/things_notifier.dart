@@ -74,13 +74,31 @@ class SearchValueInThings extends _$SearchValueInThings {
 
 @riverpod
 List<DeviceModel> searchDevicesInThings(Ref ref) {
-  final searchValue = ref.watch(searchValueInThingsProvider);
-  final devices = ref.watch(deviceManagerProvider);
+  final searchQuery = ref.watch(searchValueInThingsProvider);
+  final deviceList = ref.watch(deviceManagerProvider);
+  final showMenuDevice = ref.watch(showMenuDeviceListProvider);
+  final selectedDevices = ref.watch(deviceManagerProvider.notifier).getSelectedDevices();
+  // 有搜索内容
+  if (searchQuery.isNotEmpty) {
+    final lowerQuery = searchQuery.toLowerCase();
 
-  if (searchValue.isNotEmpty) {
-    return devices.where((d) => d.deviceName?.toLowerCase().contains(searchValue.toLowerCase()) ?? false).toList();
+    if (showMenuDevice > 0) {
+      if (selectedDevices == null || selectedDevices.isEmpty) {
+        return [];
+      }
+      return selectedDevices.where((element) => element.toString().toLowerCase().contains(lowerQuery)).toList();
+    }
+
+    return deviceList.where((element) => element.toString().toLowerCase().contains(lowerQuery)).toList();
   }
-  return devices;
+
+  // 没有搜索内容
+  final menuDevices = deviceList.where((e) => e.selectedInMenu ?? false).toList();
+  if (menuDevices.isNotEmpty) {
+    return menuDevices;
+  }
+
+  return deviceList;
 }
 
 // 选中的设备

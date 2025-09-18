@@ -109,7 +109,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
         onPressed: () {},
         child: Icon(Icons.done, color: ref.watch(colorProvider)['white'], size: 30.h),
       ),
-      floatingActionButtonLocation: CustomFloatingActionButtonLocation(-850.w, 30.h),
+      floatingActionButtonLocation: CustomFloatingActionButtonLocation(-900.w, 30.h),
       floatingActionButtonAnimator: NoAnimationFloatingActionButtonAnimator(),
     );
   }
