@@ -1,19 +1,27 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../common/utils/logger_manager.dart';
 import '../../../http/login.dart';
 import '../../../models/login_model.dart';
 
-class LoginManager extends StateNotifier<LoginResponseEntity> {
-  LoginManager(super.state);
+part 'loginmanager.g.dart';
 
-  Future<bool> login(params) async {
+@riverpod
+class Login extends _$Login {
+  @override
+  LoginResponseEntity build() {
+    // 初始状态可以根据需求设置
+    return LoginResponseEntity(code: 0, message: "");
+  }
+
+  /// 登录方法
+  Future<bool> login(LoginRequestEntity? params) async {
     try {
-      LoginResponseEntity result = await LoginAPI.login(params: params);
+      final result = await LoginAPI.login(params: params);
       state = result;
       return true;
     } catch (e) {
-      // 如果发生错误
-      LoggerManager().e("LoginManager login error: $e");
+      LoggerManager().e("Login login error: $e");
       state = LoginResponseEntity(code: 201, message: "Login failed");
       return false;
     }

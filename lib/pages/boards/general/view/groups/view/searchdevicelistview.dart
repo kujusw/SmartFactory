@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../../common/styles/assets.dart';
-import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../notifier/device_notifier.dart';
@@ -12,7 +12,7 @@ import '../../../notifier/device_notifier.dart';
 class SearchDeviceListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var datas = ref.watch(itemsSearchDeviceModelInDeviceProvider.notifier).state ?? [];
+    var datas = ref.watch(itemsSearchDeviceModelInDeviceProvider) ?? [];
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w),
       height: 590.h,
@@ -25,7 +25,7 @@ class SearchDeviceListView extends ConsumerWidget {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () => {ref.read(currentDeviceProvider.notifier).state = datas[index]},
+                    onTap: () => {ref.read(currentDeviceProvider) == datas[index]},
                     child: Column(
                       children: [
                         Container(

@@ -1,8 +1,14 @@
 // 定义一个 StateNotifier 类，用来更新索引值
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class HomeIndexState extends StateNotifier<int> {
-  HomeIndexState() : super(0);
+part 'home_index_notifier.g.dart';
+
+@riverpod
+class HomeIndexState extends _$HomeIndexState {
+  @override
+  int build() {
+    return 0; // 初始 index
+  }
 
   void setIndex(int index) {
     state = index;

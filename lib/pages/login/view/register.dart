@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/utils/logger_manager.dart';
 import '../../../common/values/index.dart';
 import '../../../models/register_model.dart';
 import '../../common/widget/rounded_loading_button.dart';
-import '../notifier/login_notifier.dart';
+import '../notifier/login_notifier.dart' hide obscureTextProvider, registerProvider;
+import '../notifier/registermanager.dart';
 
 class RegisterView extends ConsumerWidget {
   final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
   final TextEditingController emailController = TextEditingController()..text = "";
   final TextEditingController usernameController = TextEditingController()..text = "";
   final TextEditingController passController = TextEditingController()..text = "";
-  final obscureTextProvider = StateProvider((ref) => true);
-
-  final registertips = StateProvider.autoDispose((ref) => "");
 
 // 自定义密码的显示和隐藏
   Widget _suffixIconView(WidgetRef ref) {
@@ -44,26 +42,26 @@ class RegisterView extends ConsumerWidget {
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registertips.notifier).state = "Please verify the link in your email to login";
+        ref.read(registerTipsProvider.notifier).state = "Please verify the link in your email to login";
       } else if (next?.code == 600) {
         _btnController.error();
         //延迟两秒 重置
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registertips.notifier).state = "User already exists";
+        ref.read(registerTipsProvider.notifier).state = "User already exists";
       } else if (next?.code == 601) {
         _btnController.error();
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registertips.notifier).state = "Email already registered";
+        ref.read(registerTipsProvider.notifier).state = "Email already registered";
       } else {
         _btnController.error();
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registertips.notifier).state = "Register failed";
+        ref.read(registerTipsProvider.notifier).state = "Register failed";
       }
     });
     return Center(
@@ -223,21 +221,22 @@ class RegisterView extends ConsumerWidget {
                     if (emailController.text.isEmpty)
                       {
                         _btnController.reset(),
-                        ref.read(registertips.notifier).state = "E-Mail cannot be empty",
+                        ref.read(registerTipsProvider.notifier).state = "E-Mail cannot be empty",
                       }
                     else if (usernameController.text.isEmpty)
                       {
                         _btnController.reset(),
-                        ref.read(registertips.notifier).state = "Username cannot be empty",
+                        ref.read(registerTipsProvider.notifier).state = "Username cannot be empty",
                       }
                     else if (passController.text.isEmpty || passController.text.length < 6)
                       {
                         _btnController.reset(),
-                        ref.read(registertips.notifier).state = "Password cannot be empty or less than 6 digits",
+                        ref.read(registerTipsProvider.notifier).state =
+                            "Password cannot be empty or less than 6 digits",
                       }
                     else
                       {
-                        ref.read(registertips.notifier).state = "",
+                        ref.read(registerTipsProvider.notifier).state = "",
                         ref.read(registerProvider.notifier).register(
                               RegisterRequestEntity(
                                 username: usernameController.text,
@@ -255,10 +254,10 @@ class RegisterView extends ConsumerWidget {
             ),
             Visibility(
               child: Text(
-                ref.read(registertips),
+                ref.read(registerTipsProvider),
                 style: TextStyle(color: Colors.red, fontSize: Constant.textSP_16),
               ),
-              visible: ref.watch(registertips).isNotEmpty,
+              visible: ref.watch(registerTipsProvider).isNotEmpty,
             ),
             // 间距
             SizedBox(height: 20.h),

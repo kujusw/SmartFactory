@@ -3,14 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/utils/logger_manager.dart';
 import '../../../common/values/constant.dart';
 import '../../../models/login_model.dart';
 import '../../common/widget/rounded_loading_button.dart';
 import '../notifier/login_notifier.dart';
-import 'resetview.dart';
 // import 'dart:html' as html;
 
 class LoginView extends ConsumerStatefulWidget {
@@ -24,8 +22,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final TextEditingController usernameController = TextEditingController()..text = "ggliuqi527@gmail.com";
   final TextEditingController passController = TextEditingController()..text = "KJlq920527!";
 
-  final obscureTextProvider = StateProvider((ref) => true);
-  final logintips = StateProvider.autoDispose((ref) => "");
   @override
   void initState() {
     super.initState();
@@ -97,7 +93,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(logintips.notifier).state = "Login failed: ${next?.message}";
+        ref.read(loginTipsProvider.notifier).state = "Login failed: ${next?.message}";
       }
     });
     return Center(
@@ -215,38 +211,39 @@ class _LoginViewState extends ConsumerState<LoginView> {
               controller: _btnController,
               onPressed: () async {
                 FocusScope.of(context).unfocus();
-                if (usernameController.text.isEmpty) {
-                  ref.read(logintips.notifier).state = "Username cannot be empty";
-                  _btnController.reset();
-                } else if (passController.text.isEmpty) {
-                  ref.read(logintips.notifier).state = "Password cannot be empty";
-                  _btnController.reset();
-                } else {
-                  ref.read(logintips.notifier).state = "";
-                  bool result = await ref.read(loginProvider.notifier).login(
-                        LoginRequestEntity(
-                          username: usernameController.text,
-                          password: passController.text,
-                        ),
-                      );
-                  if (result) {
-                    ref.read(loginUserName.notifier).state = usernameController.text;
-                    ref.read(loginTime.notifier).state = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-                  }
-                  // // 创建一个隐藏的表单，用于浏览器的自动保存功能
-                  // html.FormElement form = html.FormElement()
-                  //   ..setAttribute('style', 'display:none;')
-                  //   ..append(html.InputElement()
-                  //     ..name = 'username'
-                  //     ..value = usernameController.text)
-                  //   ..append(html.InputElement()
-                  //     ..name = 'password'
-                  //     ..value = passController.text)
-                  //   ..submit();
+                // if (usernameController.text.isEmpty) {
+                //   ref.read(logintips.notifier).state = "Username cannot be empty";
+                //   _btnController.reset();
+                // } else if (passController.text.isEmpty) {
+                //   ref.read(logintips.notifier).state = "Password cannot be empty";
+                //   _btnController.reset();
+                // } else {
+                //   ref.read(logintips.notifier).state = "";
+                //   bool result = await ref.read(loginProvider.notifier).login(
+                //         LoginRequestEntity(
+                //           username: usernameController.text,
+                //           password: passController.text,
+                //         ),
+                //       );
+                //   if (result) {
+                //     ref.read(loginUserName.notifier).state = usernameController.text;
+                //     ref.read(loginTime.notifier).state = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+                //   }
+                // // 创建一个隐藏的表单，用于浏览器的自动保存功能
+                // html.FormElement form = html.FormElement()
+                //   ..setAttribute('style', 'display:none;')
+                //   ..append(html.InputElement()
+                //     ..name = 'username'
+                //     ..value = usernameController.text)
+                //   ..append(html.InputElement()
+                //     ..name = 'password'
+                //     ..value = passController.text)
+                //   ..submit();
 
-                  // // 将隐藏的表单添加到文档中
-                  // html.document.body?.append(form);
-                }
+                // // 将隐藏的表单添加到文档中
+                // html.document.body?.append(form);
+                // }
+                context.go('/home');
               },
               valueColor: Colors.white,
               borderRadius: 20.w,
@@ -256,10 +253,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
             // 提示
             Visibility(
               child: Text(
-                ref.read(logintips),
+                ref.read(loginTipsProvider),
                 style: TextStyle(color: Colors.red, fontSize: Constant.textSP_16),
               ),
-              visible: ref.watch(logintips).isNotEmpty,
+              visible: ref.watch(loginTipsProvider).isNotEmpty,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -335,7 +332,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
           ),
           SizedBox(height: 50.h),
           // 表单
-          ref.watch(signinProvider) == "SIGNIN" ? _buildForm(ref, context) : ResetView(),
+          _buildForm(ref, context),
         ],
       ),
     );

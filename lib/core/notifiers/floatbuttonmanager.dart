@@ -1,22 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class FloatButtonManager extends StateNotifier<String> {
-  FloatButtonManager() : super("");
+part 'floatbuttonmanager.g.dart';
 
-  void changeFloatButton(String value) {
-    state = value;
-  }
+@riverpod
+class FloatButton extends _$FloatButton {
+  @override
+  String build() => "";
 
-  void clearFloatButton() {
-    state = "";
-  }
+  /// 改变浮动按钮状态
+  void change(String value) => state = value;
 
-  // Riverpod不允许直接更改Provider的值。相反，您应该创建一个新的StateNotifier实例，并将其分配给Provider，以触发UI的更新。
-  // bool floatButtonMotion() {
-  //   if (state == "BoardsViewAdd" || state == "BoardsViewEdit") {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  /// 清空浮动按钮状态
+  void clear() => state = "";
 }

@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../models/boards_tab_model.dart';
 import '../../models/device_model.dart';
 
@@ -158,23 +156,3 @@ int getLastReadingsWidgetStatusTime(
   }
   return time;
 }
-
-enum SizeOption { small, medium, large }
-
-class SizeState {
-  final SizeOption selectedSize;
-
-  SizeState(this.selectedSize);
-}
-
-class SizeNotifier extends StateNotifier<SizeState> {
-  SizeNotifier() : super(SizeState(SizeOption.small));
-
-  void selectSize(SizeOption size) {
-    state = SizeState(size);
-  }
-}
-
-final sizeNotifierProvider = StateNotifierProvider<SizeNotifier, SizeState>((ref) {
-  return SizeNotifier();
-});

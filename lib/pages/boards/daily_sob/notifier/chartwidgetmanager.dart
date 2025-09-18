@@ -1,56 +1,54 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../models/boards_tab_model.dart';
+part 'chartwidgetmanager.g.dart';
 
-class ChartWidgetManager extends StateNotifier<List<BoardsChartWidgetModel>> {
-  ChartWidgetManager() : super([]);
+@riverpod
+class ChartWidget extends _$ChartWidget {
+  @override
+  List<BoardsChartWidgetModel> build() => [];
 
-  void addChartWidget(BoardsChartWidgetModel chartWidgetModel) {
-    state = [...state, chartWidgetModel];
+  /// 添加 widget
+  void add(BoardsChartWidgetModel widget) {
+    state = [...state, widget];
   }
 
-  //通过id删除widget
-  void removeChartWidget(int id) {
+  /// 通过 id 删除 widget
+  void removeById(int id) {
     state = state.where((t) => t.id != id).toList();
   }
 
-  void updateChartWidget(BoardsChartWidgetModel newChartWidgetModel) {
-    state = state.map((t) {
-      if (t.id == newChartWidgetModel.id) {
-        return newChartWidgetModel;
-      }
-      return t;
-    }).toList();
+  /// 更新整个 widget
+  void update(BoardsChartWidgetModel newWidget) {
+    state = state.map((t) => t.id == newWidget.id ? newWidget : t).toList();
   }
 
-  void updateChartWidgetXY(int? id, int? position_x, int? position_y) {
+  /// 更新 widget 的坐标
+  void updateXY(int? id, int? positionX, int? positionY) {
     state = state.map((t) {
       if (t.id == id) {
-        return t.copyWith(position_x: position_x, position_y: position_y);
+        return t.copyWith(position_x: positionX, position_y: positionY);
       }
       return t;
     }).toList();
   }
 
-  bool containsChartWidget(BoardsChartWidgetModel chartWidgetModel) {
-    return state.contains(chartWidgetModel);
-  }
+  /// 判断是否包含 widget
+  bool contains(BoardsChartWidgetModel widget) => state.contains(widget);
 
-  BoardsChartWidgetModel getChartWidget(int index) {
-    return state[index];
-  }
+  /// 获取指定索引的 widget
+  BoardsChartWidgetModel getAt(int index) => state[index];
 
-  //设置所有widget
+  /// 设置所有 widgets
   void setWidgets(List<BoardsChartWidgetModel> widgets) {
     state = widgets;
   }
 
-  //删除id相同的widget
-  void clearWidgetsByTabId(int? id) {
+  /// 删除指定 tabId 下的 widgets
+  void clearByTabId(int? id) {
     state = state.where((t) => t.boardId != id).toList();
   }
 
-  //删除所有widget
-  void clearWidgets() {
-    state = [];
-  }
+  /// 删除所有 widgets
+  void clearAll() => state = [];
 }

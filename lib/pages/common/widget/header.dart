@@ -7,7 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../../common/styles/assets.dart';
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../../core/dependencies/dependencies.dart';
 import '../../../models/login_model.dart';
@@ -83,10 +83,10 @@ class Header extends ConsumerWidget {
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                     ),
                     child: Text(
-                      ref.read(loginUserName).length > 3
-                          ? ref.read(loginUserName).substring(0, 3)
-                          : ref.read(loginUserName).length > 0
-                              ? ref.read(loginUserName)
+                      ref.watch(loginUserNameProvider).length > 3
+                          ? ref.watch(loginUserNameProvider).substring(0, 3)
+                          : ref.watch(loginUserNameProvider).length > 0
+                              ? ref.watch(loginUserNameProvider)
                               : "User",
                       style: TextStyle(
                         fontSize: Constant.textSP_20,

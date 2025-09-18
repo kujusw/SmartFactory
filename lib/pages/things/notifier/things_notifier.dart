@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../core/dependencies/dependencies.dart';
-import '../../../core/notifiers/general_device_state_notifier.dart';
+import '../../../http/device.dart';
 import '../../../models/device_model.dart';
 import '../../../models/device_model_new.dart';
 import '../../../models/general_device_info_model.dart';
@@ -8,130 +10,193 @@ import '../../../models/locationresponseentity.dart';
 import '../../boards/general/notifier/device_notifier.dart';
 import 'deviceaddhttpmanager.dart';
 import 'devicedeletehttpmanager.dart';
-import 'deviceinfo_state_notifier.dart';
 import 'location_inuser_state_notifier.dart';
 import 'updatedevicelocationhttpmanager.dart';
 
-final selectedGroupProvider = StateProvider.autoDispose<String>((ref) => "All Devices");
-final selectedDeviceProvider = StateProvider.autoDispose<DeviceModel?>((ref) {
-  return null;
-});
+part 'things_notifier.g.dart';
 
-final itemsDeviceInfosProvider = StateNotifierProvider<DeviceInfosState, List<GeneralDeviceInfoModel>>((ref) {
-  return DeviceInfosState();
-});
+// 分组选择
+@riverpod
+class SelectedGroup extends _$SelectedGroup {
+  @override
+  String build() => "All Devices";
 
-final addDeviceProvider = StateNotifierProvider<DeviceAddHttpManager, AddDeviceResponseEntity>((ref) {
-  return DeviceAddHttpManager(AddDeviceResponseEntity(code: 0, message: ""));
-});
+  void set(String group) => state = group;
+}
 
-final deleteDeviceProvider = StateNotifierProvider<DeviceDeleteHttpManager, DeleteDeviceResponseEntity>((ref) {
-  return DeviceDeleteHttpManager(DeleteDeviceResponseEntity(code: 0, message: ""));
-});
+@riverpod
+class SelectedDevice extends _$SelectedDevice {
+  @override
+  DeviceModel? build() => null;
 
-// //添加虚拟点时关联的设备 多选
-// final selectedAssociatedDeviceProvider = StateNotifierProvider<DeviceMultiSelectsState, List<DeviceModel>>((ref) {
-//   return DeviceMultiSelectsState();
-// });
+  void set(DeviceModel? device) => state = device;
+}
 
-//搜索值
-final vualeSearchProviderInThings = StateProvider.autoDispose<String>((ref) => "");
+// 添加 / 删除设备
+@riverpod
+class AddDevice extends _$AddDevice {
+  @override
+  AddDeviceResponseEntity build() => AddDeviceResponseEntity(code: 0, message: "");
 
-final itemsSearchDeviceModelProviderInThings = StateProvider.autoDispose<List<DeviceModel>?>((ref) {
-  if (ref.watch(vualeSearchProviderInThings).isNotEmpty) {
-    return ref.watch(itemsDeviceModelProvider).where((element) {
-      //忽略大小写
-      return element.name!.toLowerCase().contains(ref.watch(vualeSearchProviderInThings).toLowerCase());
-    }).toList();
-  } else {
-    return ref.watch(itemsDeviceModelProvider);
+  Future<bool> addDevice(params, token) async {
+    try {
+      final result = await DeviceAPI.addDevice(params: params, token: token);
+      state = result;
+      return true;
+    } catch (e) {
+      state = AddDeviceResponseEntity(code: 201, message: "Add Device failed");
+      return false;
+    }
   }
-});
+}
 
-//选中的设备
-final itemsSelectDeviceModelProviderInThings = StateProvider.autoDispose<List<DeviceModel>?>((ref) {
-  if (ref.watch(itemsDeviceModelProvider).isNotEmpty) {
-    return ref.watch(itemsDeviceModelProvider).where((element) {
-      //返回选中的设备
-      return element.selectedInAddDevice!;
-    }).toList();
-  } else {
-    return [];
+@riverpod
+class DeleteDevice extends _$DeleteDevice {
+  @override
+  DeleteDeviceResponseEntity build() => DeleteDeviceResponseEntity(code: 0, message: "");
+
+  Future<bool> deleteDevice(deviceId, token) async {
+    try {
+      final result = await DeviceAPI.deleteDevice(deviceId: deviceId, token: token);
+      state = result;
+      return true;
+    } catch (e) {
+      state = DeleteDeviceResponseEntity(code: 201, message: "Delete Device failed");
+      return false;
+    }
   }
-});
+}
 
-final updateDeviceNameProvider = StateProvider<String>((ref) => "");
+// 搜索
+@riverpod
+class SearchValueInThings extends _$SearchValueInThings {
+  @override
+  String build() => "";
 
-final selectedLocationProviderInThings = StateProvider.autoDispose<LocationModel?>((ref) => null);
-final selectedLocationProviderInUsers =
-    StateNotifierProvider.autoDispose<LocationSelectInUserState, List<LocationModel>>((ref) {
-  return LocationSelectInUserState();
-});
+  void set(String value) => state = value;
+}
 
-//更新设备位置
-final updateDeviceLocationProvider =
-    StateNotifierProvider<UpdateDeviceLocationHttpManager, UpdateDeviceLocationResponseEntity>((ref) {
-  return UpdateDeviceLocationHttpManager(UpdateDeviceLocationResponseEntity(code: 0, message: ""));
-});
+@riverpod
+List<DeviceModel> searchDevicesInThings(Ref ref) {
+  final searchValue = ref.watch(searchValueInThingsProvider);
+  final devices = ref.watch(deviceManagerProvider);
 
-//things页面设备列表 的能源信息
-final itemsGeneralDeviceInThingsProvider =
-    StateNotifierProvider<GeneralDeviceState, List<GeneralDeviceInfoModel>>((ref) {
-  return GeneralDeviceState();
-});
+  if (searchValue.isNotEmpty) {
+    return devices.where((d) => d.name?.toLowerCase().contains(searchValue.toLowerCase()) ?? false).toList();
+  }
+  return devices;
+}
 
-//things页面设备列表筛选
-final vualeSearchInThingsProvider = StateProvider.autoDispose<String>((ref) => "");
+// 选中的设备
+@riverpod
+List<DeviceModel> selectedDevicesInThings(Ref ref) {
+  final devices = ref.watch(deviceManagerProvider);
+  return devices.where((d) => d.selectedInAddDevice ?? false).toList();
+}
 
-final itemsSearchDeviceModelProvider = StateProvider.autoDispose<List<DeviceModel>?>((ref) {
-  List<DeviceModel> deviceList = ref.watch(itemsDeviceModelProvider);
+// 修改设备名称
+@riverpod
+class UpdateDeviceName extends _$UpdateDeviceName {
+  @override
+  String build() => "";
 
-  // Check if there is a search query
-  if (ref.watch(vualeSearchInThingsProvider).isNotEmpty) {
-    //如果菜单中选择了设备
-    if (ref.watch(showMenuDeviceListProvider) > 0) {
-      if (ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices()?.length == 0) {
-        deviceList = [];
-      } else {
-        deviceList = ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices()!.where((element) {
-          return element.toString().toLowerCase().contains(ref.watch(vualeSearchInThingsProvider).toLowerCase());
-        }).toList();
-      }
+  void set(String name) => state = name;
+}
+
+// 设备位置
+@riverpod
+class SelectedLocationInThings extends _$SelectedLocationInThings {
+  @override
+  LocationModel? build() => null;
+
+  void set(LocationModel? location) => state = location;
+}
+
+@riverpod
+class SelectedLocationsInUsers extends _$SelectedLocationsInUsers {
+  @override
+  List<LocationModel> build() => [];
+
+  void add(LocationModel location) {
+    if ((location.id ?? 0) > 0) {
+      state = [...state, location];
+    }
+  }
+
+  void remove(LocationModel location) {
+    state = state.where((e) => e != location).toList();
+  }
+}
+
+// things 页面设备能源信息
+@riverpod
+class GeneralDevicesInThings extends _$GeneralDevicesInThings {
+  @override
+  List<GeneralDeviceInfoModel> build() => [];
+
+  void updateGeneralDeviceName(String name) {
+    state = state.map((e) => e.copyWith(name: name)).toList();
+  }
+
+  void updateGeneralDeviceID(String id) {
+    state = state.map((e) => e.copyWith(id: id)).toList();
+  }
+
+  void setList(List<GeneralDeviceInfoModel> list) {
+    state = list;
+  }
+}
+
+// 搜索 + 菜单筛选
+@riverpod
+class SearchValueForMenuInThings extends _$SearchValueForMenuInThings {
+  @override
+  String build() => "";
+
+  void set(String value) => state = value;
+}
+
+@riverpod
+List<DeviceModel> filteredDevicesInThings(Ref ref) {
+  final searchValue = ref.watch(searchValueForMenuInThingsProvider);
+  final devices = ref.watch(deviceManagerProvider);
+  final menuDeviceList = ref.watch(showMenuDeviceListProvider);
+  final selectedDevices = ref.watch(deviceManagerProvider.notifier).getSelectedDevices();
+
+  var deviceList = devices;
+
+  if (searchValue.isNotEmpty) {
+    if (menuDeviceList > 0) {
+      deviceList = (selectedDevices?.isNotEmpty ?? false)
+          ? selectedDevices!.where((d) => d.toString().toLowerCase().contains(searchValue.toLowerCase())).toList()
+          : [];
     } else {
-      deviceList = deviceList.where((element) {
-        // Ignore case when checking if element matches search query
-        return element.toString().toLowerCase().contains(ref.watch(vualeSearchInThingsProvider).toLowerCase());
-      }).toList();
+      deviceList = deviceList.where((d) => d.toString().toLowerCase().contains(searchValue.toLowerCase())).toList();
     }
   } else {
-    // Filter devices that are selected in the menu
-    deviceList = deviceList.where((element) {
-      return element.selectedInMenu ?? false;
-    }).toList();
-
-    // If no devices are selected in the menu, use all devices
+    deviceList = deviceList.where((d) => d.selectedInMenu ?? false).toList();
     if (deviceList.isEmpty) {
-      deviceList = ref.watch(itemsDeviceModelProvider);
+      deviceList = devices;
     }
   }
-  return deviceList;
-});
 
-//退出登录后 清空数据
+  return deviceList;
+}
+
+// 退出登录清理
 void clearThingsProvider(WidgetRef ref) {
   ref.invalidate(selectedGroupProvider);
   ref.invalidate(selectedDeviceProvider);
-  ref.invalidate(itemsDeviceInfosProvider);
   ref.invalidate(addDeviceProvider);
   ref.invalidate(deleteDeviceProvider);
-  ref.invalidate(vualeSearchProviderInThings);
-  ref.invalidate(itemsSearchDeviceModelProviderInThings);
-  ref.invalidate(itemsSelectDeviceModelProviderInThings);
+  ref.invalidate(searchValueInThingsProvider);
+  ref.invalidate(searchDevicesInThingsProvider);
+  ref.invalidate(selectedDevicesInThingsProvider);
   ref.invalidate(updateDeviceNameProvider);
-  ref.invalidate(selectedLocationProviderInThings);
-  ref.invalidate(selectedLocationProviderInUsers);
+  ref.invalidate(selectedLocationInThingsProvider);
+  ref.invalidate(selectedLocationsInUsersProvider);
   ref.invalidate(updateDeviceLocationProvider);
-  ref.invalidate(itemsGeneralDeviceInThingsProvider);
-  ref.invalidate(vualeSearchInThingsProvider);
-  ref.invalidate(itemsSearchDeviceModelProvider);
+  ref.invalidate(generalDevicesInThingsProvider);
+  ref.invalidate(searchValueForMenuInThingsProvider);
+  ref.invalidate(filteredDevicesInThingsProvider);
 }

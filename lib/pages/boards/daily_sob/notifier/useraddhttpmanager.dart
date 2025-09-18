@@ -1,17 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../http/user.dart';
 import '../../../../models/user_manager_model.dart';
+part 'useraddhttpmanager.g.dart';
 
-class UserAddHttpManager extends StateNotifier<AddUserResponseEntity> {
-  UserAddHttpManager(super.state);
-  Future<bool> addUser(params, token) async {
+@riverpod
+class UserAddHttp extends _$UserAddHttp {
+  @override
+  AddUserResponseEntity build() => AddUserResponseEntity(code: 0, message: "");
+
+  /// 添加用户
+  Future<bool> addUser(dynamic params, String? token) async {
     try {
-      AddUserResponseEntity result = await UserAPI.addUser(params: params, token: token);
+      final result = await UserAPI.addUser(params: params, token: token);
       state = result;
       return true;
     } catch (e) {
-      // 如果发生错误
       state = AddUserResponseEntity(code: 201, message: "Add User failed");
       return false;
     }

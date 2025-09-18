@@ -1,10 +1,13 @@
 // 定义一个 StateNotifier 类，用来更新索引值
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class BoardsIndexState extends StateNotifier<int> {
-  BoardsIndexState() : super(0);
+part 'boards_index_notifier.g.dart';
 
-  void setIndex(int index) {
-    state = index;
-  }
+@riverpod
+class BoardsIndex extends _$BoardsIndex {
+  @override
+  int build() => 0;
+
+  /// 设置索引
+  void setIndex(int index) => state = index;
 }

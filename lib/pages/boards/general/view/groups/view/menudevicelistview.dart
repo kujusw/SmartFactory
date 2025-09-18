@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 
 import '../../../../../../common/styles/assets.dart';
-import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../../../../core/dependencies/dependencies.dart';
@@ -13,7 +14,7 @@ import '../../../notifier/device_notifier.dart';
 class MenuDeviceListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var datas = ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices();
+    var datas = ref.watch(deviceManagerProvider.notifier).getSelectedDevices();
     if (datas == null) {
       return Container();
     }
@@ -29,7 +30,7 @@ class MenuDeviceListView extends ConsumerWidget {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () => {ref.read(currentDeviceProvider.notifier).state = datas[index]},
+                    onTap: () => {ref.read(currentDeviceProvider) == datas[index]},
                     child: Column(
                       children: [
                         Container(

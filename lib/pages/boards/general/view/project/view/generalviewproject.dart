@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../../../../common/styles/assets.dart';
 import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../../../common/values/index.dart';
@@ -180,7 +182,7 @@ class GeneralViewProject extends ConsumerWidget {
                       ),
                       Consumer(builder: (_, WidgetRef ref, __) {
                         return Text(
-                          ref.watch(itemsDeviceModelProvider).length.toString() + " Devices",
+                          ref.watch(deviceManagerProvider).length.toString() + " Devices",
                           style: TextStyle(
                             fontSize: Constant.textSP_14,
                             color: ref.watch(colorProvider)['text'],

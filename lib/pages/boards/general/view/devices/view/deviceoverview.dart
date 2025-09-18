@@ -25,8 +25,7 @@ class DeviceOverView extends ConsumerWidget {
       LoggerManager().d("deviceEnergyResponseEntity: ${deviceEnergyResponseEntity.toString()}");
       ref
           .read(itemsGeneralDeviceProvider.notifier)
-          .updateGeneralDeviceName(next?.name ?? "")
-          .updateGeneralDeviceID(next?.id ?? "");
+          .updateGeneralDeviceName(GeneralDeviceInfoModel(id: next?.id ?? "", name: next?.name ?? ""));
       List<GeneralDeviceInfoModel> generalDeviceInfoModel = ref.read(itemsGeneralDeviceProvider);
       if (deviceEnergyResponseEntity.code == 100001) {
         for (var item in generalDeviceInfoModel) {
@@ -107,7 +106,7 @@ class DeviceOverView extends ConsumerWidget {
           }
         }
       }
-      ref.read(itemsGeneralDeviceProvider.notifier).setList(generalDeviceInfoModel);
+      ref.read(itemsGeneralDeviceProvider.notifier).setDevices(generalDeviceInfoModel);
     });
 
     return Container(

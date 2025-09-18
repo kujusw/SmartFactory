@@ -1,17 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../http/boardstab.dart';
 import '../../../../models/boards_tab_model.dart';
 
-class BoardsWidgetDeleteHttpManager extends StateNotifier<DeleteBoardsWidgetResponseEntity> {
-  BoardsWidgetDeleteHttpManager(super.state);
-  Future<bool> deleteBoardsWidget(params, token) async {
+part 'boardswidgetdeletehttpmanager.g.dart';
+
+@riverpod
+class BoardsWidgetDelete extends _$BoardsWidgetDelete {
+  @override
+  DeleteBoardsWidgetResponseEntity build() {
+    // 初始状态
+    return DeleteBoardsWidgetResponseEntity(code: 0, message: "");
+  }
+
+  /// 删除 Boards Widget
+  Future<bool> deleteBoardsWidget(dynamic id, String? token) async {
     try {
-      DeleteBoardsWidgetResponseEntity result = await BoardsTabAPI.deleteBoardsWidget(id: params, token: token);
+      final result = await BoardsTabAPI.deleteBoardsWidget(id: id, token: token);
       state = result;
       return true;
     } catch (e) {
-      // 如果发生错误
       state = DeleteBoardsWidgetResponseEntity(code: 201, message: "Delete User failed");
       return false;
     }

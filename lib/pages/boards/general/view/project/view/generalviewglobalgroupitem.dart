@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
+import 'package:smart_factory/pages/boards/daily_sob/notifier/location_notifier.dart';
 import '../../../../../../common/styles/assets.dart';
-import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/values/index.dart';
-import '../../../../../../core/dependencies/dependencies.dart';
 import '../../../../../../models/device_model.dart';
 import '../../../../../../models/locationresponseentity.dart';
 import '../../../../../common/widget/customthreelevelmenu.dart';
 import '../../../../../common/widget/tristatecheckbox.dart';
-import '../../../../../users/notifier/users_notifier.dart';
 import '../../../notifier/device_notifier.dart';
 
 //注意 body 设备列表只需要id 然后通过itemsDeviceModelProvider get id的对象做逻辑判断
@@ -29,7 +29,7 @@ class _GeneralViewGlobalGroupsItemState extends ConsumerState<GeneralViewGlobalG
   void initState() {
     super.initState();
     // ref.invalidate(getUsersProvider); //刷新不关心新值
-    ref.refresh(getLocationsProvider); //刷新并read新值
+    ref.refresh(locationListProvider); //刷新并read新值
   }
 
   @override
@@ -116,10 +116,10 @@ class _GeneralViewGlobalGroupsItemState extends ConsumerState<GeneralViewGlobalG
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(itemsLocationModelProvider).length > 0 && ref.watch(itemsDeviceModelProvider).length > 0
+    return ref.watch(locationListProvider).length > 0 && ref.watch(deviceManagerProvider).length > 0
         ? Container(
             child: CustomThreeLevelMenu(
-              data: getMenuData(ref.watch(itemsLocationModelProvider), ref.read(itemsDeviceModelProvider)),
+              data: getMenuData(ref.watch(locationListProvider), ref.read(deviceManagerProvider)),
               itemBuilder: (item) => GroupsItemTile(body: item, title: 1),
               subItemBuilder: (subItem) => GroupsItemTile(body: subItem, title: 2),
               subSubItemBuilder: (subSubItem) => GroupsItemTile(body: subSubItem, title: 3),
@@ -138,8 +138,9 @@ class GroupsItemTile extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 这段代码将在 widget 树构建完成后执行
       //显示menu三级菜单关联的设备列表
-      ref.read(showMenuDeviceListProvider.notifier).state =
-          ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices()?.length ?? 0;
+      ref
+          .read(showMenuDeviceListProvider.notifier)
+          .setValue(ref.watch(deviceManagerProvider.notifier).getSelectedDevices()?.length ?? 0);
     });
 
     return Container(
@@ -188,7 +189,7 @@ class GroupsItemTile extends ConsumerWidget {
                         for (var item in body["children"]) {
                           for (var device in item["children"]) {
                             ref
-                                .read(itemsDeviceModelProvider.notifier)
+                                .read(deviceManagerProvider.notifier)
                                 .selectDeviceInMenu(DeviceModel.fromJson(device), true);
                           }
                         }
@@ -196,7 +197,7 @@ class GroupsItemTile extends ConsumerWidget {
                         for (var item in body["children"]) {
                           for (var device in item["children"]) {
                             ref
-                                .read(itemsDeviceModelProvider.notifier)
+                                .read(deviceManagerProvider.notifier)
                                 .selectDeviceInMenu(DeviceModel.fromJson(device), false);
                           }
                         }
@@ -205,26 +206,20 @@ class GroupsItemTile extends ConsumerWidget {
                       // LoggerManager().d("value title ==2  $body");
                       if (value == CheckboxState.checked) {
                         for (var item in body["children"]) {
-                          ref
-                              .read(itemsDeviceModelProvider.notifier)
-                              .selectDeviceInMenu(DeviceModel.fromJson(item), true);
+                          ref.read(deviceManagerProvider.notifier).selectDeviceInMenu(DeviceModel.fromJson(item), true);
                         }
                       } else {
                         for (var item in body["children"]) {
                           ref
-                              .read(itemsDeviceModelProvider.notifier)
+                              .read(deviceManagerProvider.notifier)
                               .selectDeviceInMenu(DeviceModel.fromJson(item), false);
                         }
                       }
                     } else if (title == 3) {
                       if (value == CheckboxState.checked) {
-                        ref
-                            .read(itemsDeviceModelProvider.notifier)
-                            .selectDeviceInMenu(DeviceModel.fromJson(body), true);
+                        ref.read(deviceManagerProvider.notifier).selectDeviceInMenu(DeviceModel.fromJson(body), true);
                       } else {
-                        ref
-                            .read(itemsDeviceModelProvider.notifier)
-                            .selectDeviceInMenu(DeviceModel.fromJson(body), false);
+                        ref.read(deviceManagerProvider.notifier).selectDeviceInMenu(DeviceModel.fromJson(body), false);
                       }
                     }
                   },
@@ -256,7 +251,7 @@ class GroupsItemTile extends ConsumerWidget {
     for (var item in body["children"]) {
       for (var device in item["children"]) {
         total++;
-        if (ref.watch(itemsDeviceModelProvider.notifier).getDeviceById(device["id"])?.selectedInMenu == true) {
+        if (ref.watch(deviceManagerProvider.notifier).getDeviceById(device["id"])?.selectedInMenu == true) {
           selectedNum++;
         }
       }
@@ -275,7 +270,7 @@ class GroupsItemTile extends ConsumerWidget {
     int selectedNum = 0;
     for (var device in body["children"]) {
       total++;
-      if (ref.watch(itemsDeviceModelProvider.notifier).getDeviceById(device["id"])?.selectedInMenu == true) {
+      if (ref.watch(deviceManagerProvider.notifier).getDeviceById(device["id"])?.selectedInMenu == true) {
         selectedNum++;
       }
     }
@@ -289,7 +284,7 @@ class GroupsItemTile extends ConsumerWidget {
   }
 
   getTitleThreeChechkState(body, WidgetRef ref) {
-    if (ref.watch(itemsDeviceModelProvider.notifier).getDeviceById(body["id"])?.selectedInMenu ?? false) {
+    if (ref.watch(deviceManagerProvider.notifier).getDeviceById(body["id"])?.selectedInMenu ?? false) {
       return CheckboxState.checked;
     } else {
       return CheckboxState.unchecked;

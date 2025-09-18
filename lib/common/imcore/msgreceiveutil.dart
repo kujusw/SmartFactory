@@ -14,7 +14,7 @@ class MsgReceiveUtils {
 
   // Stream<String> get messageStream => _messageStreamMqttController.stream;
 
-  handlerReceiveMessage(WidgetRef ref, String recvMsg, String topic) {
+  handlerReceiveMessage(Ref ref, String recvMsg, String topic) {
     LoggerManager().d("handlerReceiveMessage: $recvMsg");
     // _messageStreamMqttController.add(recvMsg);
     // if (topic == "device/energy") {
@@ -24,7 +24,7 @@ class MsgReceiveUtils {
     // }
   }
 
-  void refreshDeviceInfos(WidgetRef ref, Map<String, dynamic> jsonMap, dynamic itemsDeviceInfosProvider) {
+  void refreshDeviceInfos(Ref ref, Map<String, dynamic> jsonMap, dynamic itemsDeviceInfosProvider) {
     List<GeneralDeviceInfoModel> deviceInfosModel = ref.read(itemsDeviceInfosProvider);
     if (jsonMap["deviceId"] == deviceInfosModel[0].id) {
       for (var item in deviceInfosModel) {

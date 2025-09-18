@@ -1,21 +1,45 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/utils/logger_manager.dart';
 import '../../../http/register.dart';
 import '../../../models/register_model.dart';
 
-class RegisterManager extends StateNotifier<RegisterResponseEntity> {
-  RegisterManager(super.state);
+part 'registermanager.g.dart';
 
-  Future<void> register(params) async {
+@riverpod
+class ObscureText extends _$ObscureText {
+  @override
+  bool build() => true;
+
+  void toggle() => state = !state;
+  void set(bool value) => state = value;
+}
+
+// 登录提示
+@riverpod
+class RegisterTips extends _$RegisterTips {
+  @override
+  String build() => "";
+
+  void set(String value) => state = value;
+}
+
+@riverpod
+class Register extends _$Register {
+  @override
+  RegisterResponseEntity build() {
+    // 初始状态可以根据需求设置
+    return RegisterResponseEntity(code: 0, msg: "");
+  }
+
+  /// 注册方法
+  Future<void> register(RegisterRequestEntity params) async {
     try {
-      // 假设注册成功
-      RegisterResponseEntity result = await RegisterAPI.register(params: params);
-      LoggerManager().d("注册结果:" + result.toString());
+      final result = await RegisterAPI.register(params: params);
+      LoggerManager().d("注册结果: $result");
       state = result;
     } catch (e) {
-      // 如果发生错误
-      LoggerManager().e("注册失败:" + e.toString());
+      LoggerManager().e("注册失败: $e");
       state = RegisterResponseEntity(code: 201, msg: "Register failed");
     }
   }

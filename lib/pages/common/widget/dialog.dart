@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 
 class CustomToastWidget extends ConsumerWidget {
   const CustomToastWidget({Key? key, required this.msg}) : super(key: key);

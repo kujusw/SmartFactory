@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -127,13 +126,3 @@ final darkColors = {
   "warmYellow": const Color.fromARGB(100, 230, 180, 0),
   "warmYellowLight": const Color.fromARGB(98, 246, 194, 4),
 };
-
-final darkThemeProvider = StateProvider.autoDispose<bool>((ref) => false);
-
-final colorProvider = StateProvider.autoDispose<Map<String, Color>>((ref) {
-  if (ref.watch(darkThemeProvider)) {
-    return darkColors;
-  } else {
-    return lightColors;
-  }
-});

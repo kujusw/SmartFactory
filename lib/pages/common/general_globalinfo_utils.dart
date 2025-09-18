@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/styles/assets.dart';
 import '../../common/styles/theme.dart';
+import '../../common/styles/theme_state_notifier.dart';
 
 Color getAlarmColor(String? name, WidgetRef ref) {
   final Map<String, Color> alarmTypeColorMap = {

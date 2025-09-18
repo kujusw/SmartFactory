@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../common/styles/theme.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../models/locationresponseentity.dart';
 import '../../notifier/things_notifier.dart';
@@ -30,9 +31,7 @@ class LocationListViewInAddDevice extends ConsumerWidget {
                   return Column(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          ref.read(selectedLocationProviderInThings.notifier).state = locationModels[index];
-                        },
+                        onTap: () {},
                         child: Container(
                           height: 48.h,
                           width: double.infinity,
@@ -53,14 +52,6 @@ class LocationListViewInAddDevice extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              Visibility(
-                                visible: locationModels[index].id == ref.watch(selectedLocationProviderInThings)?.id,
-                                child: Icon(
-                                  Icons.done,
-                                  size: 30.h,
-                                  color: ref.watch(colorProvider)['accentColor'],
-                                ),
-                              )
                             ],
                           ),
                         ),

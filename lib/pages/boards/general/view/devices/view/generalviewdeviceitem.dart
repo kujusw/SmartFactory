@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../../../common/styles/assets.dart';
 import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../../../../models/general_device_info_model.dart';
@@ -21,7 +22,7 @@ class GeneralViewDevicesItem extends ConsumerWidget {
     if (type == "ITEMSGENERALDEVICEPROVIDER") {
       item = ref.read(itemsGeneralDeviceProvider)[index];
     } else {
-      item = ref.read(itemsGeneralDeviceInThingsProvider)[index];
+      item = ref.read(generalDevicesInThingsProvider)[index];
     }
     return MouseRegion(
       onEnter: (PointerEvent details) => () {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../common/styles/theme.dart';
-import '../general/view/thingsgeneralwidget.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../table/view/thingstablewidget.dart';
 
 class ThingsView extends ConsumerWidget {
@@ -23,10 +22,6 @@ class ThingsView extends ConsumerWidget {
           height: 1000.h,
           child: Row(
             children: [
-              Expanded(
-                flex: 1,
-                child: ThingsViewGeneralWidget(),
-              ),
               Expanded(
                 flex: 6,
                 child: ThingsViewTableWidget(),

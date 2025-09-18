@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../tiles/abstract_settings_tile.dart';
 import '../../tiles/platforms/ios_settings_tile.dart';
 import '../../tiles/settings_tile.dart';

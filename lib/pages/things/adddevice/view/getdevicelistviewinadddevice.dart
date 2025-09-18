@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../common/styles/theme.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/dependencies/dependencies.dart';
 
@@ -20,7 +22,7 @@ class _DeviceListViewInAddDeviceState extends ConsumerState<DeviceListViewInAddD
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         if (widget.type == "NEW") {
-          ref.read(itemsDeviceModelProvider.notifier).unSelectDevice();
+          ref.read(deviceManagerProvider.notifier).unSelectDevice();
         }
       },
     );
@@ -52,7 +54,7 @@ class _DeviceListViewInAddDeviceState extends ConsumerState<DeviceListViewInAddD
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  var data = ref.watch(itemsDeviceModelProvider);
+                  var data = ref.watch(deviceManagerProvider);
                   return Column(
                     children: [
                       Container(
@@ -80,7 +82,7 @@ class _DeviceListViewInAddDeviceState extends ConsumerState<DeviceListViewInAddD
                               ),
                               value: data[index].selectedInAddDevice,
                               onChanged: (value) {
-                                ref.read(itemsDeviceModelProvider.notifier).selectDevice(data[index], value!);
+                                ref.read(deviceManagerProvider.notifier).selectDevice(data[index], value!);
                               },
                             ),
                           ],
@@ -90,7 +92,7 @@ class _DeviceListViewInAddDeviceState extends ConsumerState<DeviceListViewInAddD
                     ],
                   );
                 },
-                childCount: ref.watch(itemsDeviceModelProvider).length,
+                childCount: ref.watch(deviceManagerProvider).length,
               ),
             ),
           ],

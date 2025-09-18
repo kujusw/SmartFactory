@@ -5,14 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
-import '../../audit/notifier/audit_notifier.dart';
 import '../../boards/daily_sob/notifier/dailys_sob_notifier.dart';
 import '../../login/notifier/login_notifier.dart';
-import '../../reports/notifier/reports_notifier.dart';
 import '../../things/notifier/things_notifier.dart';
-import '../../users/notifier/users_notifier.dart';
 
 class UserLoginInfoPopup extends ConsumerWidget {
   UserLoginInfoPopup({super.key});
@@ -51,7 +48,7 @@ class UserLoginInfoPopup extends ConsumerWidget {
                 child: Consumer(
                   builder: (context, ref, child) {
                     return Text(
-                      ref.watch(loginUserName),
+                      ref.watch(loginUserNameProvider),
                       style: TextStyle(
                         color: ref.watch(colorProvider)['accentColor'],
                         fontSize: Constant.textSP_20,
@@ -84,7 +81,7 @@ class UserLoginInfoPopup extends ConsumerWidget {
                 child: Consumer(
                   builder: (context, ref, child) {
                     return Text(
-                      ref.watch(loginTime),
+                      ref.watch(loginTimeProvider),
                       style: TextStyle(
                         color: ref.watch(colorProvider)['accentColor'],
                         fontSize: Constant.textSP_16,
@@ -112,13 +109,10 @@ class UserLoginInfoPopup extends ConsumerWidget {
                     if (result) {
                       //数据清空
                       ref.invalidate(loginProvider);
-                      ref.invalidate(loginTime);
-                      ref.invalidate(loginUserName);
-                      clearUserProvider(ref);
+                      ref.invalidate(loginTimeProvider);
+                      ref.invalidate(loginUserNameProvider);
                       clearThingsProvider(ref);
                       clearBoardsProvider(ref);
-                      clearReportsProvider(ref);
-                      clearAuditProvider(ref);
 
                       unawaited(SmartDialog.dismiss(tag: "UserLoginInfoPopup"));
                     }

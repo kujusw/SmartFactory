@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:flutter_riverpod/src/consumer.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../utils/logger_manager.dart';
 import 'msgreceiveutil.dart';
 
@@ -51,7 +51,7 @@ class MqttManager {
   }
 
   // 连接到服务器的方法
-  Future<bool> connect(WidgetRef ref) async {
+  Future<bool> connect(Ref ref) async {
     try {
       await client?.connect();
       recvMessage(ref);
@@ -65,7 +65,7 @@ class MqttManager {
     }
   }
 
-  void recvMessage(WidgetRef ref) {
+  void recvMessage(Ref ref) {
     client?.updates?.listen((event) {
       var recvMessage = event[0].payload as MqttPublishMessage;
       // 字符串格式的消息

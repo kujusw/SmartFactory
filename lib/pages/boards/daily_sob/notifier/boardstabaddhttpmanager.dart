@@ -1,16 +1,24 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../http/boardstab.dart';
 import '../../../../models/boards_tab_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class BoardsTabAddHttpManager extends StateNotifier<AddBoardsTabResponseEntity> {
-  BoardsTabAddHttpManager(super.state);
-  Future<bool> addBoardsTab(params, token) async {
+part 'boardstabaddhttpmanager.g.dart';
+
+@riverpod
+class BoardsTabAdd extends _$BoardsTabAdd {
+  @override
+  AddBoardsTabResponseEntity build() {
+    // 初始状态
+    return AddBoardsTabResponseEntity(code: 0, message: "");
+  }
+
+  /// 添加 Boards Tab
+  Future<bool> addBoardsTab(AddBoardsTabRequestEntity? params, String? token) async {
     try {
-      AddBoardsTabResponseEntity result = await BoardsTabAPI.addBoardsTab(params: params, token: token);
+      final result = await BoardsTabAPI.addBoardsTab(params: params, token: token);
       state = result;
       return true;
     } catch (e) {
-      // 如果发生错误
       state = AddBoardsTabResponseEntity(code: 201, message: "Add User failed");
       return false;
     }

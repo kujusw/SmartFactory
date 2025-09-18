@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/utils/logger_manager.dart';
 import '../../../common/values/index.dart';
 import '../../../core/dependencies/dependencies.dart';
 import '../../../models/device_model.dart';
 import '../../../models/device_model_new.dart';
 import '../../login/notifier/login_notifier.dart';
-import '../devicedetail/view/devicedetaillocationview.dart';
-import '../devicedetail/view/devicedetailoverviewview.dart';
-import '../devicedetail/view/devicedetailpropertiesview.dart';
 import '../notifier/things_notifier.dart';
 
 class ThingsViewDeviceDetailView extends ConsumerStatefulWidget {
@@ -60,7 +59,7 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        ref.watch(itemsDeviceModelProvider.notifier).getDeviceById(widget._model.id ?? "0")?.name ?? "",
+                        ref.watch(deviceManagerProvider.notifier).getDeviceById(widget._model.id ?? "0")?.name ?? "",
                         style: TextStyle(
                           fontSize: Constant.textSP_18,
                           color: ref.watch(colorProvider)['white'],
@@ -111,16 +110,6 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            DeviceDetailOverviewView(),
-                            DeviceDetailPropertiesView(widget._model),
-                            DeviceDetailLocationView(widget._model),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -144,66 +133,7 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                         ),
                       ),
                       TextButton(
-                        onPressed: () async {
-                          //如果是location页面，需要刷新更新location
-                          if (_tabController.index == 2) {
-                            final location = ref.read(selectedLocationProviderInThings.notifier).state;
-                            if (location == null) {
-                              unawaited(SmartDialog.showToast("Please select location"));
-                              return;
-                            }
-                            if (location.id != widget._model.locationId) {
-                              bool result = await ref.read(updateDeviceLocationProvider.notifier).updateDevice(
-                                  widget._model.id,
-                                  UpdateDeviceLocationRequestEntity(
-                                    name: widget._model.name ?? "",
-                                    locationId: location.id,
-                                    associatedDeviceIds: widget._model.associatedDeviceIds,
-                                  ),
-                                  ref.read(loginProvider).data?.token);
-                              LoggerManager().d("updateDeviceLocationProvider result:$result");
-                              if (result) {
-                                //更新devicelist
-                                widget._model.location = location.name;
-                                widget._model.locationId = location.id;
-                                ref.read(itemsDeviceModelProvider.notifier).updateDevice(widget._model);
-                                unawaited(SmartDialog.dismiss(tag: "ThingsViewDeviceDetail"));
-                              }
-                            }
-                          } else if (_tabController.index == 1) {
-                            //如果是properties页面，虚拟点关联设备中不能有虚拟点
-                            final itemsSelectDeviceModel = ref.read(itemsSelectDeviceModelProviderInThings);
-                            if (itemsSelectDeviceModel != null &&
-                                itemsSelectDeviceModel.any((element) => element.type == "virtual")) {
-                              unawaited(
-                                  SmartDialog.showToast("Virtual points cannot be associated with virtual points"));
-                              return;
-                            }
-
-                            final updateDeviceName = ref.read(updateDeviceNameProvider);
-                            LoggerManager().d("updateDeviceName updateDeviceName:$updateDeviceName");
-                            bool result = await ref.read(updateDeviceLocationProvider.notifier).updateDevice(
-                                widget._model.id,
-                                UpdateDeviceLocationRequestEntity(
-                                  name: updateDeviceName,
-                                  locationId: widget._model.locationId,
-                                  associatedDeviceIds:
-                                      ref.read(itemsSelectDeviceModelProviderInThings)!.map((e) => e.id ?? "").toList(),
-                                ),
-                                ref.read(loginProvider).data?.token);
-                            LoggerManager().d("updateDeviceLocationProvider result:$result");
-                            if (result) {
-                              //更新devicelist
-                              widget._model.name = updateDeviceName;
-                              widget._model.associatedDeviceIds =
-                                  ref.read(itemsSelectDeviceModelProviderInThings)!.map((e) => e.id ?? "").toList();
-                              ref.read(itemsDeviceModelProvider.notifier).updateDevice(widget._model);
-                              unawaited(SmartDialog.dismiss(tag: "ThingsViewDeviceDetail"));
-                            }
-                          } else {
-                            unawaited(SmartDialog.showToast("TODO"));
-                          }
-                        },
+                        onPressed: () async {},
                         style: ButtonStyle(
                           overlayColor:
                               WidgetStateProperty.all(ref.watch(colorProvider)['accentColor']?.withValues(alpha: 0.3)),

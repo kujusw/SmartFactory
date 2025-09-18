@@ -1,26 +1,36 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../models/widget_model.dart';
 
-class WidgetManager extends StateNotifier<List<WidgetModel>> {
-  WidgetManager() : super([]);
+part 'widgetmanager.g.dart';
 
-  // 添加WidgetModel
+@riverpod
+class WidgetManager extends _$WidgetManager {
+  @override
+  List<WidgetModel> build() => [];
+
+  /// 添加 Widget
   void addWidget(WidgetModel widgetModel) {
     state = [...state, widgetModel];
   }
 
-  // 删除WidgetModel
+  /// 删除 Widget，通过 subWidgetId
   void removeWidget(int subWidgetId) {
     state = state.where((t) => t.subWidgetId != subWidgetId).toList();
   }
 
-  // 更新WidgetModel
+  /// 更新 Widget
   void updateWidget(WidgetModel oldWidgetModel, WidgetModel newWidgetModel) {
     state = state.map((t) => t == oldWidgetModel ? newWidgetModel : t).toList();
   }
 
-  //删除id相同的widget
-  void clearWidgetsByTabId(int? id) {
-    state = state.where((t) => t.tab!.id != id).toList();
+  /// 删除 tabId 相同的 Widget
+  void clearWidgetsByTabId(int? tabId) {
+    state = state.where((t) => t.tab?.id != tabId).toList();
+  }
+
+  /// 清空所有 Widget
+  void clearAll() {
+    state = [];
   }
 }

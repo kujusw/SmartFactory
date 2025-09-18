@@ -1,10 +1,16 @@
 // 定义一个 StateNotifier 类，用来更新索引值
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore_for_file: cast_from_null_always_fails
+
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/device_model.dart';
 
-class DeviceState extends StateNotifier<List<DeviceModel>> {
-  DeviceState() : super([]);
+part 'device_state_notifier.g.dart';
+
+@riverpod
+class DeviceManager extends _$DeviceManager {
+  @override
+  List<DeviceModel> build() => [];
 
   // 添加设备
   void addDevice(DeviceModel device) {
@@ -25,37 +31,42 @@ class DeviceState extends StateNotifier<List<DeviceModel>> {
 
   // 查询设备
   DeviceModel? getDeviceById(String? deviceId) {
-    return state.firstWhere((device) => device.id == deviceId);
+    return state.firstWhere(
+      (device) => device.id == deviceId,
+      orElse: () => null as DeviceModel, // 👈 防止报错
+    );
   }
 
-  //选中所有设备
+  // 选中所有设备
   void selectAllDevice(bool? val) {
     state = state.map((device) {
       return device.copyWith(selected: val);
     }).toList();
   }
-  //选中单个设备 在设备添加列表中
 
+  // 选中单个设备（在设备添加列表中）
   void selectDevice(DeviceModel device, bool selected) {
     state = state.map((t) => t.id == device.id ? device.copyWith(selectedInAddDevice: selected) : t).toList();
   }
 
-  //取消所有的选中
+  // 取消所有选中
   void unSelectDevice() {
     state = state.map((device) {
       return device.copyWith(selectedInAddDevice: false);
     }).toList();
   }
 
+  // 选中设备（菜单）
   void selectDeviceInMenu(DeviceModel device, bool selected) {
     state = state.map((t) => t.id == device.id ? device.copyWith(selectedInMenu: selected) : t).toList();
   }
 
-  //获取selectedInMenu 为true的设备集合
+  // 获取菜单里选中的设备
   List<DeviceModel>? getSelectedDevices() {
     return state.where((device) => device.selectedInMenu ?? false).toList();
   }
 
+  // 覆盖设备列表
   void setDevices(List<DeviceModel> list) {
     state = list;
   }

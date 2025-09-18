@@ -1,67 +1,127 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 
 import '../../../../common/utils/sort.dart';
 import '../../../../core/dependencies/dependencies.dart';
-import '../../../../core/notifiers/general_device_state_notifier.dart';
 import '../../../../http/device.dart';
 import '../../../../models/device_model.dart';
 import '../../../../models/general_device_info_model.dart';
 import '../../../login/notifier/login_notifier.dart';
 
-Future<List<DeviceModel>> getDevices(FutureProviderRef<List<DeviceModel>> ref) async {
-  var devices = await DeviceAPI.getDevices(path: "v1/devices/all", token: ref.read(loginProvider).data?.token);
-  var sortDevicesReturn = sortDevices(devices.data ?? []);
-  ref.read(itemsDeviceModelProvider.notifier).setDevices(sortDevicesReturn ?? []);
+part 'device_notifier.g.dart';
+
+/// 获取设备列表
+@riverpod
+Future<List<DeviceModel>> devices(Ref ref) async {
+  final token = ref.read(loginProvider).data?.token;
+  final devices = await DeviceAPI.getDevices(path: "v1/devices/all", token: token);
+  final sortDevicesReturn = sortDevices(devices.data ?? []);
+
+  ref.read(deviceManagerProvider.notifier).setDevices(sortDevicesReturn ?? []);
   return sortDevicesReturn ?? [];
 }
 
-final devicesProvider = FutureProvider<List<DeviceModel>>((ref) async {
-  return getDevices(ref);
-});
+/// 当前选中的设备
+@riverpod
+class CurrentDevice extends _$CurrentDevice {
+  @override
+  DeviceModel? build() => null;
 
-final currentDeviceProvider = StateProvider.autoDispose<DeviceModel?>((ref) {
-  // if (ref.watch(itemsDeviceModelProvider).isNotEmpty) {
-  //   return ref.watch(itemsDeviceModelProvider)[0];
-  // } else {
-  return null;
-  // }
-});
+  /// 设置当前选中的设备
+  void setCurrentDevice(DeviceModel? device) {
+    state = device;
+  }
 
-//搜索值
-final vualeSearchProvider = StateProvider.autoDispose<String>((ref) => "");
+  /// 清空当前选中的设备
+  void clearCurrentDevice() {
+    state = null;
+  }
+}
 
-final itemsSearchDeviceModelInDeviceProvider = StateProvider.autoDispose<List<DeviceModel>?>((ref) {
-  if (ref.watch(vualeSearchProvider).isNotEmpty) {
-    //如果菜单中选择了设备
-    if (ref.watch(showMenuDeviceListProvider) > 0) {
-      return ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices()?.where((element) {
-        //忽略大小写
-        return element.toString().toLowerCase().contains(ref.watch(vualeSearchProvider).toLowerCase());
-      }).toList();
+/// 搜索值
+@riverpod
+class VualeSearch extends _$VualeSearch {
+  @override
+  String build() => "";
+
+  /// 设置搜索值
+  void setValue(String value) {
+    state = value;
+  }
+
+  /// 清空搜索值
+  void clear() {
+    state = "";
+  }
+}
+
+/// 显示 menu 的设备列表 ID
+
+@riverpod
+class ShowMenuDeviceList extends _$ShowMenuDeviceList {
+  @override
+  int build() => 0;
+
+  void setValue(int value) {
+    state = value;
+  }
+
+  void reset() {
+    state = 0;
+  }
+}
+
+/// 搜索结果设备
+@riverpod
+List<DeviceModel>? itemsSearchDeviceModelInDevice(Ref ref) {
+  final search = ref.watch(vualeSearchProvider);
+  final menu = ref.watch(showMenuDeviceListProvider);
+
+  if (search.isNotEmpty) {
+    if (menu > 0) {
+      return ref
+          .watch(deviceManagerProvider.notifier)
+          .getSelectedDevices()
+          ?.where(
+            (element) => element.toString().toLowerCase().contains(search.toLowerCase()),
+          )
+          .toList();
     } else {
-      return ref.watch(itemsDeviceModelProvider).where((element) {
-        //忽略大小写
-        return element.toString().toLowerCase().contains(ref.watch(vualeSearchProvider).toLowerCase());
-      }).toList();
+      return ref
+          .watch(deviceManagerProvider)
+          .where(
+            (element) => element.toString().toLowerCase().contains(search.toLowerCase()),
+          )
+          .toList();
     }
   } else {
-    //如果菜单中选择了设备
-    if (ref.watch(showMenuDeviceListProvider) > 0) {
-      return ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices();
+    if (menu > 0) {
+      return ref.watch(deviceManagerProvider.notifier).getSelectedDevices();
     }
-    return ref.watch(itemsDeviceModelProvider);
+    return ref.watch(deviceManagerProvider);
   }
-});
-//显示menu三级菜单关联的设备列表
-final showMenuDeviceListProvider = StateProvider.autoDispose<int>((ref) => 0);
+}
 
-final itemsGeneralDeviceProvider = StateNotifierProvider<GeneralDeviceState, List<GeneralDeviceInfoModel>>((ref) {
-  return GeneralDeviceState();
-});
+/// GeneralDevice 的状态管理
+@riverpod
+class ItemsGeneralDevice extends _$ItemsGeneralDevice {
+  @override
+  List<GeneralDeviceInfoModel> build() => [];
 
-//退出登录后 清空数据
+  /// 更新 GeneralDevice 名称
+  void updateGeneralDeviceName(GeneralDeviceInfoModel device) {
+    state = state.map((e) => e.id == device.id ? device : e).toList();
+  }
+
+  void setDevices(List<GeneralDeviceInfoModel> devices) {
+    state = devices;
+  }
+}
+
+/// 退出登录清空数据
 void clearDeviceProvider(WidgetRef ref) {
   ref.invalidate(devicesProvider);
   ref.invalidate(currentDeviceProvider);

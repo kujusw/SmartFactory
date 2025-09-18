@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../common/styles/theme.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/dependencies/dependencies.dart';
+import '../../../../core/notifiers/device_state_notifier.dart';
 import '../../notifier/things_notifier.dart';
 
 class SearchDeviceListViewInAddDevice extends ConsumerStatefulWidget {
@@ -20,7 +22,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.type == "NEW") {
-        ref.read(itemsDeviceModelProvider.notifier).unSelectDevice();
+        ref.read(deviceManagerProvider.notifier).unSelectDevice();
       }
     });
   }
@@ -37,7 +39,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
 
   @override
   Widget build(BuildContext context) {
-    var datas = ref.watch(itemsSearchDeviceModelProviderInThings.notifier).state ?? [];
+    var datas = ref.watch(searchDevicesInThingsProvider) ?? [];
     return Container(
       height: 600.h,
       decoration: BoxDecoration(
@@ -79,7 +81,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
                               ),
                               value: datas[index].selectedInAddDevice,
                               onChanged: (value) {
-                                ref.read(itemsDeviceModelProvider.notifier).selectDevice(datas[index], value!);
+                                ref.read(deviceManagerProvider.notifier).selectDevice(datas[index], value!);
                               },
                             ),
                           ],
@@ -89,7 +91,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
                     ],
                   );
                 },
-                childCount: ref.read(itemsSearchDeviceModelProviderInThings)?.length,
+                childCount: ref.read(searchDevicesInThingsProvider)?.length,
               ),
             ),
           ],

@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../../../../core/dependencies/dependencies.dart';
+import '../../../../../../core/notifiers/device_state_notifier.dart';
 import '../../../../../../models/device_model.dart';
 import '../../../notifier/device_notifier.dart';
 import 'deviceoverview.dart';
@@ -35,7 +37,7 @@ class GeneralViewDevices extends ConsumerWidget {
             child: Center(
               child: Consumer(
                 builder: (context, watch, child) {
-                  List<DeviceModel>? devices = watch.watch(itemsDeviceModelProvider);
+                  List<DeviceModel>? devices = watch.watch(deviceManagerProvider);
                   DeviceModel? deviceModel = watch.watch(currentDeviceProvider);
                   if (devices?.isNotEmpty == true && deviceModel?.id?.isNotEmpty == true) {
                     return Text(

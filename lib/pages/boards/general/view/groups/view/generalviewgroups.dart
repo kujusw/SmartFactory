@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../../../common/styles/assets.dart';
 import '../../../../../../common/styles/theme.dart';
+import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../../../../core/dependencies/dependencies.dart';
+import '../../../../../../core/notifiers/device_state_notifier.dart';
 import '../../../notifier/device_notifier.dart';
 import 'devicelistview.dart';
 import 'menudevicelistview.dart';
@@ -236,8 +238,8 @@ class GeneralViewGroups extends ConsumerWidget {
                     var result = ref.watch(vualeSearchProvider).toString().length > 0
                         ? ref.watch(itemsSearchDeviceModelInDeviceProvider) ?? []
                         : ref.watch(showMenuDeviceListProvider) > 0
-                            ? ref.watch(itemsDeviceModelProvider.notifier).getSelectedDevices() ?? []
-                            : ref.watch(itemsDeviceModelProvider);
+                            ? ref.watch(deviceManagerProvider.notifier).getSelectedDevices() ?? []
+                            : ref.watch(deviceManagerProvider);
                     return Container(
                       height: 30.h,
                       alignment: Alignment.bottomLeft,

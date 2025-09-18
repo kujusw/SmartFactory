@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../../common/styles/theme.dart';
+import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
-import '../../../../core/dependencies/dependencies.dart';
 import '../../../../models/general_globalinfo_model.dart';
 import '../../../common/general_globalinfo_utils.dart';
 
@@ -48,7 +48,7 @@ class GeneralViewGlobalInfoItem extends ConsumerWidget {
                 children: [
                   Text(
                     (item.name == "Devices" || item.name == "Connected Devices")
-                        ? ref.watch(itemsDeviceModelProvider).length.toString()
+                        ? ref.watch(deviceManagerProvider).length.toString()
                         : item.value.toString(),
                     style: TextStyle(
                       color: getAlarmColor(item.name, ref),

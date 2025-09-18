@@ -7,6 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:logger/logger.dart';
 import 'bootstrap.dart';
 import 'common/styles/theme.dart';
+import 'common/styles/theme_state_notifier.dart';
 import 'core/notifiers/language_notifier.dart';
 import 'core/router/routes.dart';
 import 'generated/l10n.dart';
@@ -31,7 +32,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(
-      languageNotifierProvider.select((value) => value.value),
+      languageProvider.select((value) => value.value),
     );
     final darkThemeValue = ref.watch(darkThemeProvider);
 

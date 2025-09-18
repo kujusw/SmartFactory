@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../common/styles/assets.dart';
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../../core/dependencies/dependencies.dart';
 import '../../../models/user_role_model.dart';
@@ -37,7 +37,6 @@ class SideMenu extends ConsumerWidget {
                   isSelected: ref.read(indexHomeProvider) == 0,
                   press: () {
                     //重置 fab
-                    ref.invalidate(floatButtonProvider);
                     ref.read(indexHomeProvider.notifier).setIndex(0);
                   },
                 ),
@@ -47,145 +46,48 @@ class SideMenu extends ConsumerWidget {
                   isSelected: ref.read(indexHomeProvider) == 1,
                   press: () {
                     //重置 fab
-                    ref.invalidate(floatButtonProvider);
                     ref.read(indexHomeProvider.notifier).setIndex(1);
                   },
-                ),
-                Visibility(
-                  child: DrawerListTile(
-                    title: "Reports",
-                    iconSrc: AssetsImages.reportIconSvg,
-                    isSelected: ref.read(indexHomeProvider) == 2,
-                    press: () {
-                      ref.read(indexHomeProvider.notifier).setIndex(2);
-                    },
-                  ),
-                  visible: ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Reports",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "read" ||
-                      ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Reports",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "write" ||
-                      (ref.read(loginProvider).data?.isAdmin ?? false),
-                ),
-                Visibility(
-                  child: DrawerListTile(
-                    title: "Users",
-                    iconSrc: AssetsImages.usersIconSvg,
-                    isSelected: ref.read(indexHomeProvider) == 3,
-                    press: () {
-                      //重置 fab
-                      ref.invalidate(floatButtonProvider);
-                      ref.read(indexHomeProvider.notifier).setIndex(3);
-                    },
-                  ),
-                  visible: ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Users",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "read" ||
-                      ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Users",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "write" ||
-                      (ref.read(loginProvider).data?.isAdmin ?? false),
-                ),
-                Visibility(
-                  child: DrawerListTile(
-                    title: "Audit",
-                    iconSrc: AssetsImages.historyIconSvg,
-                    isSelected: ref.read(indexHomeProvider) == 4,
-                    press: () {
-                      ref.read(indexHomeProvider.notifier).setIndex(4);
-                    },
-                  ),
-                  visible: ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Audit",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "read" ||
-                      ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Audit",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "write" ||
-                      (ref.read(loginProvider).data?.isAdmin ?? false),
                 ),
                 DrawerListTile(
                   title: "Settings",
                   iconSrc: AssetsImages.settingsIconSvg,
-                  isSelected: ref.read(indexHomeProvider) == 5,
+                  isSelected: ref.read(indexHomeProvider) == 2,
                   press: () {
-                    ref.read(indexHomeProvider.notifier).setIndex(5);
+                    ref.read(indexHomeProvider.notifier).setIndex(2);
                   },
                 ),
               ],
             ),
           ),
-          // Positioned(
-          //   bottom: 0,
-          //   child: Container(
-          //     padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 10.h),
-          //     child: Row(
-          //       children: [
-          //         Text(
-          //           "Powered by \nKUJU",
-          //           style: TextStyle(
-          //             fontSize: Constant.textSP_12,
-          //             color: ref.watch(colorProvider)['white'],
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-
           Positioned(
-            bottom: 15.h,
+            bottom: 0.h,
             child: Container(
-              width: 100.w,
-              height: 70.h,
-              child: Image.asset(
-                AssetsImages.logoPng,
-                fit: BoxFit.contain,
+              padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 10.h),
+              child: Row(
+                children: [
+                  Text(
+                    "Powered by \nKUJU",
+                    style: TextStyle(
+                      fontSize: Constant.textSP_12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
+          // Positioned(
+          //   bottom: 15.h,
+          //   child: Container(
+          //     width: 100.w,
+          //     height: 70.h,
+          //     child: Image.asset(
+          //       AssetsImages.logoPng,
+          //       fit: BoxFit.contain,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

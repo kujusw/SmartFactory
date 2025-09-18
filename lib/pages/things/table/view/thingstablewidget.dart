@@ -8,9 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../common/styles/assets.dart';
-import '../../../../common/styles/theme.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
-import '../../../../core/dependencies/dependencies.dart';
+import '../../../../core/notifiers/device_state_notifier.dart';
 import '../../../../models/device_model.dart';
 import '../../../boards/general/notifier/device_notifier.dart';
 import '../../../login/notifier/login_notifier.dart';
@@ -67,7 +67,7 @@ class ThingsViewTableWidget extends ConsumerWidget {
                             color: ref.watch(colorProvider)['text'],
                           ),
                           onChanged: (value) {
-                            ref.read(vualeSearchInThingsProvider.notifier).state = value;
+                            ref.read(searchValueInThingsProvider.notifier).state = value;
                           },
                           controller: searchController,
                           decoration: InputDecoration(
@@ -108,12 +108,12 @@ class ThingsViewTableWidget extends ConsumerWidget {
                             ),
                             suffixIcon: GestureDetector(
                               onTap: () {
-                                if (ref.read(vualeSearchInThingsProvider).toString().length > 0) {
-                                  ref.read(vualeSearchInThingsProvider.notifier).state = "";
+                                if (ref.read(searchValueInThingsProvider).toString().length > 0) {
+                                  ref.read(searchValueInThingsProvider.notifier).state = "";
                                   searchController.clear();
                                 }
                               },
-                              child: ref.watch(vualeSearchInThingsProvider).toString().length > 0
+                              child: ref.watch(searchValueInThingsProvider).toString().length > 0
                                   ? Icon(
                                       Icons.close,
                                       color: ref.watch(colorProvider)['text'],
@@ -191,10 +191,7 @@ class ThingsViewTableWidget extends ConsumerWidget {
                             icon: Icon(Icons.delete, color: ref.watch(colorProvider)['red'], size: 25.h),
                             onPressed: () async {
                               bool result = await ref.read(deleteDeviceProvider.notifier).deleteDevice(
-                                  ref
-                                      .watch(itemsDeviceModelProvider)
-                                      .firstWhere((element) => element.selected == true)
-                                      .id,
+                                  ref.watch(deviceManagerProvider).firstWhere((element) => element.selected == true).id,
                                   ref.read(loginProvider).data?.token);
                               if (result) {
                                 //刷新数据
@@ -206,7 +203,7 @@ class ThingsViewTableWidget extends ConsumerWidget {
                           ),
                         ),
                         visible: ref
-                                .watch(itemsDeviceModelProvider)
+                                .watch(deviceManagerProvider)
                                 .firstWhere((element) => element.selected == true,
                                     orElse: () => DeviceModel(selected: false))
                                 .selected ??

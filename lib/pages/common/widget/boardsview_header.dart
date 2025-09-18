@@ -1,20 +1,17 @@
 // ignore_for_file: unused_result
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/styles/assets.dart';
-import '../../../common/styles/theme.dart';
+import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/utils/screenutil.dart';
 import '../../../common/values/index.dart';
 import '../../../models/boards_tab_model.dart';
 import '../../boards/daily_sob/notifier/dailys_sob_notifier.dart';
-import '../../login/notifier/login_notifier.dart';
-import 'addwidgettab.dart';
 import 'boardview_tab_sort.dart';
 
 class BoardsViewHeader extends ConsumerStatefulWidget {
@@ -27,7 +24,7 @@ class _BoardsViewHeaderState extends ConsumerState<BoardsViewHeader> {
   @override
   void initState() {
     super.initState();
-    ref.refresh(getBoardsTabsProvider); //刷新并read新值
+    ref.refresh(boardsTabsProvider); //刷新并read新值
   }
 
   @override
@@ -65,9 +62,9 @@ class _BoardsViewHeaderState extends ConsumerState<BoardsViewHeader> {
                       children: [
                         BoardsTabWidget(
                           tab: tab,
-                          isSelected: ref.watch(indexBoardsProvider) == ref.watch(pageProvider).indexOf(tab),
+                          isSelected: ref.watch(boardsIndexProvider) == ref.watch(pageProvider).indexOf(tab),
                           press: () {
-                            ref.watch(indexBoardsProvider.notifier).setIndex(ref.watch(pageProvider).indexOf(tab));
+                            ref.watch(boardsIndexProvider.notifier).setIndex(ref.watch(pageProvider).indexOf(tab));
                           },
                         ),
                         Container(
@@ -142,18 +139,7 @@ class _BoardsViewHeaderState extends ConsumerState<BoardsViewHeader> {
                       color: ref.watch(colorProvider)['backgroundColorWidget'],
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        unawaited(SmartDialog.showAttach(
-                          targetContext: context,
-                          usePenetrate: false,
-                          alignment: Alignment.bottomRight,
-                          maskColor: Colors.transparent,
-                          clickMaskDismiss: true,
-                          keepSingle: true,
-                          tag: "AddWidgetTab",
-                          builder: (_) => AddWidgetTab(),
-                        ));
-                      },
+                      onPressed: () {},
                       style: ButtonStyle(
                         overlayColor:
                             WidgetStateProperty.all(ref.watch(colorProvider)['accentColor']?.withValues(alpha: 0.3)),
@@ -207,20 +193,14 @@ class BoardsTabWidget extends ConsumerWidget {
   final BoardsTabModel tab;
   final VoidCallback press;
   final bool isSelected;
-  final deleteProvider = StateProvider.autoDispose<bool>((ref) => false);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onLongPress: () {
-        if (tab.id != 0 && tab.name != "General") {
-          ref.read(deleteProvider.notifier).state = true;
-          // LoggerManager().d("长按");
-        }
-      },
+      onLongPress: () {},
       onDoubleTap: () {
         // 双击事件的处理逻辑
         if (tab.id != 0 && tab.name != "General") {
-          ref.refresh(getBoardsWidgetsProvider(tab.id ?? 0)); //刷新并read新值
+          ref.refresh(boardsWidgetsProvider(tab.id ?? 0)); //刷新并read新值
         }
       },
       child: Stack(
@@ -276,40 +256,6 @@ class BoardsTabWidget extends ConsumerWidget {
                 ],
               ),
             ),
-          ),
-          //删除按钮
-          Visibility(
-            child: Positioned(
-              right: 5.w,
-              top: 0,
-              child: IconButton(
-                onPressed: () async {
-                  ref.read(deleteProvider.notifier).state = false;
-                  //删除
-                  bool result = await ref
-                      .read(deleteBoardsTabProvider.notifier)
-                      .deleteBoardsTab(tab.id, ref.read(loginProvider).data?.token);
-                  if (result) {
-                    ref.refresh(getBoardsTabsProvider);
-                    //删除后默认选中第一个
-                    ref.read(indexBoardsProvider.notifier).setIndex(0);
-                    ref.read(chartWidgetsProvider.notifier).clearWidgetsByTabId(tab.id);
-                  } else {
-                    unawaited(SmartDialog.showToast("Delete failed"));
-                  }
-                },
-                style: ButtonStyle(
-                  minimumSize: WidgetStateProperty.all(Size(0, 0)),
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                ),
-                icon: Icon(
-                  Icons.delete,
-                  size: 30.w,
-                  color: ref.watch(colorProvider)['red'],
-                ),
-              ),
-            ),
-            visible: ref.watch(deleteProvider),
           ),
         ],
       ),

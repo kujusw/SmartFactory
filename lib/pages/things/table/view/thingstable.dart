@@ -7,9 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../../../common/styles/theme.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/utils/time_utils.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/dependencies/dependencies.dart';
+import '../../../../core/notifiers/device_state_notifier.dart';
 import '../../../../http/device.dart';
 import '../../../../models/device_model.dart';
 import '../../../../models/general_device_info_model.dart';
@@ -51,11 +53,9 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
     ref.listen<DeviceModel?>(selectedDeviceProvider, (previous, next) async {
       DeviceEnergyResponseEntity deviceEnergyResponseEntity = await DeviceAPI.getDeviceModelEnergy(
           path: "v1/energy/${next?.id}", token: ref.read(loginProvider).data?.token);
-      ref
-          .read(itemsGeneralDeviceInThingsProvider.notifier)
-          .updateGeneralDeviceName(next?.name ?? "")
-          .updateGeneralDeviceID(next?.id ?? "");
-      List<GeneralDeviceInfoModel> generalDeviceInfoModel = ref.read(itemsGeneralDeviceInThingsProvider);
+      ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceName(next?.name ?? "");
+      ref.read(generalDevicesInThingsProvider.notifier).updateGeneralDeviceID(next?.id ?? "");
+      List<GeneralDeviceInfoModel> generalDeviceInfoModel = ref.read(generalDevicesInThingsProvider);
       for (var item in generalDeviceInfoModel) {
         if (item.id == deviceEnergyResponseEntity.data?.id && item.type == "Current") {
           item.value = (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + "A";
@@ -94,7 +94,7 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
           item.time = getTimeMMMDDYHHMMSSA((deviceEnergyResponseEntity.data?.energyWeeklyTimestamp ?? 0)).toString();
         }
       }
-      ref.read(itemsGeneralDeviceInThingsProvider.notifier).setList(generalDeviceInfoModel);
+      ref.read(generalDevicesInThingsProvider.notifier).setList(generalDeviceInfoModel);
     });
 
     return DataTable2(
@@ -151,8 +151,8 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
           child: Container(padding: const EdgeInsets.all(20), color: Colors.grey[200], child: const Text('No data'))),
 
       rows: List<DataRow>.generate(
-        ref.watch(itemsSearchDeviceModelProvider)?.length ?? 0,
-        (index) => devicesDataRow(ref.watch(itemsSearchDeviceModelProvider)![index], index, ref),
+        ref.watch(searchDevicesInThingsProvider)?.length ?? 0,
+        (index) => devicesDataRow(ref.watch(searchDevicesInThingsProvider)![index], index, ref),
       ),
     );
   }
@@ -166,11 +166,11 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
           //现在只能选择虚拟设备进行删除
           if (deviceModel.type == "virtual") {
             deviceModel.selected = value;
-            ref.read(itemsDeviceModelProvider.notifier).updateDevice(deviceModel);
+            ref.read(deviceManagerProvider.notifier).updateDevice(deviceModel);
 
             //单选  多选注释
             if (deviceModel.selected ?? false) {
-              for (var item in ref.read(itemsDeviceModelProvider)) {
+              for (var item in ref.read(deviceManagerProvider)) {
                 if (item.id != deviceModel.id) {
                   item.selected = false;
                 }
@@ -191,9 +191,7 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
             keepSingle: true,
             tag: "ThingsViewDeviceDetail",
             builder: (_) => ThingsViewDeviceDetailView(model: deviceModel),
-            onDismiss: () {
-              ref.read(floatButtonProvider.notifier).changeFloatButton("");
-            },
+            onDismiss: () {},
           ),
         ),
       },
