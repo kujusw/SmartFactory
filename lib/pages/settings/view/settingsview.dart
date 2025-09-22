@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../common/styles/theme.dart';
 import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../common/widget/setting/list/settings_list.dart';
@@ -23,9 +22,9 @@ class SettingsView extends ConsumerWidget {
             SettingsTile.switchTile(
               onToggle: (value) async {
                 if (value) {
-                  ref.read(darkThemeProvider.notifier).state = true;
+                  ref.read(darkThemeProvider.notifier).set(true);
                 } else {
-                  ref.read(darkThemeProvider.notifier).state = false;
+                  ref.read(darkThemeProvider.notifier).set(false);
                 }
               },
               initialValue: ref.watch(darkThemeProvider),

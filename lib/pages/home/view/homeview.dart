@@ -1,15 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../../common/styles/theme_state_notifier.dart';
+import '../../../common/utils/logger_manager.dart';
 import '../../../core/dependencies/dependencies.dart';
+import '../../../core/notifiers/floatbuttonmanager.dart';
+import '../../boards/daily_sob/notifier/dailys_sob_notifier.dart';
 import '../../boards/view/boardsview.dart';
+import '../../common/widget/floatingactionbutton/fabs/boards_fab.dart';
+import '../../common/widget/floatingactionbutton/fabs/things_fab.dart';
+import '../../common/widget/floatingactionbutton/fabs/users_fab.dart';
 import '../../common/widget/flutter_lazy_indexed_stack.dart';
 import '../../common/widget/header.dart';
 import '../../common/widget/side_menu.dart';
 import '../../settings/view/settingsview.dart';
 import '../../things/view/thingsview.dart';
+import '../../things/view/thingsviewaddactionview.dart';
+import '../../users/locationstab/view/locationaddactionview.dart';
+import '../../users/notifier/users_notifier.dart';
+import '../../users/rolestab/view/roleaddactionview.dart';
+import '../../users/userstab/view/useraddactionview.dart';
+import '../../users/view/usersview.dart';
 import '../repository/state_home.dart';
+import 'animated_floating_action_button.dart';
 import 'customfloatingactionbuttonlocation.dart';
 import 'noanimationfloatingactionbuttonanimator.dart';
 
@@ -93,6 +109,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         children: const [
                           BoardsView(),
                           ThingsView(),
+                          UsersView(),
                           SettingsView(),
                         ],
                       ),
@@ -104,12 +121,107 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: ref.watch(colorProvider)['accentColor'],
-        onPressed: () {},
-        child: Icon(Icons.done, color: ref.watch(colorProvider)['white'], size: 30.h),
-      ),
-      floatingActionButtonLocation: CustomFloatingActionButtonLocation(-900.w, 30.h),
+      floatingActionButton:
+          ref.watch(floatButtonProvider) == "BoardsViewDelete" || ref.watch(floatButtonProvider) == "BoardsViewEdit"
+              ? FloatingActionButton(
+                  backgroundColor: ref.watch(colorProvider)['accentColor'],
+                  onPressed: () {
+                    // 添加你的点击事件处理逻辑
+                    ref.read(floatButtonProvider.notifier).change("");
+                    //清除选中的widget
+                    ref.read(selectedWidgetProvider.notifier).setWidget(null);
+                  },
+                  child: Icon(Icons.done, color: ref.watch(colorProvider)['white'], size: 30.h),
+                )
+              : ref.watch(indexHomeProvider) == 1
+                  ? FloatingActionButton(
+                      backgroundColor: ref.watch(colorProvider)['accentColor'],
+                      onPressed: () {
+                        ref.read(floatButtonProvider.notifier).change("ThingsViewAdd");
+                        unawaited(SmartDialog.show(
+                          usePenetrate: false,
+                          alignment: Alignment.centerRight,
+                          clickMaskDismiss: true,
+                          keepSingle: true,
+                          tag: "ThingsViewAddActionButton",
+                          builder: (_) => ThingsViewAddActionView(),
+                          onDismiss: () {
+                            ref.read(floatButtonProvider.notifier).change("");
+                          },
+                        ));
+                      },
+                      child: Icon(Icons.add, color: ref.watch(colorProvider)['white'], size: 30.h),
+                    )
+                  : ref.watch(indexHomeProvider) == 3
+                      ? FloatingActionButton(
+                          backgroundColor: ref.watch(colorProvider)['accentColor'],
+                          onPressed: () {
+                            ref.read(floatButtonProvider.notifier).change("UsersViewAdd");
+                            unawaited(SmartDialog.show(
+                              usePenetrate: false,
+                              alignment: Alignment.centerRight,
+                              clickMaskDismiss: true,
+                              keepSingle: true,
+                              tag: "UsersViewAddActionButton",
+                              builder: (_) {
+                                if (ref.watch(indexUsersProvider) == 0) {
+                                  return AddUserWidgetView(type: "ADD", userModel: null);
+                                } else if (ref.watch(indexUsersProvider) == 1) {
+                                  return AddRoleWidgetView(type: "ADD", roleModel: null);
+                                } else {
+                                  return AddLocationWidgetView(type: "ADD", locationModel: null);
+                                }
+                              },
+                              onDismiss: () {
+                                ref.read(floatButtonProvider.notifier).change("");
+                              },
+                            ));
+                          },
+                          child: Icon(Icons.add, color: ref.watch(colorProvider)['white'], size: 30.h),
+                        )
+                      : AnimatedFloatingActionButton(
+                          key: widget.key,
+                          fabButtons: ref.watch(indexHomeProvider) == 0
+                              ? getBoardsFabButtons(ref)
+                              : ref.watch(indexHomeProvider) == 1
+                                  ? getThingsFabButtons(ref)
+                                  : ref.watch(indexHomeProvider) == 2
+                                      ? getBoardsFabButtons(ref)
+                                      : ref.watch(indexHomeProvider) == 3
+                                          ? getUsersFabButtons(ref)
+                                          : ref.watch(indexHomeProvider) == 4
+                                              ? getBoardsFabButtons(ref)
+                                              : ref.watch(indexHomeProvider) == 5
+                                                  ? getBoardsFabButtons(ref)
+                                                  : getBoardsFabButtons(ref),
+                          colorStartAnimation: ref.watch(colorProvider)['accentColor']!,
+                          colorEndAnimation: Colors.red,
+                          colorStart: ref.watch(colorProvider)['white']!,
+                          colorEnd: ref.watch(colorProvider)['white']!,
+                          animatedIconData: AnimatedIcons.menu_close,
+                          durationAnimation: 100,
+                          tooltip: "Menu",
+                          heroTag: "HOMEVIEW",
+                          onFabToggle: (bool) {
+                            LoggerManager().d("onFabToggle $bool");
+                          },
+                        ),
+      floatingActionButtonLocation: ref.watch(indexHomeProvider) == 0
+          ? ref.watch(boardsIndexProvider) == 0
+              ? CustomFloatingActionButtonLocation(-100, -100)
+              : CustomFloatingActionButtonLocation(ref.watch(floatButtonRestoreProvider) ? 620.w : 20.w, 0)
+          : ref.watch(indexHomeProvider) == 1
+              ? null
+              : ref.watch(indexHomeProvider) == 2
+                  ? CustomFloatingActionButtonLocation(-100, -100)
+                  : ref.watch(indexHomeProvider) == 3
+                      ? null
+                      : ref.watch(indexHomeProvider) == 4
+                          ? CustomFloatingActionButtonLocation(-100, -100)
+                          : ref.watch(indexHomeProvider) == 5
+                              ? CustomFloatingActionButtonLocation(-100, -100)
+                              : CustomFloatingActionButtonLocation(
+                                  ref.watch(floatButtonRestoreProvider) ? 620.w : 20.w, 0),
       floatingActionButtonAnimator: NoAnimationFloatingActionButtonAnimator(),
     );
   }

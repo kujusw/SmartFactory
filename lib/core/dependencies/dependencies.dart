@@ -1,8 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/general_globalinfo_model.dart';
-import '../notifiers/floatbuttonmanager.dart';
 import '../preferences/preferences.dart';
 import '../repository/language_repository.dart';
 import '../repository/user_repository.dart';
@@ -41,32 +39,6 @@ class IndexHome extends _$IndexHome {
 
   void setIndex(int index) => state = index;
 }
-
-/// Float Button
-
-/// Float Button Motion
-@riverpod
-bool floatButtonMotion(Ref ref) {
-  final state = ref.watch(floatButtonProvider);
-  return state == "BoardsViewAdd" ||
-      state == "ThingsViewAdd" ||
-      state == "ThingsViewEdit" ||
-      state == "UsersViewAdd" ||
-      state == "UsersViewEdit";
-}
-
-/// Float Button Restore
-@riverpod
-bool floatButtonRestore(Ref ref) {
-  final state = ref.watch(floatButtonProvider);
-  return state == "BoardsViewAdd" ||
-      state == "ThingsViewAdd" ||
-      state == "ThingsViewEdit" ||
-      state == "UsersViewAdd" ||
-      state == "UsersViewEdit";
-}
-
-/// Global Info
 
 /// Current Time (格式1)
 @riverpod

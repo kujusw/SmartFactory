@@ -126,22 +126,6 @@ class SelectedLocationInThings extends _$SelectedLocationInThings {
   void set(LocationModel? location) => state = location;
 }
 
-@riverpod
-class SelectedLocationsInUsers extends _$SelectedLocationsInUsers {
-  @override
-  List<LocationModel> build() => [];
-
-  void add(LocationModel location) {
-    if ((location.id ?? 0) > 0) {
-      state = [...state, location];
-    }
-  }
-
-  void remove(LocationModel location) {
-    state = state.where((e) => e != location).toList();
-  }
-}
-
 // things 页面设备能源信息
 @riverpod
 class GeneralDevicesInThings extends _$GeneralDevicesInThings {
@@ -208,7 +192,6 @@ void clearThingsProvider(WidgetRef ref) {
   ref.invalidate(selectedDevicesInThingsProvider);
   ref.invalidate(updateDeviceNameProvider);
   ref.invalidate(selectedLocationInThingsProvider);
-  ref.invalidate(selectedLocationsInUsersProvider);
   ref.invalidate(updateDeviceLocationProvider);
   ref.invalidate(generalDevicesInThingsProvider);
   ref.invalidate(searchValueForMenuInThingsProvider);

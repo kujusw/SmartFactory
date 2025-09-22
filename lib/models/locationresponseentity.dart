@@ -111,6 +111,7 @@ class LocationModel {
   int? id;
   String? name;
   String? tenant;
+  bool? selected;
 
   LocationModel({
     this.area,
@@ -118,11 +119,29 @@ class LocationModel {
     this.id,
     this.name,
     this.tenant,
+    this.selected,
   });
 
   factory LocationModel.fromRawJson(String str) => LocationModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
+
+  LocationModel copyWith({
+    int? area,
+    String? building,
+    int? id,
+    String? name,
+    String? tenant,
+    bool? selected,
+  }) =>
+      LocationModel(
+        area: area ?? this.area,
+        building: building ?? this.building,
+        id: id ?? this.id,
+        name: name ?? this.name,
+        tenant: tenant ?? this.tenant,
+        selected: selected ?? this.selected,
+      );
 
   factory LocationModel.fromJson(Map<String, dynamic> json) => LocationModel(
         area: json["area"],
@@ -130,6 +149,7 @@ class LocationModel {
         id: json["id"],
         name: json["name"],
         tenant: json["tenant"],
+        selected: json["selected"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -138,7 +158,12 @@ class LocationModel {
         "id": id,
         "name": name,
         "tenant": tenant,
+        "selected": selected,
       };
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
 }
 
 class AddLocationResponseEntity {

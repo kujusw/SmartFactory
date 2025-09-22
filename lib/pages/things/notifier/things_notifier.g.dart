@@ -298,7 +298,7 @@ final class SearchDevicesInThingsProvider extends $FunctionalProvider<
 }
 
 String _$searchDevicesInThingsHash() =>
-    r'f822117bc8db44fb88a786ba452a256ea08e84d6';
+    r'68e503f9f154942dd26104ee24b52d9fb5e6f2ff';
 
 @ProviderFor(selectedDevicesInThings)
 const selectedDevicesInThingsProvider = SelectedDevicesInThingsProvider._();
@@ -436,58 +436,6 @@ abstract class _$SelectedLocationInThings extends $Notifier<LocationModel?> {
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<LocationModel?, LocationModel?>,
         LocationModel?,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
-  }
-}
-
-@ProviderFor(SelectedLocationsInUsers)
-const selectedLocationsInUsersProvider = SelectedLocationsInUsersProvider._();
-
-final class SelectedLocationsInUsersProvider
-    extends $NotifierProvider<SelectedLocationsInUsers, List<LocationModel>> {
-  const SelectedLocationsInUsersProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'selectedLocationsInUsersProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$selectedLocationsInUsersHash();
-
-  @$internal
-  @override
-  SelectedLocationsInUsers create() => SelectedLocationsInUsers();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<LocationModel> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<LocationModel>>(value),
-    );
-  }
-}
-
-String _$selectedLocationsInUsersHash() =>
-    r'f0f787ad9403089e45a4fe031d70a37dd198fb89';
-
-abstract class _$SelectedLocationsInUsers
-    extends $Notifier<List<LocationModel>> {
-  List<LocationModel> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<List<LocationModel>, List<LocationModel>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<LocationModel>, List<LocationModel>>,
-        List<LocationModel>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

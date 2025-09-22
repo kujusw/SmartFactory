@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'floatbuttonmanager.dart';
+part of 'roleaddhttpmanager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,27 +9,27 @@ part of 'floatbuttonmanager.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(FloatButton)
-const floatButtonProvider = FloatButtonProvider._();
+@ProviderFor(AddRoleName)
+const addRoleNameProvider = AddRoleNameProvider._();
 
-final class FloatButtonProvider extends $NotifierProvider<FloatButton, String> {
-  const FloatButtonProvider._()
+final class AddRoleNameProvider extends $NotifierProvider<AddRoleName, String> {
+  const AddRoleNameProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'floatButtonProvider',
+          name: r'addRoleNameProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$floatButtonHash();
+  String debugGetCreateSourceHash() => _$addRoleNameHash();
 
   @$internal
   @override
-  FloatButton create() => FloatButton();
+  AddRoleName create() => AddRoleName();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(String value) {
@@ -40,9 +40,9 @@ final class FloatButtonProvider extends $NotifierProvider<FloatButton, String> {
   }
 }
 
-String _$floatButtonHash() => r'2476b8b07f6a2ec870d739306f671192250c6d16';
+String _$addRoleNameHash() => r'f66b748ad17df460db67c928d97d521ca42bf5bf';
 
-abstract class _$FloatButton extends $Notifier<String> {
+abstract class _$AddRoleName extends $Notifier<String> {
   String build();
   @$mustCallSuper
   @override
@@ -55,50 +55,53 @@ abstract class _$FloatButton extends $Notifier<String> {
   }
 }
 
-@ProviderFor(FloatButtonRestore)
-const floatButtonRestoreProvider = FloatButtonRestoreProvider._();
+@ProviderFor(RoleAddHttpManager)
+const roleAddHttpManagerProvider = RoleAddHttpManagerProvider._();
 
-final class FloatButtonRestoreProvider
-    extends $NotifierProvider<FloatButtonRestore, bool> {
-  const FloatButtonRestoreProvider._()
+final class RoleAddHttpManagerProvider
+    extends $NotifierProvider<RoleAddHttpManager, AddRoleResponseEntity> {
+  const RoleAddHttpManagerProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'floatButtonRestoreProvider',
+          name: r'roleAddHttpManagerProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$floatButtonRestoreHash();
+  String debugGetCreateSourceHash() => _$roleAddHttpManagerHash();
 
   @$internal
   @override
-  FloatButtonRestore create() => FloatButtonRestore();
+  RoleAddHttpManager create() => RoleAddHttpManager();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
+  Override overrideWithValue(AddRoleResponseEntity value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
+      providerOverride: $SyncValueProvider<AddRoleResponseEntity>(value),
     );
   }
 }
 
-String _$floatButtonRestoreHash() =>
-    r'b8779be0e8cdf9a1fdf8c0862cb49fab41106a1d';
+String _$roleAddHttpManagerHash() =>
+    r'b8f30b422018a1aa1512e5d750f61d4e54af73a6';
 
-abstract class _$FloatButtonRestore extends $Notifier<bool> {
-  bool build();
+abstract class _$RoleAddHttpManager extends $Notifier<AddRoleResponseEntity> {
+  AddRoleResponseEntity build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<bool, bool>;
+    final ref = this.ref as $Ref<AddRoleResponseEntity, AddRoleResponseEntity>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<bool, bool>, bool, Object?, Object?>;
+        AnyNotifier<AddRoleResponseEntity, AddRoleResponseEntity>,
+        AddRoleResponseEntity,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }

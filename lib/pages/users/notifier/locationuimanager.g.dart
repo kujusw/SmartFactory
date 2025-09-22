@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'location_notifier.dart';
+part of 'locationuimanager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -8,71 +8,12 @@ part of 'location_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// 原始数据
-
-@ProviderFor(LocationList)
-const locationListProvider = LocationListProvider._();
-
-/// 原始数据
-final class LocationListProvider
-    extends $NotifierProvider<LocationList, List<LocationModel>> {
-  /// 原始数据
-  const LocationListProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'locationListProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$locationListHash();
-
-  @$internal
-  @override
-  LocationList create() => LocationList();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<LocationModel> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<LocationModel>>(value),
-    );
-  }
-}
-
-String _$locationListHash() => r'ab843a034d66e7a66018b985a301d5bd2b44c6ad';
-
-/// 原始数据
-
-abstract class _$LocationList extends $Notifier<List<LocationModel>> {
-  List<LocationModel> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<List<LocationModel>, List<LocationModel>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<LocationModel>, List<LocationModel>>,
-        List<LocationModel>,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
-  }
-}
-
-/// 过滤后的数据
 
 @ProviderFor(LocationUIManager)
 const locationUIManagerProvider = LocationUIManagerProvider._();
 
-/// 过滤后的数据
 final class LocationUIManagerProvider
     extends $NotifierProvider<LocationUIManager, List<LocationModel>> {
-  /// 过滤后的数据
   const LocationUIManagerProvider._()
       : super(
           from: null,
@@ -100,9 +41,7 @@ final class LocationUIManagerProvider
   }
 }
 
-String _$locationUIManagerHash() => r'7e58c1156f078079a69a736c4a52dee6250ed6c0';
-
-/// 过滤后的数据
+String _$locationUIManagerHash() => r'92214d579f948a6d385e4f17bf2f0b88bd1aef1a';
 
 abstract class _$LocationUIManager extends $Notifier<List<LocationModel>> {
   List<LocationModel> build();
@@ -120,12 +59,8 @@ abstract class _$LocationUIManager extends $Notifier<List<LocationModel>> {
   }
 }
 
-/// 获取数据
-
 @ProviderFor(getLocations)
 const getLocationsProvider = GetLocationsProvider._();
-
-/// 获取数据
 
 final class GetLocationsProvider extends $FunctionalProvider<
         AsyncValue<List<LocationModel>>,
@@ -134,7 +69,6 @@ final class GetLocationsProvider extends $FunctionalProvider<
     with
         $FutureModifier<List<LocationModel>>,
         $FutureProvider<List<LocationModel>> {
-  /// 获取数据
   const GetLocationsProvider._()
       : super(
           from: null,
@@ -161,4 +95,4 @@ final class GetLocationsProvider extends $FunctionalProvider<
   }
 }
 
-String _$getLocationsHash() => r'cda4401b4714b8e6f2caa4d6db4189650a1b66d5';
+String _$getLocationsHash() => r'58bbf7465f0874e1e7b5fb5a3ea063be5850cb51';

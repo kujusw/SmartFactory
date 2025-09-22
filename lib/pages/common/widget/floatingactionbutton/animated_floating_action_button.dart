@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/notifiers/floatbuttonmanager.dart';
+import '../../../../core/notifiers/floatbuttonmanager.dart';
 import 'transform_float_button.dart';
 
 class AnimatedFloatingActionButton extends ConsumerStatefulWidget {

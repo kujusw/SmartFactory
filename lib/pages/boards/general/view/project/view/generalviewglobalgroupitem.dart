@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
-import 'package:smart_factory/pages/boards/daily_sob/notifier/location_notifier.dart';
+import 'package:smart_factory/pages/users/notifier/locationuimanager.dart';
 import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/values/index.dart';
@@ -30,7 +30,7 @@ class _GeneralViewGlobalGroupsItemState extends ConsumerState<GeneralViewGlobalG
       getLocationsProvider,
       (previous, next) {
         next.whenData((list) {
-          ref.read(locationListProvider.notifier).setLocations(list);
+          ref.read(locationUIManagerProvider.notifier).setLocations(list);
         });
       },
     );
@@ -52,16 +52,16 @@ class _GeneralViewGlobalGroupsItemState extends ConsumerState<GeneralViewGlobalG
 
   @override
   Widget build(BuildContext context) {
-    LoggerManager().d(" locationListProvider ${ref.watch(locationListProvider).length}");
-    final locations = ref.watch(locationListProvider);
+    LoggerManager().d(" locationListProvider ${ref.watch(locationUIManagerProvider).length}");
+    final locations = ref.watch(locationUIManagerProvider);
     return locations.isNotEmpty
         ? Container(
             child: CustomScrollView(
               slivers: [
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => GroupsItemTile(body: ref.watch(locationListProvider)[index]),
-                    childCount: ref.watch(locationListProvider).length,
+                    (context, index) => GroupsItemTile(body: ref.watch(locationUIManagerProvider)[index]),
+                    childCount: ref.watch(locationUIManagerProvider).length,
                   ),
                 ),
               ],

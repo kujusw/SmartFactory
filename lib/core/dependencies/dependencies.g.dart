@@ -249,113 +249,16 @@ abstract class _$IndexHome extends $Notifier<int> {
   }
 }
 
-/// Float Button
-/// Float Button Motion
-
-@ProviderFor(floatButtonMotion)
-const floatButtonMotionProvider = FloatButtonMotionProvider._();
-
-/// Float Button
-/// Float Button Motion
-
-final class FloatButtonMotionProvider
-    extends $FunctionalProvider<bool, bool, bool> with $Provider<bool> {
-  /// Float Button
-  /// Float Button Motion
-  const FloatButtonMotionProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'floatButtonMotionProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$floatButtonMotionHash();
-
-  @$internal
-  @override
-  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  bool create(Ref ref) {
-    return floatButtonMotion(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
-    );
-  }
-}
-
-String _$floatButtonMotionHash() => r'97dba1fb12330fe680d709178bdf1605366aec8d';
-
-/// Float Button Restore
-
-@ProviderFor(floatButtonRestore)
-const floatButtonRestoreProvider = FloatButtonRestoreProvider._();
-
-/// Float Button Restore
-
-final class FloatButtonRestoreProvider
-    extends $FunctionalProvider<bool, bool, bool> with $Provider<bool> {
-  /// Float Button Restore
-  const FloatButtonRestoreProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'floatButtonRestoreProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$floatButtonRestoreHash();
-
-  @$internal
-  @override
-  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  bool create(Ref ref) {
-    return floatButtonRestore(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
-    );
-  }
-}
-
-String _$floatButtonRestoreHash() =>
-    r'3ce61d8dfd9c9db151b3febaac6da764916576ff';
-
-/// Global Info
 /// Current Time (格式1)
 
 @ProviderFor(currentTime)
 const currentTimeProvider = CurrentTimeProvider._();
 
-/// Global Info
 /// Current Time (格式1)
 
 final class CurrentTimeProvider
     extends $FunctionalProvider<AsyncValue<String>, String, Stream<String>>
     with $FutureModifier<String>, $StreamProvider<String> {
-  /// Global Info
   /// Current Time (格式1)
   const CurrentTimeProvider._()
       : super(
