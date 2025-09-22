@@ -50,15 +50,56 @@ class SideMenu extends ConsumerWidget {
                     ref.read(indexHomeProvider.notifier).setIndex(1);
                   },
                 ),
+                Visibility(
+                  child: DrawerListTile(
+                    title: "Reports",
+                    iconSrc: AssetsImages.reportIconSvg,
+                    isSelected: ref.read(indexHomeProvider) == 2,
+                    press: () {
+                      ref.read(indexHomeProvider.notifier).setIndex(2);
+                    },
+                  ),
+                  visible: ref
+                              .read(loginProvider)
+                              .data
+                              ?.permissions
+                              ?.firstWhere(
+                                (permission) => permission.module == "Reports",
+                                orElse: () => Permission(),
+                              )
+                              .name ==
+                          "read" ||
+                      ref
+                              .read(loginProvider)
+                              .data
+                              ?.permissions
+                              ?.firstWhere(
+                                (permission) => permission.module == "Reports",
+                                orElse: () => Permission(),
+                              )
+                              .name ==
+                          "write" ||
+                      (ref.read(loginProvider).data?.isAdmin ?? false),
+                ),
+                DrawerListTile(
+                  title: "Users",
+                  iconSrc: AssetsImages.usersIconSvg,
+                  isSelected: ref.read(indexHomeProvider) == 3,
+                  press: () {
+                    //重置 fab
+                    ref.invalidate(floatButtonProvider);
+                    ref.read(indexHomeProvider.notifier).setIndex(3);
+                  },
+                ),
                 // Visibility(
                 //   child: DrawerListTile(
                 //     title: "Users",
                 //     iconSrc: AssetsImages.usersIconSvg,
-                //     isSelected: ref.read(indexHomeProvider) == 2,
+                //     isSelected: ref.read(indexHomeProvider) == 3,
                 //     press: () {
                 //       //重置 fab
                 //       ref.invalidate(floatButtonProvider);
-                //       ref.read(indexHomeProvider.notifier).setIndex(2);
+                //       ref.read(indexHomeProvider.notifier).setIndex(3);
                 //     },
                 //   ),
                 //   visible: ref
@@ -83,22 +124,43 @@ class SideMenu extends ConsumerWidget {
                 //           "write" ||
                 //       (ref.read(loginProvider).data?.isAdmin ?? false),
                 // ),
-                DrawerListTile(
-                  title: "Users",
-                  iconSrc: AssetsImages.usersIconSvg,
-                  isSelected: ref.read(indexHomeProvider) == 2,
-                  press: () {
-                    //重置 fab
-                    ref.invalidate(floatButtonProvider);
-                    ref.read(indexHomeProvider.notifier).setIndex(2);
-                  },
+                Visibility(
+                  child: DrawerListTile(
+                    title: "Audit",
+                    iconSrc: AssetsImages.historyIconSvg,
+                    isSelected: ref.read(indexHomeProvider) == 4,
+                    press: () {
+                      ref.read(indexHomeProvider.notifier).setIndex(4);
+                    },
+                  ),
+                  visible: ref
+                              .read(loginProvider)
+                              .data
+                              ?.permissions
+                              ?.firstWhere(
+                                (permission) => permission.module == "Audit",
+                                orElse: () => Permission(),
+                              )
+                              .name ==
+                          "read" ||
+                      ref
+                              .read(loginProvider)
+                              .data
+                              ?.permissions
+                              ?.firstWhere(
+                                (permission) => permission.module == "Audit",
+                                orElse: () => Permission(),
+                              )
+                              .name ==
+                          "write" ||
+                      (ref.read(loginProvider).data?.isAdmin ?? false),
                 ),
                 DrawerListTile(
                   title: "Settings",
                   iconSrc: AssetsImages.settingsIconSvg,
-                  isSelected: ref.read(indexHomeProvider) == 3,
+                  isSelected: ref.read(indexHomeProvider) == 5,
                   press: () {
-                    ref.read(indexHomeProvider.notifier).setIndex(3);
+                    ref.read(indexHomeProvider.notifier).setIndex(5);
                   },
                 ),
               ],

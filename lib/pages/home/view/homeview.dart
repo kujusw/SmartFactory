@@ -106,10 +106,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       height: 1000.h,
                       child: LazyIndexedStack(
                         index: ref.watch(indexHomeProvider),
-                        children: const [
+                        children: [
                           BoardsView(),
                           ThingsView(),
+                          Container(),
                           UsersView(),
+                          Container(),
                           SettingsView(),
                         ],
                       ),
