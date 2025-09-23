@@ -12,6 +12,7 @@ import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../models/locationresponseentity.dart';
 import '../../../login/notifier/login_notifier.dart';
+import '../../notifier/locationaddhttpmanager.dart';
 import '../../notifier/locationuimanager.dart';
 import '../../notifier/users_notifier.dart';
 import 'locationstab.dart';
@@ -188,14 +189,15 @@ class LocationsTableWidget extends ConsumerWidget {
                             ),
                             icon: Icon(Icons.delete, color: ref.watch(colorProvider)['red'], size: 25.h),
                             onPressed: () async {
-                              bool result = await ref.read(deleteLocationProvider.notifier).deleteLocation(
-                                  ref
-                                          .watch(locationUIManagerProvider)
-                                          .firstWhere((element) => element.selected == true)
-                                          .id ??
-                                      0,
-                                  ref.read(loginProvider).data?.token ?? "");
-                              if (result) {
+                              final result = await ref.read(deleteLocationProvider(
+                                ref
+                                        .watch(locationUIManagerProvider)
+                                        .firstWhere((element) => element.selected == true)
+                                        .id ??
+                                    0,
+                                ref.read(loginProvider).data?.token ?? "",
+                              ).future);
+                              if (result.code == 100001) {
                                 //刷新数据
                                 ref.refresh(getLocationsProvider);
                               } else {

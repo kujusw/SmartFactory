@@ -2,10 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smart_factory/pages/users/notifier/permissionselectuimanager.dart';
 import 'package:smart_factory/pages/users/notifier/roleuimanager.dart';
-import '../../../http/location.dart';
 import '../../../http/role.dart';
 import '../../../http/user.dart';
-import '../../../models/locationresponseentity.dart';
 import '../../../models/user_manager_model.dart';
 import '../../../models/user_role_model.dart';
 import '../../login/notifier/login_notifier.dart';
@@ -79,42 +77,6 @@ class DeleteUser extends _$DeleteUser {
       return true;
     } catch (_) {
       state = DeleteUserResponseEntity(code: 201, message: "Delete User failed");
-      return false;
-    }
-  }
-}
-
-/// -------------------- Locations --------------------
-
-@riverpod
-class AddLocation extends _$AddLocation {
-  @override
-  AddLocationResponseEntity build() => AddLocationResponseEntity(code: 0, message: "");
-
-  Future<bool> addLocation(dynamic params, String token) async {
-    try {
-      final result = await LocationAPI.addLocation(params: params, token: token);
-      state = result;
-      return true;
-    } catch (_) {
-      state = AddLocationResponseEntity(code: 201, message: "Add Location failed");
-      return false;
-    }
-  }
-}
-
-@riverpod
-class DeleteLocation extends _$DeleteLocation {
-  @override
-  DeleteLocationResponseEntity build() => DeleteLocationResponseEntity(code: 0, message: "");
-
-  Future<bool> deleteLocation(int id, String token) async {
-    try {
-      final result = await LocationAPI.deleteLocation(id: id, token: token);
-      state = result;
-      return true;
-    } catch (_) {
-      state = DeleteLocationResponseEntity(code: 201, message: "Delete Location failed");
       return false;
     }
   }
@@ -259,8 +221,6 @@ void clearUserProvider(WidgetRef ref) {
   ref.invalidate(getPermissionsProvider);
   ref.invalidate(addUserProvider);
   ref.invalidate(deleteUserProvider);
-  ref.invalidate(addLocationProvider);
-  ref.invalidate(deleteLocationProvider);
   ref.invalidate(addRoleProvider);
   ref.invalidate(deleteRoleProvider);
 }

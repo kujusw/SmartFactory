@@ -48,11 +48,7 @@ class _LocationsTableState extends ConsumerState<LocationsTable> {
         ref.refresh(getLocationsProvider);
       }
     });
-    ref.listen<AddLocationResponseEntity?>(addLocationProvider, (previous, next) async {
-      if (next?.code == 100001) {
-        ref.refresh(getLocationsProvider);
-      }
-    });
+
     return ref.watch(getLocationsProvider).when(data: (data) {
       return ref.watch(locationUIManagerProvider).length > 0
           ? DataTable2(

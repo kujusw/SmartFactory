@@ -24,7 +24,7 @@ class RegisterView extends ConsumerWidget {
       children: [
         IconButton(
             onPressed: () {
-              ref.read(obscureTextProvider.notifier).state = !ref.read(obscureTextProvider.notifier).state;
+              ref.read(obscureTextProvider.notifier).set(!ref.read(obscureTextProvider));
             },
             icon: Icon(
               ref.watch(obscureTextProvider) ? Icons.visibility_off : Icons.visibility,
@@ -42,26 +42,26 @@ class RegisterView extends ConsumerWidget {
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registerTipsProvider.notifier).state = "Please verify the link in your email to login";
+        ref.read(registerTipsProvider.notifier).set("Please verify the link in your email to login");
       } else if (next?.code == 600) {
         _btnController.error();
         //延迟两秒 重置
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registerTipsProvider.notifier).state = "User already exists";
+        ref.read(registerTipsProvider.notifier).set("User already exists");
       } else if (next?.code == 601) {
         _btnController.error();
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registerTipsProvider.notifier).state = "Email already registered";
+        ref.read(registerTipsProvider.notifier).set("Email already registered");
       } else {
         _btnController.error();
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(registerTipsProvider.notifier).state = "Register failed";
+        ref.read(registerTipsProvider.notifier).set("Register failed");
       }
     });
     return Center(
@@ -221,22 +221,21 @@ class RegisterView extends ConsumerWidget {
                     if (emailController.text.isEmpty)
                       {
                         _btnController.reset(),
-                        ref.read(registerTipsProvider.notifier).state = "E-Mail cannot be empty",
+                        ref.read(registerTipsProvider.notifier).set("E-Mail cannot be empty"),
                       }
                     else if (usernameController.text.isEmpty)
                       {
                         _btnController.reset(),
-                        ref.read(registerTipsProvider.notifier).state = "Username cannot be empty",
+                        ref.read(registerTipsProvider.notifier).set("Username cannot be empty"),
                       }
                     else if (passController.text.isEmpty || passController.text.length < 6)
                       {
                         _btnController.reset(),
-                        ref.read(registerTipsProvider.notifier).state =
-                            "Password cannot be empty or less than 6 digits",
+                        ref.read(registerTipsProvider.notifier).set("Password cannot be empty or less than 6 digits"),
                       }
                     else
                       {
-                        ref.read(registerTipsProvider.notifier).state = "",
+                        ref.read(registerTipsProvider.notifier).set(""),
                         ref.read(registerProvider.notifier).register(
                               RegisterRequestEntity(
                                 username: usernameController.text,
@@ -282,8 +281,8 @@ class RegisterView extends ConsumerWidget {
                     ),
                     onPressed: () {
                       ref.watch(signinProvider) == "SIGNIN"
-                          ? ref.read(signinProvider.notifier).state = "SIGNUP"
-                          : ref.read(signinProvider.notifier).state = "SIGNIN";
+                          ? ref.read(signinProvider.notifier).set("SIGNUP")
+                          : ref.read(signinProvider.notifier).set("SIGNIN");
                     },
                     child: Text(
                       ref.watch(signinProvider) == "SIGNIN" ? "Sign Up" : "Sign In",

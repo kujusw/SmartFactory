@@ -70,7 +70,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       children: [
         IconButton(
           onPressed: () {
-            ref.read(obscureTextProvider.notifier).state = !ref.read(obscureTextProvider.notifier).state;
+            ref.read(obscureTextProvider.notifier).set(!ref.read(obscureTextProvider));
           },
           icon: Icon(ref.watch(obscureTextProvider) ? Icons.visibility_off : Icons.visibility,
               color: ref.watch(colorProvider)['white']),
@@ -93,7 +93,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
         Future.delayed(Duration(seconds: 2), () {
           _btnController.reset();
         });
-        ref.read(loginTipsProvider.notifier).state = "Login failed: ${next?.message}";
+        ref.read(loginTipsProvider.notifier).set("Login failed: ${next?.message}");
       }
     });
     return Center(
@@ -277,8 +277,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                   onPressed: () {
                     ref.watch(signinProvider) == "SIGNIN"
-                        ? ref.read(signinProvider.notifier).state = "RESET"
-                        : ref.read(signinProvider.notifier).state = "SIGNIN";
+                        ? ref.read(signinProvider.notifier).set("RESET")
+                        : ref.read(signinProvider.notifier).set("SIGNIN");
                   },
                   icon: Icon(
                     Icons.east,

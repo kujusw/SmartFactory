@@ -182,11 +182,11 @@ class AnimatedFloatingActionButtonState extends ConsumerState<AnimatedFloatingAc
     return processButtons;
   }
 
-  void _animateFABs() {
+  Future<void> _animateFABs() async {
     if (!_isOpened) {
-      _animationController.forward();
+      await _animationController.forward();
     } else {
-      _animationController.reverse();
+      await _animationController.reverse();
     }
     _isOpened = !_isOpened;
     widget.onFabToggle(_isOpened);
@@ -196,7 +196,7 @@ class AnimatedFloatingActionButtonState extends ConsumerState<AnimatedFloatingAc
   /// GlobalKey<AnimatedFloatingActionButtonState>() object which is created
   /// and assign as a key object to [AnimatedFloatingActionButton] by user
   /// to close the [fabButtons] list.
-  void closeFABs() {
-    _animateFABs();
+  Future<void> closeFABs() async {
+    await _animateFABs();
   }
 }

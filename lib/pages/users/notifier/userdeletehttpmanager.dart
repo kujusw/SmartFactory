@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../http/user.dart';
 import '../../../models/user_manager_model.dart';
 

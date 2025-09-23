@@ -27,7 +27,7 @@ class LocationAPI {
     String? token,
   }) async {
     var response = await HttpUtil(url: Constant.HOST, token: token).post(
-      "v1/locations",
+      "api/v1/locations",
       data: params?.toJson(),
     );
     return AddLocationResponseEntity.fromJson(response);
@@ -39,7 +39,7 @@ class LocationAPI {
     String? token,
   }) async {
     var response = await HttpUtil(url: Constant.HOST, token: token).put(
-      "v1/locations/${id}",
+      "api/v1/locations/${id}",
       data: params?.toJson(),
     );
     return AddLocationResponseEntity.fromJson(response);
@@ -49,7 +49,7 @@ class LocationAPI {
     int? id,
     String? token,
   }) async {
-    var response = await HttpUtil(url: Constant.HOST, token: token).delete("v1/locations/${id}");
+    var response = await HttpUtil(url: Constant.HOST, token: token).delete("api/v1/locations/${id}");
     LoggerManager().d("LocationAPI.deleteLocation response: $response");
     return DeleteLocationResponseEntity.fromJson(response);
   }

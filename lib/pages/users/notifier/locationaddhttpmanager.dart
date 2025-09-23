@@ -1,10 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../../common/utils/logger_manager.dart';
 import '../../../http/location.dart';
 import '../../../models/locationresponseentity.dart';
 
 part 'locationaddhttpmanager.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Location extends _$Location {
   @override
   String build() => "";
@@ -12,7 +13,7 @@ class Location extends _$Location {
   void set(String value) => state = value;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Building extends _$Building {
   @override
   String build() => "";
@@ -20,7 +21,7 @@ class Building extends _$Building {
   void set(String value) => state = value;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Tenant extends _$Tenant {
   @override
   String build() => "";
@@ -28,7 +29,7 @@ class Tenant extends _$Tenant {
   void set(String value) => state = value;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Area extends _$Area {
   @override
   int build() => 0;
@@ -36,33 +37,50 @@ class Area extends _$Area {
   void set(int value) => state = value;
 }
 
+/// -------------------- Locations --------------------
+
 @riverpod
-class LocationAddHttpManager extends _$LocationAddHttpManager {
-  @override
-  AddLocationResponseEntity build() {
-    // 初始值
-    return AddLocationResponseEntity(code: 0, message: "");
+Future<AddLocationResponseEntity> addLocation(
+  Ref ref,
+  AddLocationModelRequestEntity params,
+  String token,
+) async {
+  try {
+    LoggerManager().d("Add Location params: $params");
+    final result = await LocationAPI.addLocation(params: params, token: token);
+    return result;
+  } catch (e) {
+    return AddLocationResponseEntity(code: 201, message: "Add Location failed");
   }
+}
 
-  Future<bool> addLocation(dynamic params, String? token) async {
-    try {
-      final result = await LocationAPI.addLocation(params: params, token: token);
-      state = result;
-      return true;
-    } catch (e) {
-      state = AddLocationResponseEntity(code: 201, message: "Add Location failed");
-      return false;
-    }
+@riverpod
+Future<DeleteLocationResponseEntity> deleteLocation(
+  Ref ref,
+  int id,
+  String token,
+) async {
+  try {
+    LoggerManager().d("Delete Location id: $id");
+    final result = await LocationAPI.deleteLocation(id: id, token: token);
+    return result;
+  } catch (e) {
+    return DeleteLocationResponseEntity(code: 201, message: "Delete Location failed");
   }
+}
 
-  Future<bool> updateLocation(int? id, dynamic params, String? token) async {
-    try {
-      final result = await LocationAPI.updateLocation(id: id, params: params, token: token);
-      state = result;
-      return true;
-    } catch (e) {
-      state = AddLocationResponseEntity(code: 201, message: "Update Location failed");
-      return false;
-    }
+@riverpod
+Future<AddLocationResponseEntity> updateLocation(
+  Ref ref,
+  int id,
+  AddLocationModelRequestEntity params,
+  String token,
+) async {
+  try {
+    LoggerManager().d("Update Location id: $id params: $params");
+    final result = await LocationAPI.updateLocation(id: id, params: params, token: token);
+    return result;
+  } catch (e) {
+    return AddLocationResponseEntity(code: 201, message: "Update Location failed");
   }
 }

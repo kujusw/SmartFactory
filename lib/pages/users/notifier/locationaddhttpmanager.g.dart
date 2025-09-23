@@ -19,7 +19,7 @@ final class LocationProvider extends $NotifierProvider<Location, String> {
           argument: null,
           retry: null,
           name: r'locationProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -40,7 +40,7 @@ final class LocationProvider extends $NotifierProvider<Location, String> {
   }
 }
 
-String _$locationHash() => r'd8d808e3450fa6589e01f2ba85ca31e07b588fa8';
+String _$locationHash() => r'8f5785e8a09defad6c38cff5995cf6bb04e130ed';
 
 abstract class _$Location extends $Notifier<String> {
   String build();
@@ -65,7 +65,7 @@ final class BuildingProvider extends $NotifierProvider<Building, String> {
           argument: null,
           retry: null,
           name: r'buildingProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -86,7 +86,7 @@ final class BuildingProvider extends $NotifierProvider<Building, String> {
   }
 }
 
-String _$buildingHash() => r'aaf39919890ba03b65a88efd09eaf91cc3c51982';
+String _$buildingHash() => r'ba212cad83e96dc5e9d05e7ce2d2ead84f6689a9';
 
 abstract class _$Building extends $Notifier<String> {
   String build();
@@ -111,7 +111,7 @@ final class TenantProvider extends $NotifierProvider<Tenant, String> {
           argument: null,
           retry: null,
           name: r'tenantProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -132,7 +132,7 @@ final class TenantProvider extends $NotifierProvider<Tenant, String> {
   }
 }
 
-String _$tenantHash() => r'0ff9926ffffb79c77e2c4de94d16eb614afaee3b';
+String _$tenantHash() => r'd1b7828e2a75b402fb8bb255e96502ac2f73d27c';
 
 abstract class _$Tenant extends $Notifier<String> {
   String build();
@@ -157,7 +157,7 @@ final class AreaProvider extends $NotifierProvider<Area, int> {
           argument: null,
           retry: null,
           name: r'areaProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -178,7 +178,7 @@ final class AreaProvider extends $NotifierProvider<Area, int> {
   }
 }
 
-String _$areaHash() => r'741d3b8ee2340626325fa587795712d3908f1849';
+String _$areaHash() => r'db36c82a1cd98c36bd75a1d4fa3251fda198663c';
 
 abstract class _$Area extends $Notifier<int> {
   int build();
@@ -193,55 +193,308 @@ abstract class _$Area extends $Notifier<int> {
   }
 }
 
-@ProviderFor(LocationAddHttpManager)
-const locationAddHttpManagerProvider = LocationAddHttpManagerProvider._();
+/// -------------------- Locations --------------------
 
-final class LocationAddHttpManagerProvider extends $NotifierProvider<
-    LocationAddHttpManager, AddLocationResponseEntity> {
-  const LocationAddHttpManagerProvider._()
+@ProviderFor(addLocation)
+const addLocationProvider = AddLocationFamily._();
+
+/// -------------------- Locations --------------------
+
+final class AddLocationProvider extends $FunctionalProvider<
+        AsyncValue<AddLocationResponseEntity>,
+        AddLocationResponseEntity,
+        FutureOr<AddLocationResponseEntity>>
+    with
+        $FutureModifier<AddLocationResponseEntity>,
+        $FutureProvider<AddLocationResponseEntity> {
+  /// -------------------- Locations --------------------
+  const AddLocationProvider._(
+      {required AddLocationFamily super.from,
+      required (
+        AddLocationModelRequestEntity,
+        String,
+      )
+          super.argument})
       : super(
-          from: null,
-          argument: null,
           retry: null,
-          name: r'locationAddHttpManagerProvider',
+          name: r'addLocationProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$locationAddHttpManagerHash();
+  String debugGetCreateSourceHash() => _$addLocationHash();
+
+  @override
+  String toString() {
+    return r'addLocationProvider'
+        ''
+        '$argument';
+  }
 
   @$internal
   @override
-  LocationAddHttpManager create() => LocationAddHttpManager();
+  $FutureProviderElement<AddLocationResponseEntity> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AddLocationResponseEntity value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AddLocationResponseEntity>(value),
+  @override
+  FutureOr<AddLocationResponseEntity> create(Ref ref) {
+    final argument = this.argument as (
+      AddLocationModelRequestEntity,
+      String,
     );
+    return addLocation(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddLocationProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$locationAddHttpManagerHash() =>
-    r'1c64d0bddfbf95500f23bdb04ac60558003975a7';
+String _$addLocationHash() => r'2430f234ec41704d141da8f272e7e2492756a612';
 
-abstract class _$LocationAddHttpManager
-    extends $Notifier<AddLocationResponseEntity> {
-  AddLocationResponseEntity build();
-  @$mustCallSuper
+/// -------------------- Locations --------------------
+
+final class AddLocationFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<AddLocationResponseEntity>,
+            (
+              AddLocationModelRequestEntity,
+              String,
+            )> {
+  const AddLocationFamily._()
+      : super(
+          retry: null,
+          name: r'addLocationProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  /// -------------------- Locations --------------------
+
+  AddLocationProvider call(
+    AddLocationModelRequestEntity params,
+    String token,
+  ) =>
+      AddLocationProvider._(argument: (
+        params,
+        token,
+      ), from: this);
+
   @override
-  void runBuild() {
-    final created = build();
-    final ref =
-        this.ref as $Ref<AddLocationResponseEntity, AddLocationResponseEntity>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AddLocationResponseEntity, AddLocationResponseEntity>,
-        AddLocationResponseEntity,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
+  String toString() => r'addLocationProvider';
+}
+
+@ProviderFor(deleteLocation)
+const deleteLocationProvider = DeleteLocationFamily._();
+
+final class DeleteLocationProvider extends $FunctionalProvider<
+        AsyncValue<DeleteLocationResponseEntity>,
+        DeleteLocationResponseEntity,
+        FutureOr<DeleteLocationResponseEntity>>
+    with
+        $FutureModifier<DeleteLocationResponseEntity>,
+        $FutureProvider<DeleteLocationResponseEntity> {
+  const DeleteLocationProvider._(
+      {required DeleteLocationFamily super.from,
+      required (
+        int,
+        String,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'deleteLocationProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteLocationHash();
+
+  @override
+  String toString() {
+    return r'deleteLocationProvider'
+        ''
+        '$argument';
   }
+
+  @$internal
+  @override
+  $FutureProviderElement<DeleteLocationResponseEntity> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<DeleteLocationResponseEntity> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      String,
+    );
+    return deleteLocation(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteLocationProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$deleteLocationHash() => r'9a220157aeab0e9d6f195571d2be504af37a7755';
+
+final class DeleteLocationFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<DeleteLocationResponseEntity>,
+            (
+              int,
+              String,
+            )> {
+  const DeleteLocationFamily._()
+      : super(
+          retry: null,
+          name: r'deleteLocationProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  DeleteLocationProvider call(
+    int id,
+    String token,
+  ) =>
+      DeleteLocationProvider._(argument: (
+        id,
+        token,
+      ), from: this);
+
+  @override
+  String toString() => r'deleteLocationProvider';
+}
+
+@ProviderFor(updateLocation)
+const updateLocationProvider = UpdateLocationFamily._();
+
+final class UpdateLocationProvider extends $FunctionalProvider<
+        AsyncValue<AddLocationResponseEntity>,
+        AddLocationResponseEntity,
+        FutureOr<AddLocationResponseEntity>>
+    with
+        $FutureModifier<AddLocationResponseEntity>,
+        $FutureProvider<AddLocationResponseEntity> {
+  const UpdateLocationProvider._(
+      {required UpdateLocationFamily super.from,
+      required (
+        int,
+        AddLocationModelRequestEntity,
+        String,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'updateLocationProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateLocationHash();
+
+  @override
+  String toString() {
+    return r'updateLocationProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<AddLocationResponseEntity> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<AddLocationResponseEntity> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      AddLocationModelRequestEntity,
+      String,
+    );
+    return updateLocation(
+      ref,
+      argument.$1,
+      argument.$2,
+      argument.$3,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpdateLocationProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$updateLocationHash() => r'390f446e95edeca6d8e7824e304a6f2f0767f77f';
+
+final class UpdateLocationFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<AddLocationResponseEntity>,
+            (
+              int,
+              AddLocationModelRequestEntity,
+              String,
+            )> {
+  const UpdateLocationFamily._()
+      : super(
+          retry: null,
+          name: r'updateLocationProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  UpdateLocationProvider call(
+    int id,
+    AddLocationModelRequestEntity params,
+    String token,
+  ) =>
+      UpdateLocationProvider._(argument: (
+        id,
+        params,
+        token,
+      ), from: this);
+
+  @override
+  String toString() => r'updateLocationProvider';
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +11,7 @@ import '../../../../common/values/index.dart';
 import '../../../../models/locationresponseentity.dart';
 import '../../../common/customtitletextfield.dart';
 import '../../../login/notifier/login_notifier.dart';
-import '../../notifier/users_notifier.dart';
+import '../../notifier/locationuimanager.dart';
 
 class AddLocationWidgetView extends ConsumerStatefulWidget {
   final String type;
@@ -153,30 +155,38 @@ class _AddLocationWidgetViewState extends ConsumerState<AddLocationWidgetView> {
                       return;
                     }
                     if (widget.type == "ADD") {
-                      var result = await ref.read(addLocationProvider.notifier).addLocation(
-                          AddLocationModelRequestEntity(
-                            name: location,
-                            building: ref.read(buildingProvider),
-                            tenant: ref.read(tenantProvider),
-                            area: ref.read(areaProvider),
-                          ),
-                          ref.read(loginProvider).data?.token ?? "");
-                      if (result) {
+                      var result = await ref.read(
+                        addLocationProvider(
+                                AddLocationModelRequestEntity(
+                                  name: location,
+                                  building: ref.read(buildingProvider),
+                                  tenant: ref.read(tenantProvider),
+                                  area: ref.read(areaProvider),
+                                ),
+                                ref.read(loginProvider).data?.token ?? "")
+                            .future,
+                      );
+                      if (result.code == 100001) {
+                        ref.refresh(getLocationsProvider);
                         unawaited(SmartDialog.dismiss(tag: "UsersViewAddActionButton"));
                       } else {
                         unawaited(SmartDialog.showToast("Failed to add location"));
                       }
                     } else if (widget.type == "EDIT") {
-                      var result = await ref.read(locationAddHttpManagerProvider.notifier).updateLocation(
-                          widget.locationModel?.id,
-                          AddLocationModelRequestEntity(
-                            name: location,
-                            building: ref.read(buildingProvider),
-                            tenant: ref.read(tenantProvider),
-                            area: ref.read(areaProvider),
-                          ),
-                          ref.read(loginProvider).data?.token);
-                      if (result) {
+                      var result = await ref.read(
+                        updateLocationProvider(
+                                widget.locationModel?.id ?? 0,
+                                AddLocationModelRequestEntity(
+                                  name: location,
+                                  building: ref.read(buildingProvider),
+                                  tenant: ref.read(tenantProvider),
+                                  area: ref.read(areaProvider),
+                                ),
+                                ref.read(loginProvider).data?.token ?? "")
+                            .future,
+                      );
+                      if (result.code == 100001) {
+                        ref.refresh(getLocationsProvider);
                         unawaited(SmartDialog.dismiss(tag: "UsersViewAddActionButton"));
                       } else {
                         unawaited(SmartDialog.showToast("Failed to update location"));

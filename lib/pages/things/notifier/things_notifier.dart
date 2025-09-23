@@ -8,7 +8,6 @@ import '../../../models/device_model_new.dart';
 import '../../../models/general_device_info_model.dart';
 import '../../../models/locationresponseentity.dart';
 import '../../boards/general/notifier/device_notifier.dart';
-import 'updatedevicelocationhttpmanager.dart';
 
 part 'things_notifier.g.dart';
 
@@ -189,7 +188,6 @@ void clearThingsProvider(WidgetRef ref) {
   ref.invalidate(selectedDevicesInThingsProvider);
   ref.invalidate(updateDeviceNameProvider);
   ref.invalidate(selectedLocationInThingsProvider);
-  ref.invalidate(updateDeviceLocationProvider);
   ref.invalidate(generalDevicesInThingsProvider);
   ref.invalidate(searchValueForMenuInThingsProvider);
   ref.invalidate(filteredDevicesInThingsProvider);
