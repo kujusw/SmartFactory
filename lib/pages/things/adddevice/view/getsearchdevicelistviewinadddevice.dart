@@ -39,7 +39,7 @@ class _SearchDeviceListViewInAddDeviceState extends ConsumerState<SearchDeviceLi
   Widget build(BuildContext context) {
     var datas = ref.watch(searchDevicesInThingsProvider);
     return Container(
-      height: 600.h,
+      height: 400.h,
       decoration: BoxDecoration(
         border: Border.all(color: ref.watch(colorProvider)['dividerColor']!),
         borderRadius: BorderRadius.circular(10.w),

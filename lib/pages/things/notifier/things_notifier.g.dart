@@ -106,15 +106,24 @@ abstract class _$SelectedDevice extends $Notifier<DeviceModel?> {
   }
 }
 
-@ProviderFor(AddDevice)
-const addDeviceProvider = AddDeviceProvider._();
+@ProviderFor(addDevice)
+const addDeviceProvider = AddDeviceFamily._();
 
-final class AddDeviceProvider
-    extends $NotifierProvider<AddDevice, AddDeviceResponseEntity> {
-  const AddDeviceProvider._()
+final class AddDeviceProvider extends $FunctionalProvider<
+        AsyncValue<AddDeviceResponseEntity>,
+        AddDeviceResponseEntity,
+        FutureOr<AddDeviceResponseEntity>>
+    with
+        $FutureModifier<AddDeviceResponseEntity>,
+        $FutureProvider<AddDeviceResponseEntity> {
+  const AddDeviceProvider._(
+      {required AddDeviceFamily super.from,
+      required (
+        AddDeviceModelRequestEntity,
+        String,
+      )
+          super.argument})
       : super(
-          from: null,
-          argument: null,
           retry: null,
           name: r'addDeviceProvider',
           isAutoDispose: true,
@@ -125,47 +134,93 @@ final class AddDeviceProvider
   @override
   String debugGetCreateSourceHash() => _$addDeviceHash();
 
+  @override
+  String toString() {
+    return r'addDeviceProvider'
+        ''
+        '$argument';
+  }
+
   @$internal
   @override
-  AddDevice create() => AddDevice();
+  $FutureProviderElement<AddDeviceResponseEntity> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AddDeviceResponseEntity value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AddDeviceResponseEntity>(value),
+  @override
+  FutureOr<AddDeviceResponseEntity> create(Ref ref) {
+    final argument = this.argument as (
+      AddDeviceModelRequestEntity,
+      String,
+    );
+    return addDevice(
+      ref,
+      argument.$1,
+      argument.$2,
     );
   }
-}
 
-String _$addDeviceHash() => r'55d3847558da85622fbdc81837d0062077f6e445';
-
-abstract class _$AddDevice extends $Notifier<AddDeviceResponseEntity> {
-  AddDeviceResponseEntity build();
-  @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
-    final ref =
-        this.ref as $Ref<AddDeviceResponseEntity, AddDeviceResponseEntity>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AddDeviceResponseEntity, AddDeviceResponseEntity>,
-        AddDeviceResponseEntity,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
+  bool operator ==(Object other) {
+    return other is AddDeviceProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-@ProviderFor(DeleteDevice)
-const deleteDeviceProvider = DeleteDeviceProvider._();
+String _$addDeviceHash() => r'fb1926b27014a08c1376d4a9f7e02dd2e4bb4b01';
 
-final class DeleteDeviceProvider
-    extends $NotifierProvider<DeleteDevice, DeleteDeviceResponseEntity> {
-  const DeleteDeviceProvider._()
+final class AddDeviceFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<AddDeviceResponseEntity>,
+            (
+              AddDeviceModelRequestEntity,
+              String,
+            )> {
+  const AddDeviceFamily._()
       : super(
-          from: null,
-          argument: null,
+          retry: null,
+          name: r'addDeviceProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  AddDeviceProvider call(
+    AddDeviceModelRequestEntity params,
+    String token,
+  ) =>
+      AddDeviceProvider._(argument: (
+        params,
+        token,
+      ), from: this);
+
+  @override
+  String toString() => r'addDeviceProvider';
+}
+
+@ProviderFor(deleteDevice)
+const deleteDeviceProvider = DeleteDeviceFamily._();
+
+final class DeleteDeviceProvider extends $FunctionalProvider<
+        AsyncValue<DeleteDeviceResponseEntity>,
+        DeleteDeviceResponseEntity,
+        FutureOr<DeleteDeviceResponseEntity>>
+    with
+        $FutureModifier<DeleteDeviceResponseEntity>,
+        $FutureProvider<DeleteDeviceResponseEntity> {
+  const DeleteDeviceProvider._(
+      {required DeleteDeviceFamily super.from,
+      required (
+        String,
+        String,
+      )
+          super.argument})
+      : super(
           retry: null,
           name: r'deleteDeviceProvider',
           isAutoDispose: true,
@@ -176,36 +231,73 @@ final class DeleteDeviceProvider
   @override
   String debugGetCreateSourceHash() => _$deleteDeviceHash();
 
+  @override
+  String toString() {
+    return r'deleteDeviceProvider'
+        ''
+        '$argument';
+  }
+
   @$internal
   @override
-  DeleteDevice create() => DeleteDevice();
+  $FutureProviderElement<DeleteDeviceResponseEntity> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(DeleteDeviceResponseEntity value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<DeleteDeviceResponseEntity>(value),
+  @override
+  FutureOr<DeleteDeviceResponseEntity> create(Ref ref) {
+    final argument = this.argument as (
+      String,
+      String,
     );
+    return deleteDevice(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteDeviceProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$deleteDeviceHash() => r'c14efd9dce177955fddd787488fdffd5329cf7f1';
+String _$deleteDeviceHash() => r'faac11d519ff81d35ff4cfddf41f28f7cb839369';
 
-abstract class _$DeleteDevice extends $Notifier<DeleteDeviceResponseEntity> {
-  DeleteDeviceResponseEntity build();
-  @$mustCallSuper
+final class DeleteDeviceFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<DeleteDeviceResponseEntity>,
+            (
+              String,
+              String,
+            )> {
+  const DeleteDeviceFamily._()
+      : super(
+          retry: null,
+          name: r'deleteDeviceProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  DeleteDeviceProvider call(
+    String deviceId,
+    String token,
+  ) =>
+      DeleteDeviceProvider._(argument: (
+        deviceId,
+        token,
+      ), from: this);
+
   @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref
-        as $Ref<DeleteDeviceResponseEntity, DeleteDeviceResponseEntity>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<DeleteDeviceResponseEntity, DeleteDeviceResponseEntity>,
-        DeleteDeviceResponseEntity,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
-  }
+  String toString() => r'deleteDeviceProvider';
 }
 
 @ProviderFor(SearchValueInThings)

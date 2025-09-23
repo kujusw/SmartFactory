@@ -39,7 +39,7 @@ class _DeviceListViewInAddDeviceState extends ConsumerState<DeviceListViewInAddD
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 600.h,
+      height: 400.h,
       decoration: BoxDecoration(
         border: Border.all(color: ref.watch(colorProvider)['dividerColor']!),
         borderRadius: BorderRadius.circular(10.w),
@@ -78,7 +78,7 @@ class _DeviceListViewInAddDeviceState extends ConsumerState<DeviceListViewInAddD
                               side: BorderSide(
                                 color: ref.watch(colorProvider)['white']!,
                               ),
-                              value: data[index].selectedInAddDevice,
+                              value: data[index].selectedInAddDevice ?? false,
                               onChanged: (value) {
                                 ref.read(deviceManagerProvider.notifier).selectDevice(data[index], value!);
                               },

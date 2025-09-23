@@ -35,7 +35,7 @@ class DeviceAPI {
     String? token,
   }) async {
     var response = await HttpUtil(url: Constant.HOST, token: token).post(
-      "v1/devices",
+      "api/v1/devices",
       data: params?.toJson(),
     );
     LoggerManager().d("addDevice :$response");
@@ -46,8 +46,9 @@ class DeviceAPI {
     String? deviceId,
     String? token,
   }) async {
+    LoggerManager().d("deleteDevice :$deviceId");
     var response = await HttpUtil(url: Constant.HOST, token: token).delete(
-      "v1/devices/${deviceId}",
+      "api/v1/devices/${deviceId}",
     );
     LoggerManager().d("deleteDevice :$response");
     return DeleteDeviceResponseEntity.fromJson(response);

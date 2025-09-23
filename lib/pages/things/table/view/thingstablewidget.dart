@@ -190,12 +190,16 @@ class ThingsViewTableWidget extends ConsumerWidget {
                             ),
                             icon: Icon(Icons.delete, color: ref.watch(colorProvider)['red'], size: 25.h),
                             onPressed: () async {
-                              bool result = await ref.read(deleteDeviceProvider.notifier).deleteDevice(
-                                  ref.watch(deviceManagerProvider).firstWhere((element) => element.selected == true).id,
-                                  ref.read(loginProvider).data?.token);
-                              if (result) {
-                                //刷新数据
+                              final result = await ref.read(deleteDeviceProvider(
+                                ref.watch(deviceManagerProvider).firstWhere((element) => element.selected == true).id ??
+                                    "",
+                                ref.read(loginProvider).data?.token ?? "",
+                              ).future); // 传入token;
+                              // 关键：判断ref是否还活着
+                              if (result.code == 100001 && context.mounted) {
                                 ref.refresh(devicesProvider);
+                                unawaited(SmartDialog.dismiss(tag: "ThingsViewAddActionButton"));
+                                // 清空 keeplive 为true的
                               } else {
                                 unawaited(SmartDialog.showToast("Failed to delete device"));
                               }

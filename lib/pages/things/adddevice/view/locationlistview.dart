@@ -5,6 +5,7 @@ import '../../../../../../common/utils/screenutil.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../models/locationresponseentity.dart';
+import '../../notifier/things_notifier.dart';
 
 class LocationListViewInAddDevice extends ConsumerWidget {
   final List<LocationModel> locationModels;
@@ -29,7 +30,9 @@ class LocationListViewInAddDevice extends ConsumerWidget {
                   return Column(
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          ref.read(selectedLocationInThingsProvider.notifier).set(locationModels[index]);
+                        },
                         child: Container(
                           height: 48.h,
                           width: double.infinity,
@@ -50,6 +53,14 @@ class LocationListViewInAddDevice extends ConsumerWidget {
                                   ),
                                 ],
                               ),
+                              Visibility(
+                                visible: locationModels[index].id == ref.watch(selectedLocationInThingsProvider)?.id,
+                                child: Icon(
+                                  Icons.done,
+                                  size: 30.h,
+                                  color: ref.watch(colorProvider)['accentColor'],
+                                ),
+                              )
                             ],
                           ),
                         ),

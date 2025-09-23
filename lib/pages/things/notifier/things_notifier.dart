@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
+import '../../../common/utils/logger_manager.dart';
 import '../../../http/device.dart';
 import '../../../models/device_model.dart';
 import '../../../models/device_model_new.dart';
@@ -30,36 +31,32 @@ class SelectedDevice extends _$SelectedDevice {
 
 // 添加 / 删除设备
 @riverpod
-class AddDevice extends _$AddDevice {
-  @override
-  AddDeviceResponseEntity build() => AddDeviceResponseEntity(code: 0, message: "");
-
-  Future<bool> addDevice(params, token) async {
-    try {
-      final result = await DeviceAPI.addDevice(params: params, token: token);
-      state = result;
-      return true;
-    } catch (e) {
-      state = AddDeviceResponseEntity(code: 201, message: "Add Device failed");
-      return false;
-    }
+Future<AddDeviceResponseEntity> addDevice(
+  Ref ref,
+  AddDeviceModelRequestEntity params,
+  String token,
+) async {
+  try {
+    LoggerManager().d("Add Device params: $params");
+    final result = await DeviceAPI.addDevice(params: params, token: token);
+    return result;
+  } catch (e) {
+    return AddDeviceResponseEntity(code: 201, message: "Add Device failed");
   }
 }
 
 @riverpod
-class DeleteDevice extends _$DeleteDevice {
-  @override
-  DeleteDeviceResponseEntity build() => DeleteDeviceResponseEntity(code: 0, message: "");
-
-  Future<bool> deleteDevice(deviceId, token) async {
-    try {
-      final result = await DeviceAPI.deleteDevice(deviceId: deviceId, token: token);
-      state = result;
-      return true;
-    } catch (e) {
-      state = DeleteDeviceResponseEntity(code: 201, message: "Delete Device failed");
-      return false;
-    }
+Future<DeleteDeviceResponseEntity> deleteDevice(
+  Ref ref,
+  String deviceId,
+  String token,
+) async {
+  try {
+    LoggerManager().d("deleteDevice params: $deviceId");
+    final result = await DeviceAPI.deleteDevice(deviceId: deviceId, token: token);
+    return result;
+  } catch (e) {
+    return DeleteDeviceResponseEntity(code: 201, message: "Delete Device failed");
   }
 }
 

@@ -1,42 +1,39 @@
 import 'dart:convert';
 
 class AddDeviceModelRequestEntity {
-  final String? name;
-  final int? locationId;
-  final List<String>? associatedDeviceIds;
+  String? deviceName;
+  int? locationId;
+  num? warningYellowThreshold;
+  num? warningRedThreshold;
+  List<String>? associatedDeviceIds;
 
   AddDeviceModelRequestEntity({
-    this.name,
+    this.deviceName,
     this.locationId,
+    this.warningYellowThreshold,
+    this.warningRedThreshold,
     this.associatedDeviceIds,
   });
-
-  AddDeviceModelRequestEntity copyWith({
-    String? name,
-    int? locationId,
-    List<String>? associatedDeviceIds,
-  }) =>
-      AddDeviceModelRequestEntity(
-        name: name ?? this.name,
-        locationId: locationId ?? this.locationId,
-        associatedDeviceIds: associatedDeviceIds ?? this.associatedDeviceIds,
-      );
 
   factory AddDeviceModelRequestEntity.fromRawJson(String str) => AddDeviceModelRequestEntity.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory AddDeviceModelRequestEntity.fromJson(Map<String, dynamic> json) => AddDeviceModelRequestEntity(
-        name: json["name"],
+        deviceName: json["device_name"],
         locationId: json["location_id"],
+        warningYellowThreshold: json["warning_yellow_threshold"],
+        warningRedThreshold: json["warning_red_threshold"],
         associatedDeviceIds: json["associated_device_ids"] == null
             ? []
             : List<String>.from(json["associated_device_ids"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
+        "device_name": deviceName,
         "location_id": locationId,
+        "warning_yellow_threshold": warningYellowThreshold,
+        "warning_red_threshold": warningRedThreshold,
         "associated_device_ids":
             associatedDeviceIds == null ? [] : List<dynamic>.from(associatedDeviceIds!.map((x) => x)),
       };

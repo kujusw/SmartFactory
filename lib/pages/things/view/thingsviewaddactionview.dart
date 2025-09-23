@@ -1,7 +1,6 @@
 // ignore_for_file: unused_result
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -247,7 +246,28 @@ class ThingsViewAddActionView extends ConsumerWidget {
                           LoggerManager().e("ThingsViewAddActionView error: $error");
                           return Container();
                         },
-                      )
+                      ),
+                  SizedBox(height: 8.h),
+                  //warning_yellow_threshold
+                  CustomTitleTextField(
+                    title: 'Warning Yellow Threshold',
+                    hintText: 'Enter Warning Yellow Threshold',
+                    keyboardType: TextInputType.number,
+                    initialValue: "",
+                    onChanged: (value) {
+                      ref.read(addWarningYellowThresholdProvider.notifier).set(double.parse(value));
+                    },
+                  ),
+
+                  CustomTitleTextField(
+                    title: 'Warning Red Threshold',
+                    hintText: 'Enter Warning Red Threshold',
+                    keyboardType: TextInputType.number,
+                    initialValue: "",
+                    onChanged: (value) {
+                      ref.read(addWarningRedThresholdProvider.notifier).set(double.parse(value));
+                    },
+                  ),
                 ],
               ),
             ),
@@ -273,22 +293,38 @@ class ThingsViewAddActionView extends ConsumerWidget {
                 ),
                 TextButton(
                   onPressed: () async {
+                    LoggerManager().d("Device Name  read: ${ref.read(addDeviceNameProvider)}");
+
                     final name = ref.read(addDeviceNameProvider);
                     if (name.isEmpty) {
                       unawaited(SmartDialog.showToast("Please enter device name"));
                       return;
                     }
-                    bool result = await ref.read(addDeviceProvider.notifier).addDevice(
-                        AddDeviceModelRequestEntity(
-                          name: name,
-                          locationId: ref.read(selectedLocationInThingsProvider)?.id,
-                          associatedDeviceIds:
-                              ref.read(selectedDevicesInThingsProvider).map((e) => e.id ?? "").toList(),
-                        ),
-                        ref.read(loginProvider).data?.token);
-                    if (result) {
+
+                    final result = await ref.read(addDeviceProvider(
+                            //warningYellowThreshold warning_red_threshold 为空可以不传
+                            AddDeviceModelRequestEntity(
+                              deviceName: name,
+                              locationId: ref.read(selectedLocationInThingsProvider)?.id,
+                              associatedDeviceIds:
+                                  ref.read(selectedDevicesInThingsProvider).map((e) => e.id ?? "").toList(),
+                              //warning_yellow_threshold
+                              warningYellowThreshold: ref.read(addWarningYellowThresholdProvider) == 0
+                                  ? null
+                                  : ref.read(addWarningYellowThresholdProvider),
+                              //warning_red_threshold
+                              warningRedThreshold: ref.read(addWarningRedThresholdProvider) == 0
+                                  ? null
+                                  : ref.read(addWarningRedThresholdProvider),
+                            ),
+                            ref.read(loginProvider).data?.token ?? "")
+                        .future); // 传入token;
+                    // 关键：判断ref是否还活着
+                    if (result.code == 100001 && context.mounted) {
                       ref.refresh(devicesProvider);
                       unawaited(SmartDialog.dismiss(tag: "ThingsViewAddActionButton"));
+                      // 清空 keeplive 为true的
+                      ref.invalidate(addDeviceNameProvider);
                     }
                   },
                   style: ButtonStyle(
