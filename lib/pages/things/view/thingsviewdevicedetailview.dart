@@ -9,6 +9,9 @@ import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../../models/device_model.dart';
+import '../devicedetail/view/devicedetaillocationview.dart';
+import '../devicedetail/view/devicedetailoverviewview.dart';
+import '../devicedetail/view/devicedetailpropertiesview.dart';
 
 class ThingsViewDeviceDetailView extends ConsumerStatefulWidget {
   final DeviceModel _model;
@@ -102,6 +105,16 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                               "Location",
                               style: TextStyle(fontSize: Constant.textSP_18, color: ref.watch(colorProvider)['white']),
                             ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            DeviceDetailOverviewView(),
+                            DeviceDetailPropertiesView(widget._model),
+                            DeviceDetailLocationView(widget._model),
                           ],
                         ),
                       ),

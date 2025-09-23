@@ -7,23 +7,17 @@ import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/values/index.dart';
 import '../../../../../../models/general_device_info_model.dart';
-import '../../../../../things/notifier/things_notifier.dart';
 import '../../../../common/widgets/marquee.dart';
-import '../../../notifier/device_notifier.dart';
 
 class GeneralViewDevicesItem extends ConsumerWidget {
-  final int index;
-  final String type;
-  const GeneralViewDevicesItem({super.key, required this.index, required this.type});
+  final GeneralDeviceInfoModel item;
+  const GeneralViewDevicesItem({
+    super.key,
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GeneralDeviceInfoModel item;
-    if (type == "ITEMSGENERALDEVICEPROVIDER") {
-      item = ref.read(itemsGeneralDeviceProvider)[index];
-    } else {
-      item = ref.read(generalDevicesInThingsProvider)[index];
-    }
     return MouseRegion(
       onEnter: (PointerEvent details) => () {
         // 鼠标悬停时的背景色

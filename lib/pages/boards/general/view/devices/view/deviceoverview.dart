@@ -104,7 +104,8 @@ class DeviceOverView extends ConsumerWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return GeneralViewDevicesItem(index: index, type: "ITEMSGENERALDEVICEPROVIDER");
+                  final item = ref.watch(itemsGeneralDeviceProvider)[index];
+                  return GeneralViewDevicesItem(item: item);
                 },
                 childCount: ref.watch(itemsGeneralDeviceProvider).length,
               ),

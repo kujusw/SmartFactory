@@ -104,7 +104,7 @@ List<DeviceModel>? itemsSearchDeviceModelInDevice(Ref ref) {
   }
 }
 
-/// GeneralDevice 的状态管理
+/// 主页GeneralDevice 的状态管理 注意跟设备列表 设备详情区分
 @riverpod
 class ItemsGeneralDevice extends _$ItemsGeneralDevice {
   @override

@@ -67,7 +67,7 @@ final class SelectedDeviceProvider
           argument: null,
           retry: null,
           name: r'selectedDeviceProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -88,7 +88,7 @@ final class SelectedDeviceProvider
   }
 }
 
-String _$selectedDeviceHash() => r'76a4f914568e8277fe8704cddefaa4976087b461';
+String _$selectedDeviceHash() => r'6807abcadd32be6f66d3c5ea83d3bf6dee50b184';
 
 abstract class _$SelectedDevice extends $Notifier<DeviceModel?> {
   DeviceModel? build();
@@ -528,59 +528,6 @@ abstract class _$SelectedLocationInThings extends $Notifier<LocationModel?> {
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<LocationModel?, LocationModel?>,
         LocationModel?,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
-  }
-}
-
-@ProviderFor(GeneralDevicesInThings)
-const generalDevicesInThingsProvider = GeneralDevicesInThingsProvider._();
-
-final class GeneralDevicesInThingsProvider extends $NotifierProvider<
-    GeneralDevicesInThings, List<GeneralDeviceInfoModel>> {
-  const GeneralDevicesInThingsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'generalDevicesInThingsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$generalDevicesInThingsHash();
-
-  @$internal
-  @override
-  GeneralDevicesInThings create() => GeneralDevicesInThings();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<GeneralDeviceInfoModel> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<GeneralDeviceInfoModel>>(value),
-    );
-  }
-}
-
-String _$generalDevicesInThingsHash() =>
-    r'de89e22205b3141d3d533ab4396519d32b223ad1';
-
-abstract class _$GeneralDevicesInThings
-    extends $Notifier<List<GeneralDeviceInfoModel>> {
-  List<GeneralDeviceInfoModel> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref
-        as $Ref<List<GeneralDeviceInfoModel>, List<GeneralDeviceInfoModel>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<GeneralDeviceInfoModel>, List<GeneralDeviceInfoModel>>,
-        List<GeneralDeviceInfoModel>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

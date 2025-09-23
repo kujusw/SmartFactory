@@ -10,11 +10,8 @@ import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/dependencies/dependencies.dart';
 import '../../../../core/notifiers/device_state_notifier.dart';
-import '../../../../http/device.dart';
 import '../../../../models/device_model.dart';
-import '../../../../models/general_device_info_model.dart';
 import '../../../boards/general/notifier/device_notifier.dart';
-import '../../../login/notifier/login_notifier.dart';
 import '../../notifier/things_notifier.dart';
 import '../../view/thingsviewdevicedetailview.dart';
 
@@ -48,76 +45,6 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
         ref.refresh(devicesProvider);
       }
     });
-    ref.listen<DeviceModel?>(selectedDeviceProvider, (previous, next) async {
-      DeviceEnergyResponseEntity deviceEnergyResponseEntity = await DeviceAPI.getDeviceModelEnergy(
-          path: "v1/energy/${next?.id}", token: ref.read(loginProvider).data?.token);
-      List<GeneralDeviceInfoModel> generalDeviceInfoModel = [];
-      if (deviceEnergyResponseEntity.code == 100001) {
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Current",
-          value: (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + "A",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Energy",
-          value: (deviceEnergyResponseEntity.data?.energy ?? 0.0).toStringAsFixed(2) + "kWh",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Power",
-          value: (deviceEnergyResponseEntity.data?.power ?? 0.0).toStringAsFixed(2) + "kW",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Power Factor",
-          value: (deviceEnergyResponseEntity.data?.powerFactor ?? 0.0).toStringAsFixed(2),
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Total Current",
-          value: (deviceEnergyResponseEntity.data?.totalCurrent ?? 0.0).toStringAsFixed(2) + "A",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Total Power",
-          value: (deviceEnergyResponseEntity.data?.totalPower ?? 0.0).toStringAsFixed(2) + "kW",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Voltage",
-          value: (deviceEnergyResponseEntity.data?.voltage ?? 0.0).toStringAsFixed(2) + "V",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-
-        for (var warning in deviceEnergyResponseEntity.data?.warnings ?? []) {
-          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-            id: next?.id,
-            name: next?.deviceName ?? "",
-            type: warning.type,
-            value: warning.message,
-            time: deviceEnergyResponseEntity.data?.timestamp,
-          ));
-        }
-      }
-      ref.read(generalDevicesInThingsProvider.notifier).setList(generalDeviceInfoModel);
-    });
-
     return DataTable2(
       // Forcing all scrollbars to be visible, alternatively themes can be used (see above)
       // headingRowColor: MaterialStateColor.resolveWith((states) => Colors.green[300]!),

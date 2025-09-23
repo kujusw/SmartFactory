@@ -263,15 +263,15 @@ final class ItemsSearchDeviceModelInDeviceProvider extends $FunctionalProvider<
 String _$itemsSearchDeviceModelInDeviceHash() =>
     r'68a66d524af47912f771691702f6d34aae46d6cb';
 
-/// GeneralDevice 的状态管理
+/// 主页GeneralDevice 的状态管理 注意跟设备列表 设备详情区分
 
 @ProviderFor(ItemsGeneralDevice)
 const itemsGeneralDeviceProvider = ItemsGeneralDeviceProvider._();
 
-/// GeneralDevice 的状态管理
+/// 主页GeneralDevice 的状态管理 注意跟设备列表 设备详情区分
 final class ItemsGeneralDeviceProvider extends $NotifierProvider<
     ItemsGeneralDevice, List<GeneralDeviceInfoModel>> {
-  /// GeneralDevice 的状态管理
+  /// 主页GeneralDevice 的状态管理 注意跟设备列表 设备详情区分
   const ItemsGeneralDeviceProvider._()
       : super(
           from: null,
@@ -302,7 +302,7 @@ final class ItemsGeneralDeviceProvider extends $NotifierProvider<
 String _$itemsGeneralDeviceHash() =>
     r'f01b9a8400cc5f91a6a90182710923ea096c627a';
 
-/// GeneralDevice 的状态管理
+/// 主页GeneralDevice 的状态管理 注意跟设备列表 设备详情区分
 
 abstract class _$ItemsGeneralDevice
     extends $Notifier<List<GeneralDeviceInfoModel>> {

@@ -5,7 +5,6 @@ import '../../../common/utils/logger_manager.dart';
 import '../../../http/device.dart';
 import '../../../models/device_model.dart';
 import '../../../models/device_model_new.dart';
-import '../../../models/general_device_info_model.dart';
 import '../../../models/locationresponseentity.dart';
 import '../../boards/general/notifier/device_notifier.dart';
 
@@ -20,7 +19,7 @@ class SelectedGroup extends _$SelectedGroup {
   void set(String group) => state = group;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class SelectedDevice extends _$SelectedDevice {
   @override
   DeviceModel? build() => null;
@@ -122,25 +121,6 @@ class SelectedLocationInThings extends _$SelectedLocationInThings {
   void set(LocationModel? location) => state = location;
 }
 
-// things 页面设备能源信息
-@riverpod
-class GeneralDevicesInThings extends _$GeneralDevicesInThings {
-  @override
-  List<GeneralDeviceInfoModel> build() => [];
-
-  void updateGeneralDeviceName(String name) {
-    state = state.map((e) => e.copyWith(name: name)).toList();
-  }
-
-  void updateGeneralDeviceID(String id) {
-    state = state.map((e) => e.copyWith(id: id)).toList();
-  }
-
-  void setList(List<GeneralDeviceInfoModel> list) {
-    state = list;
-  }
-}
-
 // 搜索 + 菜单筛选
 @riverpod
 class SearchValueForMenuInThings extends _$SearchValueForMenuInThings {
@@ -188,7 +168,6 @@ void clearThingsProvider(WidgetRef ref) {
   ref.invalidate(selectedDevicesInThingsProvider);
   ref.invalidate(updateDeviceNameProvider);
   ref.invalidate(selectedLocationInThingsProvider);
-  ref.invalidate(generalDevicesInThingsProvider);
   ref.invalidate(searchValueForMenuInThingsProvider);
   ref.invalidate(filteredDevicesInThingsProvider);
 }
