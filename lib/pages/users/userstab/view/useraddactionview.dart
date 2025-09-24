@@ -175,6 +175,8 @@ class _AddUserWidgetViewState extends ConsumerState<AddUserWidgetView> {
                               visible: widget.type == "ADD",
                             ),
                             CustomDropdown(
+                              alignment: Alignment.bottomCenter,
+                              width: 320.w,
                               title: "Role",
                               value: ref.watch(userAddRoleProvider),
                               list: ref.read(itemsRoleModelProvider).map((e) => e.name ?? "").toList(),

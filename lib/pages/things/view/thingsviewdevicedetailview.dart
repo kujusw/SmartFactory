@@ -121,7 +121,7 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                           controller: _tabController,
                           children: [
                             DeviceDetailOverviewView(),
-                            DeviceDetailChartsView(widget._model, buildContext: context),
+                            DeviceDetailChartsView(widget._model, buildContext: widget.buildContext),
                             DeviceDetailPropertiesView(widget._model),
                             DeviceDetailLocationView(widget._model),
                           ],

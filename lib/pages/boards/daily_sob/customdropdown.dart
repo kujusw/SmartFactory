@@ -11,10 +11,19 @@ class CustomDropdown extends ConsumerWidget {
   final String title;
   final String? value;
   final List<String> list;
+  final Alignment alignment;
   final Function(String?) onSelected;
+  final double width;
 
-  const CustomDropdown(
-      {super.key, required this.title, required this.value, required this.list, required this.onSelected});
+  const CustomDropdown({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.list,
+    required this.onSelected,
+    required this.alignment,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,10 +58,11 @@ class CustomDropdown extends ConsumerWidget {
                 targetContext: context,
                 usePenetrate: false,
                 maskColor: Colors.transparent,
+                alignment: alignment,
                 clickMaskDismiss: true,
                 keepSingle: true,
                 tag: "SelectPopupPage",
-                builder: (_) => SelectPopupPage(list, onSelected),
+                builder: (_) => SelectPopupPage(list, onSelected, width),
               ));
             },
             child: Container(
@@ -91,13 +101,15 @@ class CustomDropdown extends ConsumerWidget {
 class SelectPopupPage extends ConsumerWidget {
   final List<String> list;
   final Function(String?) onSelected;
-  SelectPopupPage(this.list, this.onSelected);
+  final double width;
+
+  SelectPopupPage(this.list, this.onSelected, this.width);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       alignment: Alignment.centerLeft,
-      width: 560.w,
+      width: width,
       height: (list.length * 30.h + 4.h) > 300.h ? 300.h : (list.length * 30.h + 4.h),
       margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 5.h, bottom: 5.h),
       decoration: BoxDecoration(

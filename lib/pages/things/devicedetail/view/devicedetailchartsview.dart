@@ -33,7 +33,9 @@ class DeviceDetailChartsView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomDropdown(
+                  alignment: Alignment.centerRight,
                   title: "Day",
+                  width: 320.w,
                   value: ref.watch(chartDataTypeProvider),
                   list: ['day', 'week', 'month', 'year'],
                   onSelected: (value) {
@@ -45,7 +47,18 @@ class DeviceDetailChartsView extends ConsumerWidget {
                 const SizedBox(width: 12),
 
                 // 动态开始结束时间选择
-                CustomDateRangePicker(buildContext: buildContext),
+                CustomDateRangePicker(
+                  buildContext: buildContext,
+                  onResult: (picked) {
+                    if (picked != null) {
+                      ref.read(chartDataStartProvider.notifier).set(picked.start.toString());
+                      ref.read(chartDataEndProvider.notifier).set(picked.end.toString());
+                    } else {
+                      ref.read(chartDataStartProvider.notifier).set("");
+                      ref.read(chartDataEndProvider.notifier).set("");
+                    }
+                  },
+                ),
               ],
             ),
             SizedBox(height: 20.h),

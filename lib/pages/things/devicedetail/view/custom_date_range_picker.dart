@@ -4,7 +4,9 @@ import '../../notifier/device_detail_chart_notifier.dart';
 
 class CustomDateRangePicker extends ConsumerWidget {
   final BuildContext buildContext;
-  const CustomDateRangePicker({super.key, required this.buildContext});
+  final void Function(DateTimeRange?) onResult;
+
+  const CustomDateRangePicker({super.key, required this.buildContext, required this.onResult});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,21 +30,14 @@ class CustomDateRangePicker extends ConsumerWidget {
       onTap: () async {
         final today = DateTime.now();
         final picked = await showDateRangePicker(
-          context: buildContext,
+          context: context, // 使用局部 Navigator 的 context
+          useRootNavigator: false,
           firstDate: DateTime(today.year - 5),
           lastDate: DateTime(today.year + 5),
           initialDateRange:
               (startDate != null && endDate != null) ? DateTimeRange(start: startDate, end: endDate) : null,
         );
-
-        if (picked != null) {
-          // DateTime 转 string 时间
-          ref.read(chartDataStartProvider.notifier).set(picked.start.toString());
-          ref.read(chartDataEndProvider.notifier).set(picked.end.toString());
-
-          // ✅ 回调逻辑（直接刷新图表或请求数据）
-          debugPrint("选中的开始时间: ${picked.start}, 结束时间: ${picked.end}");
-        }
+        onResult(picked);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

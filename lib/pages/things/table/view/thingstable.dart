@@ -138,7 +138,22 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
             clickMaskDismiss: true,
             keepSingle: true,
             tag: "ThingsViewDeviceDetail",
-            builder: (_) => ThingsViewDeviceDetailView(buildContext: context, model: deviceModel),
+            builder: (_) => Navigator(
+              // 包一层局部 Navigator
+              onGenerateRoute: (_) => MaterialPageRoute(
+                builder: (_) => Align(
+                  alignment: Alignment.centerRight, // 这里手动设置
+                  child: SizedBox(
+                    width: 600.w,
+                    height: 1080.h,
+                    child: ThingsViewDeviceDetailView(
+                      buildContext: context,
+                      model: deviceModel,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             onDismiss: () {},
           ),
         ),
