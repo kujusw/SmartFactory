@@ -1,12 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../common/values/index.dart';
-import '../../../common/customstartitletextfieldselected.dart';
-import '../../../common/linechart.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:smart_factory/models/device_model.dart';
+import 'package:smart_factory/pages/things/notifier/device_detail_chart_notifier.dart';
+import '../../../boards/daily_sob/customdropdown.dart';
+import '../../../login/notifier/loginmanager.dart';
+import '../../notifier/energy_curve_provider.dart';
+import 'custom_date_range_picker.dart';
+import 'energy_curve_chart.dart';
 
 class DeviceDetailChartsView extends ConsumerWidget {
-  const DeviceDetailChartsView({Key? key}) : super(key: key);
+  final DeviceModel _model;
+  final BuildContext buildContext;
+
+  const DeviceDetailChartsView(this._model, {Key? key, required this.buildContext}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,74 +32,32 @@ class DeviceDetailChartsView extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                StarredTextFieldSelected(
-                  width: 180.w,
-                  title: 'Chart Type',
-                  titleSize: Constant.textSP_18,
-                  initialValue: 'Line Chart',
-                  isEnable: false,
-                  starShow: false,
-                  onChanged: (value) {},
-                  suffixIconOnTap: () {},
+                CustomDropdown(
+                  title: "Day",
+                  value: ref.watch(chartDataTypeProvider),
+                  list: ['day', 'week', 'month', 'year'],
+                  onSelected: (value) {
+                    ref.read(chartDataTypeProvider.notifier).set(value ?? "day");
+                    unawaited(SmartDialog.dismiss(tag: "SelectPopupPage"));
+                  },
                 ),
-                StarredTextFieldSelected(
-                  width: 180.w,
-                  title: 'Aggregation Method',
-                  titleSize: Constant.textSP_18,
-                  initialValue: 'None',
-                  starShow: false,
-                  isEnable: false,
-                  onChanged: (value) {},
-                  suffixIconOnTap: () {},
-                ),
-                StarredTextFieldSelected(
-                  width: 180.w,
-                  title: 'Aggregation Times',
-                  titleSize: Constant.textSP_18,
-                  initialValue: 'All',
-                  starShow: false,
-                  isEnable: false,
-                  onChanged: (value) {},
-                  suffixIconOnTap: () {},
-                ),
-              ],
-            ),
-            StarredTextFieldSelected(
-              title: 'Readings',
-              initialValue: '',
-              starShow: false,
-              isEnable: true,
-              onChanged: (value) {},
-              suffixIconOnTap: () {},
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                StarredTextFieldSelected(
-                  width: 280.w,
-                  title: 'Time Range',
-                  titleSize: Constant.textSP_18,
-                  initialValue: 'Today',
-                  isEnable: false,
-                  starShow: false,
-                  onChanged: (value) {},
-                  suffixIconOnTap: () {},
-                ),
-                StarredTextFieldSelected(
-                  width: 280.w,
-                  title: 'Custom Time Range',
-                  titleSize: Constant.textSP_18,
-                  initialValue: 'None',
-                  starShow: false,
-                  isEnable: false,
-                  onChanged: (value) {},
-                  suffixIconOnTap: () {},
-                ),
+                //根据选择的时间类型，设置时间范围
+                const SizedBox(width: 12),
+
+                // 动态开始结束时间选择
+                CustomDateRangePicker(buildContext: buildContext),
               ],
             ),
             SizedBox(height: 20.h),
-            LineChartWidget(),
+            EnergyCurveChart(
+              params: EnergyCurveRequest(
+                deviceId: _model.id ?? "",
+                token: ref.read(loginProvider).data?.token ?? "",
+                period: ref.watch(chartDataTypeProvider),
+                start: ref.watch(chartDataStartProvider) ?? "",
+                end: ref.watch(chartDataEndProvider) ?? "",
+              ),
+            ),
           ],
         ),
       ),

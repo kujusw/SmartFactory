@@ -13,4 +13,14 @@ class DeviceEnergyChartAPI {
     LoggerManager().d("getDeviceEnergys $response");
     return DeviceEnergyResponseModel.fromJson(response);
   }
+
+  static Future<DeviceEnergyResponseModel> getDeviceEnergyCurve({
+    String? path,
+    String? token,
+    DeviceEnergyRequestEntity? params,
+  }) async {
+    var response = await HttpUtil(url: (Constant.HOST), token: token).get(path!, queryParameters: params!.toJson());
+    LoggerManager().d("getDeviceEnergys $response");
+    return DeviceEnergyResponseModel.fromJson(response);
+  }
 }

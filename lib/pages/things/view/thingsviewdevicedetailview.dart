@@ -9,16 +9,20 @@ import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../../models/device_model.dart';
+import '../devicedetail/view/devicedetailchartsview.dart';
 import '../devicedetail/view/devicedetaillocationview.dart';
 import '../devicedetail/view/devicedetailoverviewview.dart';
 import '../devicedetail/view/devicedetailpropertiesview.dart';
 
 class ThingsViewDeviceDetailView extends ConsumerStatefulWidget {
   final DeviceModel _model;
+  final BuildContext buildContext;
   ThingsViewDeviceDetailView({
     Key? key,
     required DeviceModel model,
+    required BuildContext buildContext,
   })  : _model = model,
+        buildContext = buildContext,
         super(key: key);
   @override
   ThingsViewDeviceDetailViewState createState() => ThingsViewDeviceDetailViewState();
@@ -31,7 +35,7 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 4);
   }
 
   @override
@@ -98,6 +102,10 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                               style: TextStyle(fontSize: Constant.textSP_18, color: ref.watch(colorProvider)['white']),
                             ),
                             Text(
+                              "Chart",
+                              style: TextStyle(fontSize: Constant.textSP_18, color: ref.watch(colorProvider)['white']),
+                            ),
+                            Text(
                               "Properties",
                               style: TextStyle(fontSize: Constant.textSP_18, color: ref.watch(colorProvider)['white']),
                             ),
@@ -113,6 +121,7 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                           controller: _tabController,
                           children: [
                             DeviceDetailOverviewView(),
+                            DeviceDetailChartsView(widget._model, buildContext: context),
                             DeviceDetailPropertiesView(widget._model),
                             DeviceDetailLocationView(widget._model),
                           ],

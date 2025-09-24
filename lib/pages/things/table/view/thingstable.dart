@@ -100,12 +100,12 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
 
       rows: List<DataRow>.generate(
         ref.watch(searchDevicesInThingsProvider).length,
-        (index) => devicesDataRow(ref.watch(searchDevicesInThingsProvider)[index], index, ref),
+        (index) => devicesDataRow(ref.watch(searchDevicesInThingsProvider)[index], index, ref, context),
       ),
     );
   }
 
-  DataRow2 devicesDataRow(DeviceModel deviceModel, int index, WidgetRef ref) {
+  DataRow2 devicesDataRow(DeviceModel deviceModel, int index, WidgetRef ref, BuildContext context) {
     return DataRow2.byIndex(
       index: index,
       selected: deviceModel.selected ?? false,
@@ -138,7 +138,7 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
             clickMaskDismiss: true,
             keepSingle: true,
             tag: "ThingsViewDeviceDetail",
-            builder: (_) => ThingsViewDeviceDetailView(model: deviceModel),
+            builder: (_) => ThingsViewDeviceDetailView(buildContext: context, model: deviceModel),
             onDismiss: () {},
           ),
         ),
