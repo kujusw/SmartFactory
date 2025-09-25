@@ -68,13 +68,20 @@ class GeneralViewDevicesState extends ConsumerState<GeneralViewDevices> with Sin
               ],
             ),
           ),
+          SizedBox(height: 10.h),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                DeviceOverView(),
-                DeviceDetailChartsView(ref.read(currentDeviceProvider), buildContext: context),
-              ],
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.w),
+                color: ref.watch(colorProvider)['backgroundColorWidget'],
+              ),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  DeviceOverView(),
+                  DeviceDetailChartsView(ref.read(currentDeviceProvider), buildContext: context),
+                ],
+              ),
             ),
           ),
         ],

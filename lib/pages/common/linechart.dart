@@ -2,14 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:graphic/graphic.dart';
 
+import '../../models/chart_series_model.dart';
+
 class LineChartWidget extends StatelessWidget {
   final List<String> labels;
   final List<double> values;
   final double yMax;
-  // 新增参数支持多条曲线
-  final List<List<double>>? multipleValues;
-  final List<String>? seriesNames;
-  final List<Color>? seriesColors;
+  // 重构后的参数：使用单一的 additionalSeries 参数
+  final List<ChartSeriesModel>? additionalSeries;
   // 新增警戒线参数
   final double? redAlertLine;
   final double? yellowAlertLine;
@@ -19,9 +19,7 @@ class LineChartWidget extends StatelessWidget {
     required this.labels,
     required this.values,
     required this.yMax,
-    this.multipleValues,
-    this.seriesNames,
-    this.seriesColors,
+    this.additionalSeries,
     this.redAlertLine,
     this.yellowAlertLine,
   }) : super(key: key);
@@ -35,7 +33,7 @@ class LineChartWidget extends StatelessWidget {
     // 构建数据
     List<Map<String, dynamic>> data;
 
-    if (multipleValues != null && multipleValues!.isNotEmpty) {
+    if (additionalSeries != null && additionalSeries!.isNotEmpty) {
       // 多条曲线数据
       data = List.generate(labels.length, (i) {
         Map<String, dynamic> point = {'time': labels[i]};
@@ -44,8 +42,8 @@ class LineChartWidget extends StatelessWidget {
         point['series0'] = i < values.length ? values[i] : 0.0;
 
         // 添加其他曲线数据
-        for (int j = 0; j < multipleValues!.length; j++) {
-          point['series${j + 1}'] = i < multipleValues![j].length ? multipleValues![j][i] : 0.0;
+        for (int j = 0; j < additionalSeries!.length; j++) {
+          point['series${j + 1}'] = i < additionalSeries![j].data.length ? additionalSeries![j].data[i] : 0.0;
         }
 
         return point;
@@ -70,7 +68,7 @@ class LineChartWidget extends StatelessWidget {
     // 构建标记
     List<Mark> marks = [];
 
-    if (multipleValues != null && multipleValues!.isNotEmpty) {
+    if (additionalSeries != null && additionalSeries!.isNotEmpty) {
       // 多条曲线的变量和标记
       variables['series0'] = Variable(
         accessor: (map) => map['series0'] as num,
@@ -79,11 +77,11 @@ class LineChartWidget extends StatelessWidget {
 
       marks.add(LineMark(
         shape: ShapeEncode(value: BasicLineShape(smooth: true)),
-        color: ColorEncode(value: seriesColors?[0] ?? Colors.blue),
+        color: ColorEncode(value: Colors.blue), // 主曲线保持蓝色
         position: Varset('time') * Varset('series0'),
       ));
 
-      for (int i = 0; i < multipleValues!.length; i++) {
+      for (int i = 0; i < additionalSeries!.length; i++) {
         String seriesKey = 'series${i + 1}';
         variables[seriesKey] = Variable(
           accessor: (map) => map[seriesKey] as num,
@@ -92,7 +90,7 @@ class LineChartWidget extends StatelessWidget {
 
         marks.add(LineMark(
           shape: ShapeEncode(value: BasicLineShape(smooth: true)),
-          color: ColorEncode(value: seriesColors?[i + 1] ?? Colors.green),
+          color: ColorEncode(value: additionalSeries![i].color),
           position: Varset('time') * Varset(seriesKey),
         ));
       }

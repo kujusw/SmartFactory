@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../models/chart_series_model.dart';
 import '../../../common/linechart.dart';
 import '../../notifier/energy_curve_provider.dart';
 
@@ -10,19 +11,15 @@ import '../../notifier/energy_curve_provider.dart';
 /// ----------------------------
 class EnergyCurveChart extends ConsumerWidget {
   final EnergyCurveRequest params;
-  // 新增参数支持多条曲线和警戒线
-  final List<List<double>>? additionalSeries;
-  final List<String>? seriesNames;
-  final List<Color>? seriesColors;
+  // 重构后的参数：使用统一的 additionalSeries 参数
+  final List<ChartSeriesModel>? additionalSeries;
   final double? redAlertValue;
   final double? yellowAlertValue;
-  
+
   const EnergyCurveChart({
     Key? key,
     required this.params,
     this.additionalSeries,
-    this.seriesNames,
-    this.seriesColors,
     this.redAlertValue,
     this.yellowAlertValue,
   }) : super(key: key);
@@ -34,7 +31,7 @@ class EnergyCurveChart extends ConsumerWidget {
       data: (energyCurve) {
         final lineSections = buildLineSections(energyCurve);
         final yMax = getYAxisMax(lineSections[1].cast<double>());
-        
+
         // 计算包含警戒线的最大值
         double adjustedYMax = yMax;
         if (redAlertValue != null && redAlertValue! > adjustedYMax) {
@@ -57,19 +54,17 @@ class EnergyCurveChart extends ConsumerWidget {
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   // 添加图例
-                  if (seriesNames != null || redAlertValue != null || yellowAlertValue != null)
+                  if (additionalSeries != null || redAlertValue != null || yellowAlertValue != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Wrap(
                         spacing: 16,
                         children: [
                           // 主曲线图例
-                          _buildLegendItem("能耗曲线", seriesColors?[0] ?? Colors.blue),
+                          _buildLegendItem("能耗曲线", Colors.blue),
                           // 其他曲线图例
-                          if (seriesNames != null)
-                            ...seriesNames!.asMap().entries.map((entry) => 
-                              _buildLegendItem(entry.value, seriesColors?[entry.key + 1] ?? Colors.green)
-                            ),
+                          if (additionalSeries != null)
+                            ...additionalSeries!.map((series) => _buildLegendItem(series.name, series.color)),
                           // 警戒线图例
                           if (redAlertValue != null)
                             _buildLegendItem("红色警戒线 (${redAlertValue!.toInt()} kW)", Colors.red, isDashed: true),
@@ -89,9 +84,7 @@ class EnergyCurveChart extends ConsumerWidget {
                   labels: lineSections[0].cast<String>(),
                   values: lineSections[1].cast<double>(),
                   yMax: adjustedYMax,
-                  multipleValues: additionalSeries,
-                  seriesNames: seriesNames,
-                  seriesColors: seriesColors ?? [Colors.blue, Colors.green, Colors.purple, Colors.cyan],
+                  additionalSeries: additionalSeries,
                   redAlertLine: redAlertValue,
                   yellowAlertLine: yellowAlertValue,
                 ),
@@ -116,10 +109,11 @@ class EnergyCurveChart extends ConsumerWidget {
             color: color,
             border: isDashed ? Border.all(color: color, width: 1) : null,
           ),
-          child: isDashed ? 
-            CustomPaint(
-              painter: DashedLinePainter(color: color),
-            ) : null,
+          child: isDashed
+              ? CustomPaint(
+                  painter: DashedLinePainter(color: color),
+                )
+              : null,
         ),
         const SizedBox(width: 4),
         Text(
@@ -134,19 +128,19 @@ class EnergyCurveChart extends ConsumerWidget {
 // 虚线绘制器
 class DashedLinePainter extends CustomPainter {
   final Color color;
-  
+
   DashedLinePainter({required this.color});
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
       ..strokeWidth = 2;
-    
+
     const dashWidth = 3.0;
     const dashSpace = 2.0;
     double startX = 0;
-    
+
     while (startX < size.width) {
       canvas.drawLine(
         Offset(startX, size.height / 2),
@@ -156,7 +150,7 @@ class DashedLinePainter extends CustomPainter {
       startX += dashWidth + dashSpace;
     }
   }
-  
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

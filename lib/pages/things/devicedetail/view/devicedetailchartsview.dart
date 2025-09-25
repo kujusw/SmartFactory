@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:smart_factory/models/device_model.dart';
 import 'package:smart_factory/pages/things/notifier/device_detail_chart_notifier.dart';
+import '../../../../models/chart_series_model.dart';
 import '../../../boards/daily_sob/customdropdown.dart';
 import '../../../login/notifier/loginmanager.dart';
 import '../../notifier/energy_curve_provider.dart';
@@ -73,11 +74,17 @@ class DeviceDetailChartsView extends ConsumerWidget {
                     ),
                     // 添加额外的曲线数据
                     additionalSeries: [
-                      [1000.5, 1200.3, 1500.8, 1800.2, 2000.1, 800.2, 900.5, 1100.1, 1300.7, 1600.4], // 第二条曲线数据
-                      [800.2, 900.5, 1100.1, 1300.7, 1600.4, 1000.5, 1200.3, 1500.8, 1800.2, 2000.1], // 第三条曲线数据
+                      ChartSeriesModel(
+                        data: [1000.5, 1200.3, 1500.8, 1800.2, 2000.1, 800.2, 900.5, 1100.1, 1300.7, 1600.4],
+                        name: "预测功耗",
+                        color: Colors.green,
+                      ),
+                      ChartSeriesModel(
+                        data: [800.2, 900.5, 1100.1, 1300.7, 1600.4, 1000.5, 1200.3, 1500.8, 1800.2, 2000.1],
+                        name: "目标功耗",
+                        color: Colors.purple,
+                      ),
                     ],
-                    seriesNames: ["预测功耗", "目标功耗"],
-                    seriesColors: [Colors.blue, Colors.green, Colors.purple],
                     // 设置警戒线
                     redAlertValue: 2500.0, // 红色警戒线在25kW
                     yellowAlertValue: 2000.0, // 黄色警戒线在20kW
