@@ -13,7 +13,7 @@ import 'custom_date_range_picker.dart';
 import 'energy_curve_chart.dart';
 
 class DeviceDetailChartsView extends ConsumerWidget {
-  final DeviceModel _model;
+  final DeviceModel? _model;
   final BuildContext buildContext;
 
   const DeviceDetailChartsView(this._model, {Key? key, required this.buildContext}) : super(key: key);
@@ -22,58 +22,60 @@ class DeviceDetailChartsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomDropdown(
-                  alignment: Alignment.centerRight,
-                  title: "Day",
-                  width: 320.w,
-                  value: ref.watch(chartDataTypeProvider),
-                  list: ['day', 'week', 'month', 'year'],
-                  onSelected: (value) {
-                    ref.read(chartDataTypeProvider.notifier).set(value ?? "day");
-                    unawaited(SmartDialog.dismiss(tag: "SelectPopupPage"));
-                  },
-                ),
-                //根据选择的时间类型，设置时间范围
-                const SizedBox(width: 12),
+      child: _model != null
+          ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomDropdown(
+                        alignment: Alignment.centerRight,
+                        title: "Day",
+                        width: 320.w,
+                        value: ref.watch(chartDataTypeProvider),
+                        list: ['day', 'week', 'month', 'year'],
+                        onSelected: (value) {
+                          ref.read(chartDataTypeProvider.notifier).set(value ?? "day");
+                          unawaited(SmartDialog.dismiss(tag: "SelectPopupPage"));
+                        },
+                      ),
+                      //根据选择的时间类型，设置时间范围
+                      const SizedBox(width: 12),
 
-                // 动态开始结束时间选择
-                CustomDateRangePicker(
-                  buildContext: buildContext,
-                  onResult: (picked) {
-                    if (picked != null) {
-                      ref.read(chartDataStartProvider.notifier).set(picked.start.toString());
-                      ref.read(chartDataEndProvider.notifier).set(picked.end.toString());
-                    } else {
-                      ref.read(chartDataStartProvider.notifier).set("");
-                      ref.read(chartDataEndProvider.notifier).set("");
-                    }
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20.h),
-            EnergyCurveChart(
-              params: EnergyCurveRequest(
-                deviceId: _model.id ?? "",
-                token: ref.read(loginProvider).data?.token ?? "",
-                period: ref.watch(chartDataTypeProvider),
-                start: ref.watch(chartDataStartProvider) ?? "",
-                end: ref.watch(chartDataEndProvider) ?? "",
+                      // 动态开始结束时间选择
+                      CustomDateRangePicker(
+                        buildContext: buildContext,
+                        onResult: (picked) {
+                          if (picked != null) {
+                            ref.read(chartDataStartProvider.notifier).set(picked.start.toString());
+                            ref.read(chartDataEndProvider.notifier).set(picked.end.toString());
+                          } else {
+                            ref.read(chartDataStartProvider.notifier).set("");
+                            ref.read(chartDataEndProvider.notifier).set("");
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                  EnergyCurveChart(
+                    params: EnergyCurveRequest(
+                      deviceId: _model?.id ?? "",
+                      token: ref.read(loginProvider).data?.token ?? "",
+                      period: ref.watch(chartDataTypeProvider),
+                      start: ref.watch(chartDataStartProvider) ?? "",
+                      end: ref.watch(chartDataEndProvider) ?? "",
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : Container(),
     );
   }
 }
