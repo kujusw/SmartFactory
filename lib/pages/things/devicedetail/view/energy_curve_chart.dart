@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -76,17 +78,28 @@ class EnergyCurveChart extends ConsumerWidget {
                 ],
               ),
             ),
+            // 支持水平滚动的图表容器
             SizedBox(
               height: 300.h,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: LineChartWidget(
-                  labels: lineSections[0].cast<String>(),
-                  values: lineSections[1].cast<double>(),
-                  yMax: adjustedYMax,
-                  additionalSeries: additionalSeries,
-                  redAlertLine: redAlertValue,
-                  yellowAlertLine: yellowAlertValue,
+              child: ScrollConfiguration(
+                behavior: CustomScrollBehavior(),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Container(
+                    // 根据数据点数量动态计算宽度
+                    width: _calculateChartWidth(lineSections[0].length),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: LineChartWidget(
+                        labels: lineSections[0].cast<String>(),
+                        values: lineSections[1].cast<double>(),
+                        yMax: adjustedYMax,
+                        additionalSeries: additionalSeries,
+                        redAlertLine: redAlertValue,
+                        yellowAlertLine: yellowAlertValue,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -96,6 +109,19 @@ class EnergyCurveChart extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Center(child: Text("Error: $err")),
     );
+  }
+
+  /// 根据数据点数量计算图表宽度
+  double _calculateChartWidth(int dataPointCount) {
+    // 基础宽度
+    const double baseWidth = 400.0;
+    // 每个数据点的最小宽度，确保标签不重叠
+    const double minWidthPerPoint = 35.0;
+    // 计算所需宽度
+    double calculatedWidth = dataPointCount * minWidthPerPoint;
+
+    // 确保最小宽度，但当数据点较多时使用计算宽度
+    return calculatedWidth > baseWidth ? calculatedWidth : baseWidth;
   }
 
   Widget _buildLegendItem(String label, Color color, {bool isDashed = false}) {
@@ -122,6 +148,33 @@ class EnergyCurveChart extends ConsumerWidget {
         ),
       ],
     );
+  }
+}
+
+/// 自定义滚动行为，支持 Command 键拖动
+class CustomScrollBehavior extends ScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
+
+  @override
+  Widget buildScrollbar(BuildContext context, Widget child, ScrollableDetails details) {
+    // 在桌面平台显示滚动条
+    switch (getPlatform(context)) {
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return Scrollbar(
+          controller: details.controller,
+          child: child,
+        );
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.iOS:
+        return child;
+    }
   }
 }
 
