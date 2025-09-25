@@ -64,31 +64,34 @@ class DeviceDetailChartsView extends ConsumerWidget {
                     ],
                   ),
                   SizedBox(height: 20.h),
-                  EnergyCurveChart(
-                    params: EnergyCurveRequest(
-                      deviceId: _model?.id ?? "",
-                      token: ref.read(loginProvider).data?.token ?? "",
-                      period: ref.watch(chartDataTypeProvider),
-                      start: ref.watch(chartDataStartProvider) ?? "",
-                      end: ref.watch(chartDataEndProvider) ?? "",
-                    ),
-                    // 添加额外的曲线数据
-                    additionalSeries: [
-                      ChartSeriesModel(
-                        data: [1000.5, 1200.3, 1500.8, 1800.2, 2000.1, 800.2, 900.5, 1100.1, 1300.7, 1600.4],
-                        name: "预测功耗",
-                        color: Colors.green,
+                  LayoutBuilder(builder: (context, constraints) {
+                    return EnergyCurveChart(
+                      width: constraints.maxWidth,
+                      params: EnergyCurveRequest(
+                        deviceId: _model?.id ?? "",
+                        token: ref.read(loginProvider).data?.token ?? "",
+                        period: ref.watch(chartDataTypeProvider),
+                        start: ref.watch(chartDataStartProvider) ?? "",
+                        end: ref.watch(chartDataEndProvider) ?? "",
                       ),
-                      ChartSeriesModel(
-                        data: [800.2, 900.5, 1100.1, 1300.7, 1600.4, 1000.5, 1200.3, 1500.8, 1800.2, 2000.1],
-                        name: "目标功耗",
-                        color: Colors.purple,
-                      ),
-                    ],
-                    // 设置警戒线
-                    redAlertValue: 2500.0, // 红色警戒线在25kW
-                    yellowAlertValue: 2000.0, // 黄色警戒线在20kW
-                  ),
+                      // 添加额外的曲线数据
+                      additionalSeries: [
+                        ChartSeriesModel(
+                          data: [1000.5, 1200.3, 1500.8, 1800.2, 2000.1, 800.2, 900.5, 1100.1, 1300.7, 1600.4],
+                          name: "预测功耗",
+                          color: Colors.green,
+                        ),
+                        ChartSeriesModel(
+                          data: [800.2, 900.5, 1100.1, 1300.7, 1600.4, 1000.5, 1200.3, 1500.8, 1800.2, 2000.1],
+                          name: "目标功耗",
+                          color: Colors.purple,
+                        ),
+                      ],
+                      // 设置警戒线
+                      redAlertValue: 2500.0, // 红色警戒线在25kW
+                      yellowAlertValue: 2000.0, // 黄色警戒线在20kW
+                    );
+                  }),
                 ],
               ),
             )

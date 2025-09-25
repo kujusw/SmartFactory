@@ -1,9 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../models/chart_series_model.dart';
 import '../../../common/linechart.dart';
 import '../../notifier/energy_curve_provider.dart';
@@ -17,6 +15,7 @@ class EnergyCurveChart extends ConsumerWidget {
   final List<ChartSeriesModel>? additionalSeries;
   final double? redAlertValue;
   final double? yellowAlertValue;
+  final double? width;
 
   const EnergyCurveChart({
     Key? key,
@@ -24,6 +23,7 @@ class EnergyCurveChart extends ConsumerWidget {
     this.additionalSeries,
     this.redAlertValue,
     this.yellowAlertValue,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -114,12 +114,11 @@ class EnergyCurveChart extends ConsumerWidget {
   /// 根据数据点数量计算图表宽度
   double _calculateChartWidth(int dataPointCount) {
     // 基础宽度
-    const double baseWidth = 400.0;
+    double baseWidth = width ?? 600.w;
     // 每个数据点的最小宽度，确保标签不重叠
-    const double minWidthPerPoint = 35.0;
+    double minWidthPerPoint = 40.w;
     // 计算所需宽度
     double calculatedWidth = dataPointCount * minWidthPerPoint;
-
     // 确保最小宽度，但当数据点较多时使用计算宽度
     return calculatedWidth > baseWidth ? calculatedWidth : baseWidth;
   }
