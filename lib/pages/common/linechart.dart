@@ -6,12 +6,24 @@ class LineChartWidget extends StatelessWidget {
   final List<String> labels;
   final List<double> values;
   final double yMax;
+  // 新增参数支持多条曲线
+  final List<List<double>>? multipleValues;
+  final List<String>? seriesNames;
+  final List<Color>? seriesColors;
+  // 新增警戒线参数
+  final double? redAlertLine;
+  final double? yellowAlertLine;
 
   const LineChartWidget({
     Key? key,
     required this.labels,
     required this.values,
     required this.yMax,
+    this.multipleValues,
+    this.seriesNames,
+    this.seriesColors,
+    this.redAlertLine,
+    this.yellowAlertLine,
   }) : super(key: key);
 
   @override
@@ -20,29 +32,124 @@ class LineChartWidget extends StatelessWidget {
       return const Center(child: Text("No data"));
     }
 
-    final data = List.generate(labels.length, (i) {
-      return {
-        'time': labels[i],
-        'power': values[i],
-      };
-    });
+    // 构建数据
+    List<Map<String, dynamic>> data;
+
+    if (multipleValues != null && multipleValues!.isNotEmpty) {
+      // 多条曲线数据
+      data = List.generate(labels.length, (i) {
+        Map<String, dynamic> point = {'time': labels[i]};
+
+        // 添加第一条曲线（原始数据）
+        point['series0'] = i < values.length ? values[i] : 0.0;
+
+        // 添加其他曲线数据
+        for (int j = 0; j < multipleValues!.length; j++) {
+          point['series${j + 1}'] = i < multipleValues![j].length ? multipleValues![j][i] : 0.0;
+        }
+
+        return point;
+      });
+    } else {
+      // 单条曲线数据
+      data = List.generate(labels.length, (i) {
+        return {
+          'time': labels[i],
+          'power': values[i],
+        };
+      });
+    }
+
+    // 构建变量定义
+    Map<String, Variable> variables = {
+      'time': Variable(
+        accessor: (map) => map['time'] as String,
+      ),
+    };
+
+    // 构建标记
+    List<Mark> marks = [];
+
+    if (multipleValues != null && multipleValues!.isNotEmpty) {
+      // 多条曲线的变量和标记
+      variables['series0'] = Variable(
+        accessor: (map) => map['series0'] as num,
+        scale: LinearScale(min: 0, max: yMax, formatter: (v) => '${v.toInt()} kW'),
+      );
+
+      marks.add(LineMark(
+        shape: ShapeEncode(value: BasicLineShape(smooth: true)),
+        color: ColorEncode(value: seriesColors?[0] ?? Colors.blue),
+        position: Varset('time') * Varset('series0'),
+      ));
+
+      for (int i = 0; i < multipleValues!.length; i++) {
+        String seriesKey = 'series${i + 1}';
+        variables[seriesKey] = Variable(
+          accessor: (map) => map[seriesKey] as num,
+          scale: LinearScale(min: 0, max: yMax, formatter: (v) => '${v.toInt()} kW'),
+        );
+
+        marks.add(LineMark(
+          shape: ShapeEncode(value: BasicLineShape(smooth: true)),
+          color: ColorEncode(value: seriesColors?[i + 1] ?? Colors.green),
+          position: Varset('time') * Varset(seriesKey),
+        ));
+      }
+    } else {
+      // 单条曲线
+      variables['power'] = Variable(
+        accessor: (map) => map['power'] as num,
+        scale: LinearScale(min: 0, max: yMax, formatter: (v) => '${v.toInt()} kW'),
+      );
+
+      marks.add(LineMark(
+        shape: ShapeEncode(value: BasicLineShape(smooth: true)),
+        color: ColorEncode(value: Colors.blue),
+      ));
+    }
+
+    // 添加警戒线
+    if (redAlertLine != null) {
+      variables['redAlert'] = Variable(
+        accessor: (map) => map['redAlert'] as num,
+        scale: LinearScale(min: 0, max: yMax),
+      );
+
+      marks.add(LineMark(
+        shape: ShapeEncode(value: BasicLineShape(dash: [5, 5])),
+        color: ColorEncode(value: Colors.red),
+        position: Varset('time') * Varset('redAlert'),
+      ));
+
+      // 合并警戒线数据
+      for (int i = 0; i < data.length; i++) {
+        data[i]['redAlert'] = redAlertLine;
+      }
+    }
+
+    if (yellowAlertLine != null) {
+      variables['yellowAlert'] = Variable(
+        accessor: (map) => map['yellowAlert'] as num,
+        scale: LinearScale(min: 0, max: yMax),
+      );
+
+      marks.add(LineMark(
+        shape: ShapeEncode(value: BasicLineShape(dash: [10, 5])),
+        color: ColorEncode(value: Colors.orange),
+        position: Varset('time') * Varset('yellowAlert'),
+      ));
+
+      // 合并警戒线数据
+      for (int i = 0; i < data.length; i++) {
+        data[i]['yellowAlert'] = yellowAlertLine;
+      }
+    }
 
     return Chart(
       data: data,
-      variables: {
-        'time': Variable(
-          accessor: (Map map) => map['time'] as String,
-        ),
-        'power': Variable(
-          accessor: (Map map) => map['power'] as double,
-          scale: LinearScale(min: 0, max: yMax, formatter: (v) => '${v.toInt()} kWW'),
-        ),
-      },
-      marks: [
-        LineMark(
-          shape: ShapeEncode(value: BasicLineShape(smooth: true)),
-        )
-      ],
+      variables: variables,
+      marks: marks,
       axes: [
         Defaults.horizontalAxis,
         Defaults.verticalAxis,
