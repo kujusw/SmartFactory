@@ -41,7 +41,7 @@ final class LocationUIManagerProvider
   }
 }
 
-String _$locationUIManagerHash() => r'92214d579f948a6d385e4f17bf2f0b88bd1aef1a';
+String _$locationUIManagerHash() => r'64217399ca1de6a54b3d79d315e1e9f6b289647e';
 
 abstract class _$LocationUIManager extends $Notifier<List<LocationModel>> {
   List<LocationModel> build();

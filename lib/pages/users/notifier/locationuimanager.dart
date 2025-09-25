@@ -47,6 +47,12 @@ class LocationUIManager extends _$LocationUIManager {
     state = state.map((t) => t.copyWith(selected: selected)).toList();
   }
 
+  //获取名字通过id
+  String getLocationNameById(int id) {
+    final location = state.firstWhere((element) => element.id == id, orElse: () => LocationModel());
+    return location.name ?? "";
+  }
+
   /// 搜索
   List<LocationModel> getSearchLocations(String keyword) {
     return state.where((element) {

@@ -33,8 +33,8 @@ class _DeviceDetailPropertiesViewState extends ConsumerState<DeviceDetailPropert
         //先所有的重置选中selectedInAddDevice
         ref.read(deviceManagerProvider.notifier).unSelectDevice();
         for (var item in ref.read(deviceManagerProvider)) {
-          for (var selectItem in widget.model?.associatedDevices ?? []) {
-            if (item.id == selectItem) {
+          for (DeviceModel selectItem in widget.model?.associatedDevices ?? []) {
+            if (item.id == selectItem.id) {
               item.selectedInAddDevice = true;
             }
           }

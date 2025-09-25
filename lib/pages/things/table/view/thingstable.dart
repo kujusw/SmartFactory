@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:smart_factory/pages/users/notifier/locationuimanager.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/dependencies/dependencies.dart';
@@ -166,7 +167,8 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
       cells: [
         DataCell(customValue(deviceModel.id ?? "0", ref)),
         DataCell(customValue(deviceModel.deviceName ?? "", ref)),
-        DataCell(customValue((deviceModel.locationId ?? 0).toString(), ref)),
+        DataCell(customValue(
+            ref.read(locationUIManagerProvider.notifier).getLocationNameById(deviceModel.locationId ?? 0), ref)),
         DataCell(customValue(deviceModel.deviceType ?? "", ref)),
         DataCell(customValueOnline(deviceModel)),
       ],
