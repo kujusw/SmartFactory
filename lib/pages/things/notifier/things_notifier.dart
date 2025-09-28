@@ -43,6 +43,23 @@ Future<AddDeviceResponseEntity> addDevice(
   }
 }
 
+//更新设备
+@riverpod
+Future<UpdateDeviceLocationResponseEntity> updateDevice(
+  Ref ref,
+  String deviceId,
+  AddDeviceModelRequestEntity params,
+  String token,
+) async {
+  try {
+    LoggerManager().d("updateDevice params: $params deviceId: $deviceId");
+    final result = await DeviceAPI.updateDevice(id: deviceId, params: params, token: token);
+    return result;
+  } catch (e) {
+    return UpdateDeviceLocationResponseEntity(code: 201, message: "Update Device failed");
+  }
+}
+
 @riverpod
 Future<DeleteDeviceResponseEntity> deleteDevice(
   Ref ref,
@@ -97,14 +114,14 @@ List<DeviceModel> searchDevicesInThings(Ref ref) {
 }
 
 // 选中的设备
-@riverpod
+@Riverpod(keepAlive: true)
 List<DeviceModel> selectedDevicesInThings(Ref ref) {
   final devices = ref.watch(deviceManagerProvider);
   return devices.where((d) => d.selectedInAddDevice ?? false).toList();
 }
 
 // 修改设备名称
-@riverpod
+@Riverpod(keepAlive: true)
 class UpdateDeviceName extends _$UpdateDeviceName {
   @override
   String build() => "";
@@ -113,7 +130,7 @@ class UpdateDeviceName extends _$UpdateDeviceName {
 }
 
 // 设备位置
-@riverpod
+@Riverpod(keepAlive: true)
 class SelectedLocationInThings extends _$SelectedLocationInThings {
   @override
   LocationModel? build() => null;

@@ -155,7 +155,12 @@ class _ThingsTableState extends ConsumerState<ThingsTable> {
                 ),
               ),
             ),
-            onDismiss: () {},
+            onDismiss: () {
+              //清除 keeplive
+              ref.invalidate(updateDeviceNameProvider);
+              ref.invalidate(selectedLocationInThingsProvider);
+              ref.invalidate(selectedDevicesInThingsProvider);
+            },
           ),
         ),
       },

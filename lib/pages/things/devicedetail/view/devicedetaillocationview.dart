@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
+import '../../../../core/notifiers/device_state_notifier.dart';
 import '../../../../models/device_model.dart';
 import '../../../../models/locationresponseentity.dart';
 import '../../../users/notifier/locationuimanager.dart';
 import '../../adddevice/view/locationlistview.dart';
+import '../../notifier/addactionview_notifer.dart';
 import '../../notifier/things_notifier.dart';
 
 class DeviceDetailLocationView extends ConsumerStatefulWidget {
@@ -21,9 +23,25 @@ class _DeviceDetailLocationViewState extends ConsumerState<DeviceDetailLocationV
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(updateDeviceNameProvider.notifier).set(widget.model?.deviceName ?? "");
       ref
           .read(selectedLocationInThingsProvider.notifier)
           .set(LocationModel(id: widget.model?.locationId ?? 0, name: ""));
+      //先所有的重置选中selectedInAddDevice
+      ref.read(deviceManagerProvider.notifier).unSelectDevice();
+      ref
+          .read(updateDeviceWarningYellowThresholdProvider.notifier)
+          .set(widget.model?.warningYellowThreshold?.toDouble() ?? 0);
+      ref
+          .read(updateDeviceWarningRedThresholdProvider.notifier)
+          .set(widget.model?.warningRedThreshold?.toDouble() ?? 0);
+      for (var item in ref.read(deviceManagerProvider)) {
+        for (DeviceModel selectItem in widget.model?.associatedDevices ?? []) {
+          if (item.id == selectItem.id) {
+            item.selectedInAddDevice = true;
+          }
+        }
+      }
     });
   }
 

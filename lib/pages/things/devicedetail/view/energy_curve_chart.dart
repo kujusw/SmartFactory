@@ -116,7 +116,7 @@ class EnergyCurveChart extends ConsumerWidget {
     // 基础宽度
     double baseWidth = width ?? 600.w;
     // 每个数据点的最小宽度，确保标签不重叠
-    double minWidthPerPoint = 40.w;
+    double minWidthPerPoint = 50.w;
     // 计算所需宽度
     double calculatedWidth = dataPointCount * minWidthPerPoint;
     // 确保最小宽度，但当数据点较多时使用计算宽度

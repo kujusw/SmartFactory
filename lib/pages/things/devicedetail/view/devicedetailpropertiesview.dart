@@ -9,10 +9,13 @@ import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../common/values/index.dart';
 import '../../../../core/notifiers/device_state_notifier.dart';
 import '../../../../models/device_model.dart';
+import '../../../../models/locationresponseentity.dart';
 import '../../../boards/general/notifier/device_notifier.dart';
 import '../../../common/customstartitletextfield.dart';
+import '../../../common/customtitletextfield.dart';
 import '../../adddevice/view/getdevicelistviewinadddevice.dart';
 import '../../adddevice/view/getsearchdevicelistviewinadddevice.dart';
+import '../../notifier/addactionview_notifer.dart';
 import '../../notifier/things_notifier.dart';
 
 class DeviceDetailPropertiesView extends ConsumerStatefulWidget {
@@ -30,6 +33,15 @@ class _DeviceDetailPropertiesViewState extends ConsumerState<DeviceDetailPropert
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         ref.read(updateDeviceNameProvider.notifier).set(widget.model?.deviceName ?? "");
+        ref
+            .read(selectedLocationInThingsProvider.notifier)
+            .set(LocationModel(id: widget.model?.locationId ?? 0, name: ""));
+        ref
+            .read(updateDeviceWarningYellowThresholdProvider.notifier)
+            .set(widget.model?.warningYellowThreshold?.toDouble() ?? 0);
+        ref
+            .read(updateDeviceWarningRedThresholdProvider.notifier)
+            .set(widget.model?.warningRedThreshold?.toDouble() ?? 0);
         //先所有的重置选中selectedInAddDevice
         ref.read(deviceManagerProvider.notifier).unSelectDevice();
         for (var item in ref.read(deviceManagerProvider)) {
@@ -219,6 +231,28 @@ class _DeviceDetailPropertiesViewState extends ConsumerState<DeviceDetailPropert
                   ? SearchDeviceListViewInAddDevice(type: "DETAIL")
                   : DeviceListViewInAddDevice(type: "DETAIL");
             }),
+
+            SizedBox(height: 8.h),
+            //warning_yellow_threshold
+            CustomTitleTextField(
+              title: 'Warning Yellow Threshold',
+              hintText: 'Enter Warning Yellow Threshold',
+              keyboardType: TextInputType.number,
+              initialValue: widget.model?.warningYellowThreshold?.toString() ?? "",
+              onChanged: (value) {
+                ref.read(updateDeviceWarningYellowThresholdProvider.notifier).set(double.parse(value));
+              },
+            ),
+
+            CustomTitleTextField(
+              title: 'Warning Red Threshold',
+              hintText: 'Enter Warning Red Threshold',
+              keyboardType: TextInputType.number,
+              initialValue: widget.model?.warningRedThreshold?.toString() ?? "",
+              onChanged: (value) {
+                ref.read(updateDeviceWarningRedThresholdProvider.notifier).set(double.parse(value));
+              },
+            ),
           ],
         ),
       ),

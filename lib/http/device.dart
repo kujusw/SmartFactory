@@ -56,11 +56,11 @@ class DeviceAPI {
 
   static Future<UpdateDeviceLocationResponseEntity> updateDevice({
     String? id,
-    UpdateDeviceLocationRequestEntity? params,
+    AddDeviceModelRequestEntity? params,
     String? token,
   }) async {
     var response = await HttpUtil(url: Constant.HOST, token: token).put(
-      "v1/devices/$id",
+      "api/v1/devices/$id",
       data: params?.toJson(),
     );
     LoggerManager().d("updateDevice :$response");

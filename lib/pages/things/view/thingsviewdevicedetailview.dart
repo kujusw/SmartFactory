@@ -9,10 +9,15 @@ import 'package:smart_factory/core/notifiers/device_state_notifier.dart';
 import '../../../common/styles/theme_state_notifier.dart';
 import '../../../common/values/index.dart';
 import '../../../models/device_model.dart';
+import '../../../models/device_model_new.dart';
+import '../../boards/general/notifier/device_notifier.dart';
+import '../../login/notifier/login_notifier.dart';
 import '../devicedetail/view/devicedetailchartsview.dart';
 import '../devicedetail/view/devicedetaillocationview.dart';
 import '../devicedetail/view/devicedetailoverviewview.dart';
 import '../devicedetail/view/devicedetailpropertiesview.dart';
+import '../notifier/addactionview_notifer.dart';
+import '../notifier/things_notifier.dart';
 
 class ThingsViewDeviceDetailView extends ConsumerStatefulWidget {
   final DeviceModel _model;
@@ -150,7 +155,72 @@ class ThingsViewDeviceDetailViewState extends ConsumerState<ThingsViewDeviceDeta
                         ),
                       ),
                       TextButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          //如果是location页面，需要刷新更新location
+                          if (_tabController.index == 3) {
+                            final location = ref.read(selectedLocationInThingsProvider);
+                            if (location == null) {
+                              unawaited(SmartDialog.showToast("Please select location"));
+                              return;
+                            }
+                            if (location.id != widget._model.locationId) {
+                              final result = await ref.read(updateDeviceProvider(
+                                      //warningYellowThreshold warning_red_threshold 为空可以不传
+                                      widget._model.id ?? "",
+                                      AddDeviceModelRequestEntity(
+                                        deviceName: ref.read(updateDeviceNameProvider),
+                                        locationId: ref.read(selectedLocationInThingsProvider)?.id,
+                                        associatedDeviceIds:
+                                            ref.read(selectedDevicesInThingsProvider).map((e) => e.id ?? "").toList(),
+                                        //warning_yellow_threshold
+                                        warningYellowThreshold: ref.read(updateDeviceWarningYellowThresholdProvider),
+                                        //warning_red_threshold
+                                        warningRedThreshold: ref.read(updateDeviceWarningRedThresholdProvider),
+                                      ),
+                                      ref.read(loginProvider).data?.token ?? "")
+                                  .future); // 传入token;
+                              // 关键：判断ref是否还活着
+                              if (result.code == 100001 && context.mounted) {
+                                ref.refresh(devicesProvider);
+                                widget._model.locationId = ref.read(selectedLocationInThingsProvider)?.id;
+                                unawaited(SmartDialog.dismiss(tag: "ThingsViewDeviceDetail"));
+                              }
+                            }
+                          } else if (_tabController.index == 2) {
+                            //如果是properties页面，虚拟点关联设备中不能有虚拟点
+                            if (widget._model.associatedDevices?.any((element) => element.deviceType == "virtual") ==
+                                true) {
+                              unawaited(
+                                  SmartDialog.showToast("Virtual points cannot be associated with virtual points"));
+                              return;
+                            }
+
+                            final result = await ref.read(updateDeviceProvider(
+                                    //warningYellowThreshold warning_red_threshold 为空可以不传
+                                    widget._model.id ?? "",
+                                    AddDeviceModelRequestEntity(
+                                      deviceName: ref.read(updateDeviceNameProvider),
+                                      locationId: ref.read(selectedLocationInThingsProvider)?.id,
+                                      associatedDeviceIds:
+                                          ref.read(selectedDevicesInThingsProvider).map((e) => e.id ?? "").toList(),
+                                      //warning_yellow_threshold
+                                      warningYellowThreshold: ref.read(updateDeviceWarningYellowThresholdProvider),
+                                      //warning_red_threshold
+                                      warningRedThreshold: ref.read(updateDeviceWarningRedThresholdProvider),
+                                    ),
+                                    ref.read(loginProvider).data?.token ?? "")
+                                .future); // 传入token;
+                            // 关键：判断ref是否还活着
+                            if (result.code == 100001 && context.mounted) {
+                              ref.refresh(devicesProvider);
+                              widget._model.deviceName = ref.read(updateDeviceNameProvider);
+                              widget._model.associatedDevices = ref.read(selectedDevicesInThingsProvider);
+                              unawaited(SmartDialog.dismiss(tag: "ThingsViewDeviceDetail"));
+                            }
+                          } else {
+                            unawaited(SmartDialog.showToast("TODO"));
+                          }
+                        },
                         style: ButtonStyle(
                           overlayColor:
                               WidgetStateProperty.all(ref.watch(colorProvider)['accentColor']?.withValues(alpha: 0.3)),

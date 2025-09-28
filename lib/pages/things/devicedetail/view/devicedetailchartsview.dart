@@ -76,20 +76,40 @@ class DeviceDetailChartsView extends ConsumerWidget {
                       ),
                       // 添加额外的曲线数据
                       additionalSeries: [
-                        ChartSeriesModel(
-                          data: [1000.5, 1200.3, 1500.8, 1800.2, 2000.1, 800.2, 900.5, 1100.1, 1300.7, 1600.4],
-                          name: "预测功耗",
-                          color: Colors.green,
-                        ),
-                        ChartSeriesModel(
-                          data: [800.2, 900.5, 1100.1, 1300.7, 1600.4, 1000.5, 1200.3, 1500.8, 1800.2, 2000.1],
-                          name: "目标功耗",
-                          color: Colors.purple,
-                        ),
+                        for (DeviceModel item in _model?.associatedDevices ?? [])
+                          if (item.deviceType == "virtual")
+                            ...() {
+                              // 为虚拟设备获取能耗数据
+                              final virtualDeviceParams = EnergyCurveRequest(
+                                deviceId: item.id ?? "",
+                                token: ref.read(loginProvider).data?.token ?? "",
+                                period: ref.watch(chartDataTypeProvider),
+                                start: ref.watch(chartDataStartProvider) ?? "",
+                                end: ref.watch(chartDataEndProvider) ?? "",
+                              );
+
+                              final asyncData = ref.watch(energyCurveProvider(virtualDeviceParams));
+                              return asyncData.when(
+                                data: (energyCurve) {
+                                  // 提取功率数据
+                                  final powerData =
+                                      energyCurve.data?.points?.map((point) => point.power ?? 0.0).toList() ?? [];
+                                  return [
+                                    ChartSeriesModel(
+                                      data: powerData,
+                                      name: item.deviceName ?? "虚拟设备",
+                                      color: Colors.orange, // 可以根据需要设置不同颜色
+                                    )
+                                  ];
+                                },
+                                loading: () => <ChartSeriesModel>[], // 加载中返回空列表
+                                error: (err, _) => <ChartSeriesModel>[], // 错误时返回空列表
+                              );
+                            }(),
                       ],
                       // 设置警戒线
-                      redAlertValue: 2500.0, // 红色警戒线在25kW
-                      yellowAlertValue: 2000.0, // 黄色警戒线在20kW
+                      redAlertValue: _model?.warningRedThreshold?.toDouble() ?? 0, // 红色警戒线在25kW
+                      yellowAlertValue: _model?.warningYellowThreshold?.toDouble() ?? 0, // 黄色警戒线在20kW
                     );
                   }),
                 ],

@@ -203,6 +203,109 @@ final class AddDeviceFamily extends $Family
   String toString() => r'addDeviceProvider';
 }
 
+@ProviderFor(updateDevice)
+const updateDeviceProvider = UpdateDeviceFamily._();
+
+final class UpdateDeviceProvider extends $FunctionalProvider<
+        AsyncValue<UpdateDeviceLocationResponseEntity>,
+        UpdateDeviceLocationResponseEntity,
+        FutureOr<UpdateDeviceLocationResponseEntity>>
+    with
+        $FutureModifier<UpdateDeviceLocationResponseEntity>,
+        $FutureProvider<UpdateDeviceLocationResponseEntity> {
+  const UpdateDeviceProvider._(
+      {required UpdateDeviceFamily super.from,
+      required (
+        String,
+        AddDeviceModelRequestEntity,
+        String,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'updateDeviceProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateDeviceHash();
+
+  @override
+  String toString() {
+    return r'updateDeviceProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<UpdateDeviceLocationResponseEntity> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<UpdateDeviceLocationResponseEntity> create(Ref ref) {
+    final argument = this.argument as (
+      String,
+      AddDeviceModelRequestEntity,
+      String,
+    );
+    return updateDevice(
+      ref,
+      argument.$1,
+      argument.$2,
+      argument.$3,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpdateDeviceProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$updateDeviceHash() => r'ce40762e8fb103d92d51bfddfadd2985226327b5';
+
+final class UpdateDeviceFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<UpdateDeviceLocationResponseEntity>,
+            (
+              String,
+              AddDeviceModelRequestEntity,
+              String,
+            )> {
+  const UpdateDeviceFamily._()
+      : super(
+          retry: null,
+          name: r'updateDeviceProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  UpdateDeviceProvider call(
+    String deviceId,
+    AddDeviceModelRequestEntity params,
+    String token,
+  ) =>
+      UpdateDeviceProvider._(argument: (
+        deviceId,
+        params,
+        token,
+      ), from: this);
+
+  @override
+  String toString() => r'updateDeviceProvider';
+}
+
 @ProviderFor(deleteDevice)
 const deleteDeviceProvider = DeleteDeviceFamily._();
 
@@ -405,7 +508,7 @@ final class SelectedDevicesInThingsProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'selectedDevicesInThingsProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -434,7 +537,7 @@ final class SelectedDevicesInThingsProvider extends $FunctionalProvider<
 }
 
 String _$selectedDevicesInThingsHash() =>
-    r'93f721a40aef52796cfc750fc1a3a374cf6621f3';
+    r'57ae3ce46a16226a978f1a1084789fd5098cf133';
 
 @ProviderFor(UpdateDeviceName)
 const updateDeviceNameProvider = UpdateDeviceNameProvider._();
@@ -447,7 +550,7 @@ final class UpdateDeviceNameProvider
           argument: null,
           retry: null,
           name: r'updateDeviceNameProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -468,7 +571,7 @@ final class UpdateDeviceNameProvider
   }
 }
 
-String _$updateDeviceNameHash() => r'4412875d0b4935b494d7a138ab50aba292f687b1';
+String _$updateDeviceNameHash() => r'de288eafb79c9ce595fc81c81fd0528f29ba3dcc';
 
 abstract class _$UpdateDeviceName extends $Notifier<String> {
   String build();
@@ -494,7 +597,7 @@ final class SelectedLocationInThingsProvider
           argument: null,
           retry: null,
           name: r'selectedLocationInThingsProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -516,7 +619,7 @@ final class SelectedLocationInThingsProvider
 }
 
 String _$selectedLocationInThingsHash() =>
-    r'87d80e12f911bdd5faa586e134091a457c1a9dc7';
+    r'4aed06408afb515b385a0c3bd3ec59f958c1b411';
 
 abstract class _$SelectedLocationInThings extends $Notifier<LocationModel?> {
   LocationModel? build();

@@ -151,3 +151,103 @@ abstract class _$AddWarningRedThreshold extends $Notifier<double> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(UpdateDeviceWarningYellowThreshold)
+const updateDeviceWarningYellowThresholdProvider =
+    UpdateDeviceWarningYellowThresholdProvider._();
+
+final class UpdateDeviceWarningYellowThresholdProvider
+    extends $NotifierProvider<UpdateDeviceWarningYellowThreshold, double> {
+  const UpdateDeviceWarningYellowThresholdProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'updateDeviceWarningYellowThresholdProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$updateDeviceWarningYellowThresholdHash();
+
+  @$internal
+  @override
+  UpdateDeviceWarningYellowThreshold create() =>
+      UpdateDeviceWarningYellowThreshold();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(double value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<double>(value),
+    );
+  }
+}
+
+String _$updateDeviceWarningYellowThresholdHash() =>
+    r'dc35349dbfdf4455e77be066d7e5de88502c56ea';
+
+abstract class _$UpdateDeviceWarningYellowThreshold extends $Notifier<double> {
+  double build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<double, double>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<double, double>, double, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(UpdateDeviceWarningRedThreshold)
+const updateDeviceWarningRedThresholdProvider =
+    UpdateDeviceWarningRedThresholdProvider._();
+
+final class UpdateDeviceWarningRedThresholdProvider
+    extends $NotifierProvider<UpdateDeviceWarningRedThreshold, double> {
+  const UpdateDeviceWarningRedThresholdProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'updateDeviceWarningRedThresholdProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateDeviceWarningRedThresholdHash();
+
+  @$internal
+  @override
+  UpdateDeviceWarningRedThreshold create() => UpdateDeviceWarningRedThreshold();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(double value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<double>(value),
+    );
+  }
+}
+
+String _$updateDeviceWarningRedThresholdHash() =>
+    r'608a8ff594c019f46f18eff790b68c8d4ddd42a2';
+
+abstract class _$UpdateDeviceWarningRedThreshold extends $Notifier<double> {
+  double build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<double, double>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<double, double>, double, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

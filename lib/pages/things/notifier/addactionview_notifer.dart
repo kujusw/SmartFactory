@@ -25,3 +25,18 @@ class AddWarningRedThreshold extends _$AddWarningRedThreshold {
 
   void set(double threshold) => state = threshold;
 }
+
+@Riverpod(keepAlive: true)
+class UpdateDeviceWarningYellowThreshold extends _$UpdateDeviceWarningYellowThreshold {
+  @override
+  double build() => 0;
+
+  void set(double threshold) => state = threshold;
+}
+
+@Riverpod(keepAlive: true)
+class UpdateDeviceWarningRedThreshold extends _$UpdateDeviceWarningRedThreshold {
+  @override
+  double build() => 0;
+  void set(double threshold) => state = threshold;
+}

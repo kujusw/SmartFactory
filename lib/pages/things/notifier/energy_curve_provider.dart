@@ -145,14 +145,6 @@ class EnergyCurveRequest {
 /// Riverpod Provider
 /// ----------------------------
 final energyCurveProvider = FutureProvider.family<EnergyCurveResponse, EnergyCurveRequest>((ref, params) async {
-  // var url = "api/v1/energy/curve?device_id=${params.deviceId}&period=${params.period}";
-
-  // if (params.start.isNotEmpty) {
-  //   url += "&start=${params.start}";
-  // }
-  // if (params.end.isNotEmpty) {
-  //   url += "&end=${params.end}";
-  // }
   var response = await HttpUtil(url: (Constant.HOST), token: params.token)
       .get("api/v1/energy/curve", queryParameters: params.toJson());
   LoggerManager().d("energyCurveProvider response: ${json.encode(response)}");
