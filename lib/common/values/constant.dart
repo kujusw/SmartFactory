@@ -40,6 +40,9 @@ abstract class Constant {
 
   static double add_testSP = 4.sp;
 
+  static double textSP_4 = 4.sp + add_testSP;
+  static double textSP_6 = 6.sp + add_testSP;
+  static double textSP_8 = 8.sp + add_testSP;
   static double textSP_12 = 12.sp + add_testSP;
   static double textSP_14 = 14.sp + add_testSP;
   static double textSP_16 = 16.sp + add_testSP;
