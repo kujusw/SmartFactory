@@ -9,6 +9,7 @@ import '../../../../../../common/styles/theme_state_notifier.dart';
 import '../../../../../../common/utils/logger_manager.dart';
 import '../../../../../../common/utils/screenutil.dart';
 import '../../../../../../common/values/index.dart';
+import '../../../../../../models/device_model.dart';
 import '../../../notifier/device_notifier.dart';
 
 class DeviceListView extends ConsumerWidget {
@@ -16,6 +17,18 @@ class DeviceListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(devicesProvider).when(
           data: (data) {
+            //加一个调试设备 如果不存在添加
+            if (!data.any((element) => element.id == "debug")) {
+              data.add(DeviceModel(
+                id: "debug",
+                deviceName: "SMD",
+                deviceType: "debug",
+                locationId: 0,
+                selected: false,
+                selectedInAddDevice: false,
+                selectedInMenu: false,
+              ));
+            }
             return Container(
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               height: 590.h,

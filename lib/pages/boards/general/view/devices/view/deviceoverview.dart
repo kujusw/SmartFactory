@@ -19,71 +19,173 @@ class DeviceOverView extends ConsumerWidget {
     // LoggerManager().d("DeviceOverView: build ${ref.read(itemsGeneralDeviceProvider)}");
     if (!context.mounted) return Container();
     ref.listen<DeviceModel?>(currentDeviceProvider, (previous, next) async {
-      DeviceEnergyResponseEntity deviceEnergyResponseEntity = await DeviceAPI.getDeviceModelEnergy(
-          path: "api/v1/energy/${next?.id}", token: ref.read(loginProvider).data?.token);
-      LoggerManager().d("deviceEnergyResponseEntity: ${deviceEnergyResponseEntity.toString()}");
       List<GeneralDeviceInfoModel> generalDeviceInfoModel = [];
-      if (deviceEnergyResponseEntity.code == 100001) {
+      if (next?.deviceType == "debug") {
+        final t = "Feb 26 2024, 4:45:00 PM";
         generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Current",
-          value: (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + "A",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
+            id: next?.id, name: next?.deviceName ?? "", type: "SMD Capacity", value: "60/100", time: t, uiType: "SMD"));
         generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Energy",
-          value: (deviceEnergyResponseEntity.data?.energy ?? 0.0).toStringAsFixed(2) + "kWh",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "SMD Failure Rate",
+            value: "30/100",
+            time: t,
+            uiType: "SMD"));
         generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Power",
-          value: (deviceEnergyResponseEntity.data?.power ?? 0.0).toStringAsFixed(2) + "kW",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Silkscreen Capacity",
+            value: "75/100",
+            time: t,
+            uiType: "SMD"));
         generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Power Factor",
-          value: (deviceEnergyResponseEntity.data?.powerFactor ?? 0.0).toStringAsFixed(2),
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Silkscreen Failure Rate",
+            value: "30/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id, name: next?.deviceName ?? "", type: "SPI Capacity", value: "80/100", time: t, uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "SPI Failure Rate",
+            value: "10/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "SMD 1 Capacity",
+            value: "25/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "SMD 1 Failure Rate",
+            value: "60/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "SMD 2 Capacity",
+            value: "90/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "SMD 2 Failure Rate",
+            value: "30/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Reflow Capacity",
+            value: "20/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Reflow Failure Rate",
+            value: "90/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id, name: next?.deviceName ?? "", type: "AOI Capacity", value: "60/100", time: t, uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "AOI Failure Rate",
+            value: "50/100",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Failure Type 1",
+            value: "100 pcs",
+            time: t,
+            uiType: "SMD"));
+        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Failure Type 2",
+            value: "100 pcs",
+            time: t,
+            uiType: "SMD"));
+      } else {
+        DeviceEnergyResponseEntity deviceEnergyResponseEntity = await DeviceAPI.getDeviceModelEnergy(
+            path: "api/v1/energy/${next?.id}", token: ref.read(loginProvider).data?.token);
+        LoggerManager().d("deviceEnergyResponseEntity: ${deviceEnergyResponseEntity.toString()}");
 
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Total Current",
-          value: (deviceEnergyResponseEntity.data?.totalCurrent ?? 0.0).toStringAsFixed(2) + "A",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Total Power",
-          value: (deviceEnergyResponseEntity.data?.totalPower ?? 0.0).toStringAsFixed(2) + "kW",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-
-        generalDeviceInfoModel.add(GeneralDeviceInfoModel(
-          id: next?.id,
-          name: next?.deviceName ?? "",
-          type: "Voltage",
-          value: (deviceEnergyResponseEntity.data?.voltage ?? 0.0).toStringAsFixed(2) + "V",
-          time: deviceEnergyResponseEntity.data?.timestamp,
-        ));
-
-        for (var warning in deviceEnergyResponseEntity.data?.warnings ?? []) {
+        if (deviceEnergyResponseEntity.code == 100001) {
           generalDeviceInfoModel.add(GeneralDeviceInfoModel(
             id: next?.id,
             name: next?.deviceName ?? "",
-            type: warning.type,
-            value: warning.message,
+            type: "Current",
+            value: (deviceEnergyResponseEntity.data?.current ?? 0.0).toStringAsFixed(2) + "A",
             time: deviceEnergyResponseEntity.data?.timestamp,
           ));
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Energy",
+            value: (deviceEnergyResponseEntity.data?.energy ?? 0.0).toStringAsFixed(2) + "kWh",
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Power",
+            value: (deviceEnergyResponseEntity.data?.power ?? 0.0).toStringAsFixed(2) + "kW",
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Power Factor",
+            value: (deviceEnergyResponseEntity.data?.powerFactor ?? 0.0).toStringAsFixed(2),
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
+
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Total Current",
+            value: (deviceEnergyResponseEntity.data?.totalCurrent ?? 0.0).toStringAsFixed(2) + "A",
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Total Power",
+            value: (deviceEnergyResponseEntity.data?.totalPower ?? 0.0).toStringAsFixed(2) + "kW",
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
+
+          generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+            id: next?.id,
+            name: next?.deviceName ?? "",
+            type: "Voltage",
+            value: (deviceEnergyResponseEntity.data?.voltage ?? 0.0).toStringAsFixed(2) + "V",
+            time: deviceEnergyResponseEntity.data?.timestamp,
+          ));
+
+          for (var warning in deviceEnergyResponseEntity.data?.warnings ?? []) {
+            generalDeviceInfoModel.add(GeneralDeviceInfoModel(
+              id: next?.id,
+              name: next?.deviceName ?? "",
+              type: warning.type,
+              value: warning.message,
+              time: deviceEnergyResponseEntity.data?.timestamp,
+            ));
+          }
         }
       }
       ref.read(itemsGeneralDeviceProvider.notifier).setDevices(generalDeviceInfoModel);

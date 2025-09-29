@@ -7,6 +7,7 @@ class GeneralDeviceInfoModel {
   String? name; //设备名称
   String? type; //设备类型
   String? time; //设备添加时间
+  String? uiType;
 
   GeneralDeviceInfoModel({
     this.id,
@@ -15,6 +16,7 @@ class GeneralDeviceInfoModel {
     this.type,
     this.state,
     this.time,
+    this.uiType,
   });
   GeneralDeviceInfoModel copyWith({
     String? id,
@@ -23,6 +25,7 @@ class GeneralDeviceInfoModel {
     String? type,
     String? state,
     String? time,
+    String? uiType,
   }) {
     return GeneralDeviceInfoModel(
       id: id ?? this.id,
@@ -31,6 +34,7 @@ class GeneralDeviceInfoModel {
       type: type ?? this.type,
       state: state ?? this.state,
       time: time ?? this.time,
+      uiType: uiType ?? this.uiType,
     );
   }
 
@@ -42,6 +46,7 @@ class GeneralDeviceInfoModel {
           type: from.type,
           state: from.state,
           time: from.time,
+          uiType: from.uiType,
         );
 
   factory GeneralDeviceInfoModel.fromRawJson(String str) => GeneralDeviceInfoModel.fromJson(json.decode(str));
@@ -55,6 +60,7 @@ class GeneralDeviceInfoModel {
         type: json["type"],
         state: json["state"],
         time: json["time"],
+        uiType: json["uiType"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,6 +70,7 @@ class GeneralDeviceInfoModel {
         "type": type,
         "state": state,
         "time": time,
+        "uiType": uiType,
       };
 
   @override

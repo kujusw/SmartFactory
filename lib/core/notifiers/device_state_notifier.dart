@@ -77,5 +77,17 @@ class DeviceManager extends _$DeviceManager {
   // 覆盖设备列表
   void setDevices(List<DeviceModel> list) {
     state = list;
+    // 底部增加一个调试设备  如果不存在添加
+    if (!state.any((element) => element.id == "debug")) {
+      addDevice(DeviceModel(
+        id: "debug",
+        deviceName: "SMD",
+        deviceType: "debug",
+        locationId: 0,
+        selected: false,
+        selectedInAddDevice: false,
+        selectedInMenu: false,
+      ));
+    }
   }
 }

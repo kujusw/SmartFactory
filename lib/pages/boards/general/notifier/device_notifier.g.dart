@@ -278,7 +278,7 @@ final class ItemsGeneralDeviceProvider extends $NotifierProvider<
           argument: null,
           retry: null,
           name: r'itemsGeneralDeviceProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -300,7 +300,7 @@ final class ItemsGeneralDeviceProvider extends $NotifierProvider<
 }
 
 String _$itemsGeneralDeviceHash() =>
-    r'f01b9a8400cc5f91a6a90182710923ea096c627a';
+    r'16e5203b86c1bbca065c90a74019c34d381699f1';
 
 /// 主页GeneralDevice 的状态管理 注意跟设备列表 设备详情区分
 

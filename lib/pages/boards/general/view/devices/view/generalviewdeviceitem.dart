@@ -53,11 +53,16 @@ class GeneralViewDevicesItem extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      AssetsImages.chipIconBlueSvg,
-                      height: 30.h,
-                      width: 30.h,
-                    ),
+                    item.uiType == "SMD"
+                        ? Icon(
+                            Icons.pie_chart,
+                            size: 30.h,
+                          )
+                        : SvgPicture.asset(
+                            AssetsImages.chipIconBlueSvg,
+                            height: 30.h,
+                            width: 30.h,
+                          ),
                     SizedBox(
                       height: 10.h,
                     ),

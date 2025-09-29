@@ -68,8 +68,8 @@ dependencies:
   #图表
   graphic: ^2.2.1
   quiver: ^3.2.1
-
-  fl_chart: ^0.64.0
+  #fl_chart: ^0.64.0
+  syncfusion_flutter_gauges: ^31.1.21
   # The following adds the Cupertino Icons font to your application.
   # svg
   flutter_svg: ^2.2.1
@@ -84,6 +84,7 @@ dependencies:
   # table_sticky_headers: ^2.0.5
   dotted_border: ^3.1.0
   fading_edge_scrollview: ^4.1.1
+  
 
 dev_dependencies:
   flutter_test:

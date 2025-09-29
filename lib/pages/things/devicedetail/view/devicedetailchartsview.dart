@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:smart_factory/models/device_model.dart';
 import 'package:smart_factory/pages/things/notifier/device_detail_chart_notifier.dart';
+import '../../../../common/styles/theme_state_notifier.dart';
 import '../../../../models/chart_series_model.dart';
 import '../../../boards/daily_sob/customdropdown.dart';
 import '../../../login/notifier/loginmanager.dart';
@@ -23,6 +24,7 @@ class DeviceDetailChartsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w),
+      color: ref.watch(colorProvider)['backgroundColorWidget'],
       child: _model != null
           ? SingleChildScrollView(
               child: Column(
