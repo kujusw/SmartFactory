@@ -50,37 +50,15 @@ class SideMenu extends ConsumerWidget {
                     ref.read(indexHomeProvider.notifier).setIndex(1);
                   },
                 ),
-                Visibility(
-                  child: DrawerListTile(
-                    title: "Reports",
-                    iconSrc: AssetsImages.reportIconSvg,
-                    isSelected: ref.read(indexHomeProvider) == 2,
-                    press: () {
-                      ref.read(indexHomeProvider.notifier).setIndex(2);
-                    },
-                  ),
-                  visible: ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Reports",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "read" ||
-                      ref
-                              .read(loginProvider)
-                              .data
-                              ?.permissions
-                              ?.firstWhere(
-                                (permission) => permission.module == "Reports",
-                                orElse: () => Permission(),
-                              )
-                              .name ==
-                          "write" ||
-                      (ref.read(loginProvider).data?.isAdmin ?? false),
+                DrawerListTile(
+                  title: "Charts",
+                  iconSrc: AssetsImages.reportIconSvg,
+                  isSelected: ref.read(indexHomeProvider) == 2,
+                  press: () {
+                    ref.read(indexHomeProvider.notifier).setIndex(2);
+                  },
                 ),
+
                 DrawerListTile(
                   title: "Users",
                   iconSrc: AssetsImages.usersIconSvg,

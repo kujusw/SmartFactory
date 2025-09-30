@@ -64,7 +64,7 @@ class _GeneralViewDevicesItemState extends ConsumerState<GeneralViewDevicesItem>
                       left: 0,
                       right: 0,
                       top: 0,
-                      bottom: 70.h,
+                      bottom: 80.h,
                       child: Center(
                         child: (item.uiType == "SMD" && _useGauge)
                             ? SfRadialGauge(
@@ -165,7 +165,7 @@ class _GeneralViewDevicesItemState extends ConsumerState<GeneralViewDevicesItem>
                         children: [
                           if (!_useGauge)
                             SizedBox(
-                              height: 24.h, // 为水平 ListView 提供有界高度，避免 unbounded height
+                              height: 30.h, // 为水平 ListView 提供有界高度，避免 unbounded height
                               child: Marquee(
                                 text: item.value ?? "",
                                 scrollAxis: Axis.horizontal,

@@ -69,13 +69,13 @@ class DeviceDetailChartsView extends ConsumerWidget {
                   LayoutBuilder(builder: (context, constraints) {
                     return EnergyCurveChart(
                       width: constraints.maxWidth,
-                      params: EnergyCurveRequest(
-                        deviceId: _model?.id ?? "",
-                        token: ref.read(loginProvider).data?.token ?? "",
-                        period: ref.watch(chartDataTypeProvider),
-                        start: ref.watch(chartDataStartProvider) ?? "",
-                        end: ref.watch(chartDataEndProvider) ?? "",
-                      ),
+                      // params: EnergyCurveRequest(
+                      //   deviceId: _model?.id ?? "",
+                      //   token: ref.read(loginProvider).data?.token ?? "",
+                      //   period: ref.watch(chartDataTypeProvider),
+                      //   start: ref.watch(chartDataStartProvider) ?? "",
+                      //   end: ref.watch(chartDataEndProvider) ?? "",
+                      // ),
                       // 添加额外的曲线数据
                       additionalSeries: [
                         for (DeviceModel item in _model?.associatedDevices ?? [])
@@ -109,9 +109,9 @@ class DeviceDetailChartsView extends ConsumerWidget {
                               );
                             }(),
                       ],
-                      // 设置警戒线
-                      redAlertValue: _model?.warningRedThreshold?.toDouble() ?? 0, // 红色警戒线在25kW
-                      yellowAlertValue: _model?.warningYellowThreshold?.toDouble() ?? 0, // 黄色警戒线在20kW
+                      // // 设置警戒线
+                      // redAlertValue: _model?.warningRedThreshold?.toDouble() ?? 0, // 红色警戒线在25kW
+                      // yellowAlertValue: _model?.warningYellowThreshold?.toDouble() ?? 0, // 黄色警戒线在20kW
                     );
                   }),
                 ],

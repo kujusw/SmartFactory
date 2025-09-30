@@ -42,7 +42,7 @@ class Header extends ConsumerWidget {
                       : ref.watch(indexHomeProvider) == 1
                           ? "Devices"
                           : ref.watch(indexHomeProvider) == 2
-                              ? "Reports"
+                              ? "Charts"
                               : ref.watch(indexHomeProvider) == 3
                                   ? "Users"
                                   : ref.watch(indexHomeProvider) == 4

@@ -10,6 +10,7 @@ import '../../../core/dependencies/dependencies.dart';
 import '../../../core/notifiers/floatbuttonmanager.dart';
 import '../../boards/daily_sob/notifier/dailys_sob_notifier.dart';
 import '../../boards/view/boardsview.dart';
+import '../../chart/view/chartview.dart';
 import '../../common/widget/floatingactionbutton/fabs/boards_fab.dart';
 import '../../common/widget/floatingactionbutton/fabs/things_fab.dart';
 import '../../common/widget/floatingactionbutton/fabs/users_fab.dart';
@@ -109,7 +110,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         children: [
                           BoardsView(),
                           ThingsView(),
-                          Container(),
+                          ChartView(),
                           UsersView(),
                           Container(),
                           SettingsView(),
